@@ -18,39 +18,39 @@ class CategoryController extends Controller
     {
         $categories = Category::get();
 
-        return view('admin.category.index',compact('categories'));
+        return view('admin.categories.index',compact('categories'));
     }
 
     public function create()
     {
-        return view('admin.category.create');
+        return view('admin.categories.create');
     }
 
     public function store(StoreRequest $request)
     {
         Category::create($request->all());
-        return redirect()->route('category.index');
+        return redirect()->route('categories.index');
     }
 
     public function show(Category $category)
     {
-        return view('admin.category.create',compact('category')); 
+        return view('admin.categories.create',compact('category')); 
     }
 
     public function edit(Category $category)
     {
-        return view('admin.category.edit',compact('category'));
+        return view('admin.categories.edit',compact('category'));
     }
 
     public function update(UpdateRequest $request, Category $category)
     {
         $category->update($request->all());
-        return redirect()->route('category.index');
+        return redirect()->route('categories.index');
     }
 
     public function destroy(Category $category)
     {
         $category->delete();
-        return redirect()->route('category.index');
+        return redirect()->route('categories.index');
     }
 }
