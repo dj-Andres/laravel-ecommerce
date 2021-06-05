@@ -12,7 +12,7 @@
     <div class="content-wrapper">
         <div class="page-header">
             <h3 class="page-title">
-                Registro de Categorias
+                Editar Categorias
             </h3>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
@@ -26,12 +26,12 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            <h4 class="card-title">Registro Categorías</h4>
+                            <h4 class="card-title">Editar Categorías</h4>
                         </div>
                         
-                        {!! Form::open(['route' => 'categories.store','method' => 'POST']) !!}
+                        {!! Form::model($category, ['route'=>['categories.update',$category->id],'method'=>'PUT']) !!}
                             @include('admin.categories._form')
-                            <button type="submit" class="btn btn-primary mr-2">Guardar</button>
+                            <button type="submit" class="btn btn-primary mr-2">Actualizar</button>
                             <a href="{{ route('categories.index')}}" class="btn btn-light">Cancelar</a>
                         {!! Form::close() !!}
 

@@ -34,7 +34,7 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
-        return view('admin.categories.create',compact('category')); 
+        return view('admin.categories.show',compact('category')); 
     }
 
     public function edit(Category $category)
@@ -44,6 +44,7 @@ class CategoryController extends Controller
 
     public function update(UpdateRequest $request, Category $category)
     {
+        $this->debug();
         $category->update($request->all());
         return redirect()->route('categories.index');
     }
