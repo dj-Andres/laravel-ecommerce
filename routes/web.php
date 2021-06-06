@@ -19,7 +19,7 @@ Route::get('/prueba', function () {
 
 Route::resource('categories', CategoryController::class)->names('categories');
 Route::resource('clients', ClientController::class)->names('clients');
-Route::resource('products', ProductController::class)->names('products');
+Route::resource('product', ProductController::class)->names('product');
 Route::resource('providers', ProviderController::class)->names('providers');
 Route::resource('purchases', PurchaseController::class)->names('purchases');
 Route::resource('sales', SaleController::class)->names('sales');

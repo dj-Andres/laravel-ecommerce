@@ -19,7 +19,8 @@ class StoreRequest extends FormRequest
     {
         return [
             'name' => 'required|string|unique:products|max:150',
-            'image' => 'required|dimensions:min_width=100,min_height=200',
+            //'image' => 'required|dimensions:min_width=100,min_height=200',
+            'image' => 'required',
             'sell_price' => 'required',
             'category_id'=>'integer|required|exists:App\Models\Category,id',
             'provider_id'=>'integer|required|exists:App\Models\Provider,id',
@@ -34,7 +35,7 @@ class StoreRequest extends FormRequest
             'name.max' => 'Solo se permite un maximo de 150 caracteres.',
 
             'image.required' => 'Este campo es requerido.',
-            'image.dimensions'=> 'Solo se permiten imagenes en 100x200 px.',
+            //'image.dimensions'=> 'Solo se permiten imagenes en 100x200 px.',
 
             'sell_price.required' => 'Este campo es requerido.',
 
