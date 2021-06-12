@@ -11,7 +11,18 @@
             color: #FF0000;
             padding-top: 2px;
         }
-
+        .image-wrapper{
+            position: relative;
+            padding-bottom: 56.25%;
+        }
+        .image-wrapper img{
+            border-radius: 7px;
+            border: 2px solid blueviolet;
+            position: absolute;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
     </style>
 @endsection
 @section('content')
@@ -91,6 +102,13 @@
                                         <input type="file" name="image" id="image" class="custom-file-input" lang="es">
                                         <label for="image" class="custom-file-label">Seleccionar Archivo</label>
                                     </div>
+                                    <div class="col-md-6">
+                                        <div class="image-wrapper">
+                                            @isset($product->image)
+                                                <img src="" alt="Producto" id="picture">
+                                            @endisset
+                                        </div>
+                                    </div>
                                     @error('image')
                                         <p class="text-danger">
                                             {{$message}}
@@ -116,4 +134,21 @@
 @section('scripts')
     {!! Html::script('js/jquery.min.js') !!}
     {!! Html::script('js/jquery.validate.min.js') !!}
+    <script>
+        const file = document.getElementById('image');
+        const image = document.getElementById('picture');
+    
+        file.addEventListener('change',changeImg);
+    
+        function changeImg(event){
+            let file = event.target.files[0];
+            let reader = new FileReader();
+    
+            reader.onload=(event) =>{
+                image.setAttribute('src',event.target.result);
+            };
+    
+            reader.readAsDataURL(file);
+        }
+    </script>
 @endsection

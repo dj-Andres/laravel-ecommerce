@@ -8,12 +8,16 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Provider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::get();        
+        $products = Product::join('categories','categories.id','=','products.category_id')
+                            ->select('products.id','products.name','products.stock','products.status','categories.name as categoria')
+                            ->where('products.status','=','ACTIVE')
+                            ->get();
         return view('admin.product.index', compact('products'));
     }
 
@@ -41,8 +45,14 @@ class ProductController extends Controller
         return redirect()->route('product.index');
     }
 
-    public function show(Product $product)
+    public function show($id)
     {
+        $product = Product::join('categories','categories.id','=','products.category_id')
+                    ->join('providers','providers.id','=','products.provider_id')
+                    ->select('products.id','products.name','products.sell_price','products.status','categories.name as categoria','providers.name as proveedor')
+                    ->where('products.id','=',$id)
+                    ->first();
+
         return view('admin.product.show', compact('product'));
     }
 
@@ -55,12 +65,23 @@ class ProductController extends Controller
 
     public function update(UpdateRequest $request, Product $product)
     {
-        $product->update($request->all());
+        if($request->hasFile('image')){
+            $file = $request->file('image');
+            $image_name = time().'-'.$file->getClientOriginalName();
+            $file->move(public_path("/images/productos"),$image_name);
+        }
+
+
+        $product->update($request->all()+[
+            'image' => $image_name
+        ]);
+
         return redirect()->route('product.index');
     }
-    public function destroy(Product $product)
-    {
-        $product->delete();
+    public function destroy($id)
+    {   $product = Product::findOrFail($id);
+        $product->status = 'DESACTIVED';
+        $product->update();
         return redirect()->route('product.index');
     }
 }

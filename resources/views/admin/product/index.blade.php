@@ -58,8 +58,11 @@
                                             <a href="{{route('product.show',$product)}}">{{$product->name}}</a>
                                         </td>
                                         <td>{{$product->stock}}</td>
-                                        <td>{{$product->status}}</td>
-                                        <td>{{$product->category_id}}</td>
+                                        @if ($product->status === 'ACTIVE')
+                                            <td><span class="badge badge-success">Activo</span></td>
+                                        @endif
+                                        
+                                        <td>{{$product->categoria}}</td>
                                         <td style="width: 50px;">
                                             {!! Form::open(['route'=>['product.destroy',$product], 'method'=>'DELETE']) !!}
     
