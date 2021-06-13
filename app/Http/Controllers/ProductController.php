@@ -8,7 +8,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Provider;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+
 
 class ProductController extends Controller
 {
@@ -49,7 +49,7 @@ class ProductController extends Controller
     {
         $product = Product::join('categories','categories.id','=','products.category_id')
                     ->join('providers','providers.id','=','products.provider_id')
-                    ->select('products.id','products.name','products.sell_price','products.status','categories.name as categoria','providers.name as proveedor')
+                    ->select('products.id','providers.id as provider_id','categories.id as category_id','products.name','products.sell_price','products.status','categories.name as categoria','providers.name as proveedor')
                     ->where('products.id','=',$id)
                     ->first();
 

@@ -23,7 +23,7 @@ class StoreRequest extends FormRequest
             'ruc'=> 'string|required|max:10',
             'address'=>'string|required|max:150',
             'phone'=>'string|required|unique:clients|max:10',
-            'email'=> 'string|email:rcf,dns|required|unique:clients|max:200',
+            'email'=> 'string|email|required|unique:clients|max:200',
         ];
     }
 

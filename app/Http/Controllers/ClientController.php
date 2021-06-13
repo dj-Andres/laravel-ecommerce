@@ -35,7 +35,7 @@ class ClientController extends Controller
     }
 
     public function update(UpdateRequest $request, Client $client)
-    {
+    {   
         $client->update($request->all());
         return redirect()->route('client.index');
     }

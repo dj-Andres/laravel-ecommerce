@@ -29,7 +29,7 @@ class UpdateRequest extends FormRequest
             'ruc'=> 'string|required|max:10',
             'address'=>'string|required|max:150',
             'phone'=>'string|required|unique:clients,phone,'.$this->route('client')->id.'|max:10',
-            'email'=> 'string|email:rcf,dns|required|unique:clients,email,'.$this->route('client')->id.'|max:200',
+            'email'=> 'string|email|required|unique:clients,email,'.$this->route('client')->id.'|max:200',
         ];
     }
 
