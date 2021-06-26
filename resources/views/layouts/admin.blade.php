@@ -14,6 +14,8 @@
     <!-- End plugin css for this page -->
     <!-- inject:css -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/sweetalert2.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/select2.css') }}">
 
     @yield('styles')
     <!-- endinject -->
@@ -437,6 +439,8 @@
     <script src="{{asset('js/misc.js')}}"></script>
     <script src="{{asset('js/settings.js')}}"></script>
     <script src="{{asset('js/todolist.js')}}"></script>
+    <script src="{{ asset('js/select2.js') }}"></script>
+    <script src="{{ asset('js/sweetalert.js') }}"></script>
     <!-- endinject -->
     <!-- Custom js for this page-->
     <script src="{{asset('js/dashboard.js')}}"></script>

@@ -4,38 +4,71 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Purchase\StoreRequest;
 use App\Http\Requests\Purchase\UpdateRequest;
+use App\Models\Product;
 use App\Models\Provider;
 use App\Models\Purchase;
+use App\Models\PurchaseDetails;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 use function GuzzleHttp\Promise\all;
 
 class PurchaseController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        $purchases = Purchase::get();
+        $purchases = Purchase::join('providers', 'providers.id', '=', 'purchases.provider_id')
+            ->select('purchases.id as compra_id', 'providers.id', 'providers.name as proveedor', 'purchases.purchase_date', 'purchases.impuesto', 'purchases.total', 'status')
+            ->get();
         return view('admin.purchase.index', compact('purchases'));
     }
 
     public function create()
     {
         $providers = Provider::get();
-        return view('admin.purchase.create', compact('providers'));
+        $products = Product::get();
+        return view('admin.purchase.create', compact('providers', 'products'));
     }
 
     public function store(StoreRequest $request)
     {
-        $purchase = Purchase::create($request->all());
+        try {
+            DB::beginTransaction();
 
-        foreach ($request->product_id as $key) {
-            $results[] = array("product_id" => $request->product_id[$key], "cantidad" => $request->cantidad[$key], "price" => $request->price[$key]);
+                $purchase = Purchase::create($request->all() + [
+                    'user_id' => Auth::user()->id,
+                    'purchase_date' => Carbon::now('America/Guayaquil')
+                ]);
+            
+                $purchase->save();
+
+                $contador = 0;
+
+                while($contador < count($request->product_id))
+                {
+                    $detalle  = new PurchaseDetails();
+                    $detalle->pruchase_id = $purchase['id'];
+                    $detalle->product_id = $request->product_id[$contador];
+                    $detalle->cantidad = $request->cantidad[$contador];
+                    $detalle->price = $request->price[$contador];
+                    
+                    $detalle->save();
+                    $contador= $contador+1;
+                }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
         }
-
-        //$purchase->purchaseDatails()->createMany($results);
-        $purchase->shoppingDatails()->createMany($results);
-
-        return redirect()->route('purchase.index');
+        return redirect()->route('purchases.index');
     }
 
     public function show(Purchase $purchase)
@@ -55,9 +88,11 @@ class PurchaseController extends Controller
         return redirect()->route('purchase.index');*/
     }
 
-    public function destroy(Purchase $purchase)
+    public function destroy($id)
     {
-        /*$purchase->delete();
-        return redirect()->route('purchase.index');*/
+        $purchase = Purchase::findOrFail($id);
+        $purchase->status = "CANCELED";
+        $purchase->update();
+        return redirect()->route('purchase.index');
     }
 }
