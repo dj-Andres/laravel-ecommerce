@@ -1,6 +1,4 @@
 <div class="row">
-    <!--<input type="hidden" name="shopping_id" id="compra_id">
-    <input type="hidden" name="id" id="id">-->
     <div class="col-md-6 col-lg-12">
         <div class="form-group row">
             {!! Form::label('provider', 'Proveedor') !!}            

@@ -72,14 +72,23 @@ class PurchaseController extends Controller
     }
 
     public function show(Purchase $purchase)
-    {
-        return view('admin.purchase.show', compact('purchase'));
+    {   
+        $subtotal = 0;
+
+        $purchaseDetails = PurchaseDetails::where('pruchase_id','=',$purchase->id)->get();
+        
+        foreach ($purchaseDetails as $detalle) {
+            $subtotal += $detalle->cantidad*$detalle->price;
+        }
+
+        return view('admin.purchase.show', compact('purchase','purchaseDetails','subtotal'));
     }
 
     public function edit(Purchase $purchase)
     {
         $providers = Provider::get();
-        return view('admin.purchase.edit', compact('providers'));
+        $products = Product::get();
+        return view('admin.purchase.edit', compact('providers','products'));
     }
 
     public function update(UpdateRequest $request, Purchase $purchase)

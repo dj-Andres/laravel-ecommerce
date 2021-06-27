@@ -16,7 +16,7 @@
             </h3>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Panel administrador</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('purchases.index') }}">Panel administrador</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Compras</li>
                 </ol>
             </nav>
@@ -52,7 +52,7 @@
                                         <th>Estado</th>
                                         <th>Impuesto</th>
                                         <th>Total</th>
-                                        <th>Acciones</th>
+                                        <th style="width: 5px;">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -66,15 +66,24 @@
                                         @endif
                                         <td>{{$purchase->impuesto}}</td>
                                         <td>{{$purchase->total}}</td>
-                                        <td style="width: 50px;">
-                                            {!! Form::open(['route'=>['purchases.destroy',$purchase], 'method'=>'DELETE']) !!}
+                                        <td style="width: 50px;">        
+                                                <a class="jsgrid-button jsgrid-edit-button" href="{{route('purchases.show', $purchase->compra_id)}}" title="Ver Detalle">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a class="jsgrid-button jsgrid-edit-button" title="Reporte PDF">
+                                                    <i class="fas fa-file-pdf"></i>
+                                                </a>
+                                                <a class="jsgrid-button jsgrid-edit-button" title="Imprimir">
+                                                    <i class="fas fa-print"></i>
+                                                </a>
+                                            {{--{!! Form::open(['route'=>['purchases.destroy',$purchase], 'method'=>'DELETE']) !!}
                                                 <a class="jsgrid-button jsgrid-edit-button" href="{{route('purchases.edit', $purchase)}}" title="Editar">
                                                     <i class="far fa-edit"></i>
                                                 </a>
                                                 <button class="jsgrid-button jsgrid-delete-button unstyled-button" type="submit" title="Anular Compra">
                                                     <i class="far fa-trash-alt"></i>
                                                 </button>
-                                            {!! Form::close() !!}
+                                            {!! Form::close() !!}--}}
                                         </td>
                                     </tr>
                                     @endforeach
