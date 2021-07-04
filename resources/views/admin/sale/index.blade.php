@@ -12,12 +12,12 @@
     <div class="content-wrapper">
         <div class="page-header">
             <h3 class="page-title">
-                Compras
+                Ventas
             </h3>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('purchases.index') }}">Panel administrador</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Compras</li>
+                    <li class="breadcrumb-item"><a href="{{ route('sales.index') }}">Panel administrador</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Ventas</li>
                 </ol>
             </nav>
         </div>
@@ -27,8 +27,8 @@
                     <div class="card-body">
                         
                         <div class="d-flex justify-content-between">
-                            <h4 class="card-title">Compras 
-                                <a href="{{route('purchases.create')}}" class="btn btn-primary">Crear Nueva</a>
+                            <h4 class="card-title">Ventas 
+                                <a href="{{route('sales.create')}}" class="btn btn-primary">Crear Nueva</a>
                             </h4>
                             {{--  <i class="fas fa-ellipsis-v"></i>  --}}
                             <div class="btn-group">
@@ -47,8 +47,8 @@
                                 <thead>
                                     <tr>
                                         <th>Codigo</th>
-                                        <th>Proveedor</th>
-                                        <th>Fecha de Compra</th>
+                                        <th>Cliente</th>
+                                        <th>Fecha de Venta</th>
                                         <th>Estado</th>
                                         <th>Impuesto</th>
                                         <th>Total</th>
@@ -56,28 +56,28 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($purchases as $purchase)
+                                    @foreach ($sales as $sale)
                                     <tr>
-                                        <th scope="row">{{$purchase->compra_id}}</th>
-                                        <td>{{$purchase->proveedor}}</td>
-                                        <td>{{$purchase->purchase_date}}</td>
-                                        @if ($purchase->status === 'VALID')
+                                        <th scope="row">{{$sale->id}}</th>
+                                        <td>{{$sale->name}}</td>
+                                        <td>{{$sale->sale_date}}</td>
+                                        @if ($sale->status === 'VALID')
                                             <td><span class="badge badge-success">VALIDA</span></td>
                                         @endif
-                                        <td>{{$purchase->impuesto}}</td>
-                                        <td>{{$purchase->total}}</td>
+                                        <td>{{$sale->impuesto}}</td>
+                                        <td>{{$sale->total}}</td>
                                         <td style="width: 50px;">        
-                                                <a class="jsgrid-button jsgrid-edit-button" href="{{route('purchases.show', $purchase->compra_id)}}" title="Ver Detalle">
+                                                <a class="jsgrid-button jsgrid-edit-button" href="{{route('sales.show', $sale->id)}}" title="Ver Detalle">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a class="jsgrid-button jsgrid-edit-button" href="{{route('purchases.pdf', $purchase->compra_id)}}" title="Reporte PDF">
+                                                <a class="jsgrid-button jsgrid-edit-button" title="Reporte PDF">
                                                     <i class="fas fa-file-pdf"></i>
                                                 </a>
                                                 <a class="jsgrid-button jsgrid-edit-button" title="Imprimir">
                                                     <i class="fas fa-print"></i>
                                                 </a>
-                                            {{--{!! Form::open(['route'=>['purchases.destroy',$purchase], 'method'=>'DELETE']) !!}
-                                                <a class="jsgrid-button jsgrid-edit-button" href="{{route('purchases.edit', $purchase)}}" title="Editar">
+                                            {{--{!! Form::open(['route'=>['sales.destroy',$sale], 'method'=>'DELETE']) !!}
+                                                <a class="jsgrid-button jsgrid-edit-button" href="{{route('sales.edit', $sale)}}" title="Editar">
                                                     <i class="far fa-edit"></i>
                                                 </a>
                                                 <button class="jsgrid-button jsgrid-delete-button unstyled-button" type="submit" title="Anular Compra">
@@ -91,9 +91,6 @@
                             </table>
                         </div>
                     </div>
-                    {{--  <div class="card-footer text-muted">
-                        {{$purchase->render()}}
-                    </div>  --}}
                 </div>
             </div>
         </div>

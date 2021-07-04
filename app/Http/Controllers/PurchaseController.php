@@ -104,4 +104,16 @@ class PurchaseController extends Controller
         $purchase->update();
         return redirect()->route('purchase.index');
     }
+    public function pdf(Purchase $purchase)
+    {
+        $subtotal = 0;
+
+        $purchaseDetails = PurchaseDetails::where('pruchase_id','=',$purchase->id)->get();
+        
+        foreach ($purchaseDetails as $detalle) {
+            $subtotal += $detalle->cantidad*$detalle->price;
+        }
+        
+         dd($purchase);
+    }
 }

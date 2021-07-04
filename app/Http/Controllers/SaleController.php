@@ -4,40 +4,80 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Sale\StoreRequest;
 use App\Models\Client;
+use App\Models\Product;
 use App\Models\Sale;
+use App\Models\SaleDetail;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SaleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        $sales = Sale::get();
+        $sales = Sale::join('clients', 'clients.id', '=', 'sales.client_id')
+            ->select('sales.id','clients.name', 'sale_date', 'impuesto', 'total', 'status')
+            ->get();
         return view('admin.sale.index', compact('sales'));
     }
 
     public function create()
     {
         $clients = Client::get();
-        return view('admin.sale.create', compact('clients'));
+        $products = Product::get();
+        return view('admin.sale.create', compact('clients','products'));
     }
 
     public function store(StoreRequest $request)
     {
-        $sales = Sale::create($request->all());
+        try {
+            DB::beginTransaction();
+                
+                $sales = Sale::create($request->all() + [
+                    'user_id' => Auth::user()->id,
+                    'sale_date' => Carbon::now('America/Guayaquil')
+                ]);
+    
+                $sales->save();
 
-        foreach ($request->product_id as $key) {
-            $results[] = array("product_id" => $request->product_id[$key], "cantidad" => $request->cantidad[$key], "price" => $request->price[$key], "descuento" => $request->descuento[$key]);
+                $contador = 0;
+
+                while($contador < count($request->product_id))
+                {
+                    $detalle  = new SaleDetail();
+                    $detalle->sale_id = $sales['id'];
+                    $detalle->product_id = $request->product_id[$contador];
+                    $detalle->cantidad = $request->cantidad[$contador];
+                    $detalle->price = $request->price[$contador];
+                    $detalle->descuento = $request->descuento[$contador];
+                    
+                    $detalle->save();
+                    $contador= $contador+1;
+                }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
         }
-
-        $sales->saleDetails()->createMany($results);
-
-        return redirect()->route('sale.index');
+        return redirect()->route('sales.index');
     }
     public function show(Sale $sale)
     {
-        $clients = Client::get();
+        $subtotal = 0;
 
-        return view('admin.sale.show', compact('clients'));
+        $saleDetails = SaleDetail::where('sale_id','=',$sale->id)->get();
+        
+        foreach ($saleDetails as $detalle) {
+            $subtotal += $detalle->cantidad*$detalle->price - $detalle->cantidad * $detalle->price * $detalle->descuento /100;
+        }
+        
+        return view('admin.sale.show', compact('sale','saleDetails','subtotal'));
     }
 
     public function edit(Sale $sale)
@@ -57,8 +97,11 @@ class SaleController extends Controller
      * @param  \App\Models\Sale  $sale
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Sale $sale)
+    public function destroy($id)
     {
-        //
+        $sale = Sale::findOrFail($id);
+        $sale->status = "CANCELED";
+        $sale->update();
+        return redirect()->route('sales.index');
     }
 }
