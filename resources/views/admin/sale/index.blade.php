@@ -70,7 +70,7 @@
                                                 <a class="jsgrid-button jsgrid-edit-button" href="{{route('sales.show', $sale->id)}}" title="Ver Detalle">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a class="jsgrid-button jsgrid-edit-button" title="Reporte PDF">
+                                                <a class="jsgrid-button jsgrid-edit-button" href="{{ route('sales.pdf', $sale->id) }}" title="Reporte PDF">
                                                     <i class="fas fa-file-pdf"></i>
                                                 </a>
                                                 <a class="jsgrid-button jsgrid-edit-button" title="Imprimir">

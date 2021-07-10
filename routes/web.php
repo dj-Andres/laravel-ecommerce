@@ -26,6 +26,8 @@ Route::resource('purchases', PurchaseController::class)->names('purchases');
 Route::resource('sales', SaleController::class)->names('sales');
 
 Route::get('purchases/pdf/{purchase}',[PurchaseController::class,'pdf'])->name('purchases.pdf');
+Route::get('sales/pdf/{sale}',[SaleController::class,'pdf'])->name('sales.pdf');
+Route::get('sales/print/{sale}',[SaleController::class,'print'])->name('sales.print');
 
 Auth::routes();
 

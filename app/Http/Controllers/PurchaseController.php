@@ -12,8 +12,10 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
+use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\Mail;
 use function GuzzleHttp\Promise\all;
+
 
 class PurchaseController extends Controller
 {
@@ -113,7 +115,8 @@ class PurchaseController extends Controller
         foreach ($purchaseDetails as $detalle) {
             $subtotal += $detalle->cantidad*$detalle->price;
         }
-        
-         dd($purchase);
+
+        $pdf = PDF::loadView('admin.purchase.pdf', compact('purchase','subtotal','purchaseDetails'));
+        return $pdf->download('reporte_compra_'.$purchase->id.'_'.$purchase->purchase_date.'.pdf');    
     }
 }

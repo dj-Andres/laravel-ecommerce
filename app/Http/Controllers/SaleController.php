@@ -7,10 +7,13 @@ use App\Models\Client;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleDetail;
+use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
+
 
 class SaleController extends Controller
 {
@@ -103,5 +106,18 @@ class SaleController extends Controller
         $sale->status = "CANCELED";
         $sale->update();
         return redirect()->route('sales.index');
+    }
+    public function pdf(Sale $sale)
+    {
+        $subtotal = 0;
+
+        $saleDetails = SaleDetail::where('sale_id','=',$sale->id)->get();
+        
+        foreach ($saleDetails as $detalle) {
+            $subtotal += $detalle->cantidad*$detalle->price - $detalle->cantidad * $detalle->price * $detalle->descuento /100;
+        }
+        
+        $pdf = PDF::loadView('admin.sale.pdf', compact('sale','subtotal','saleDetails'));
+        return $pdf->download('reporte_compra_'.$sale->id.'_'.$sale->sale_date.'.pdf');    
     }
 }
