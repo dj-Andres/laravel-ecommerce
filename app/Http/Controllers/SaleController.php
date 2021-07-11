@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use Mike42\Escpos\PrintConnectors\FilePrintConnector;
+use Mike42\Escpos\Printer;
+use Mike42\Escpos\EscposImage;
+Use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 
 
 class SaleController extends Controller
@@ -119,5 +123,37 @@ class SaleController extends Controller
         
         $pdf = PDF::loadView('admin.sale.pdf', compact('sale','subtotal','saleDetails'));
         return $pdf->download('reporte_compra_'.$sale->id.'_'.$sale->sale_date.'.pdf');    
+    }
+    public function print(Sale $sale)
+    {
+        try {
+            $subtotal = 0;
+
+            $saleDetails = SaleDetail::where('sale_id','=',$sale->id)->get();
+            
+            foreach ($saleDetails as $detalle) {
+                $subtotal += $detalle->cantidad*$detalle->price - $detalle->cantidad * $detalle->price * $detalle->descuento /100;
+            }
+            $printer_name = "TM20";
+            $conector = new WindowsPrintConnector($printer_name);
+            $printer = new Printer($connector);
+            $printer->text("€ 9,95\n");
+
+            $printer->cut();
+            $printer->close();
+        } catch (\Throwable $th) {
+            return redirect()->back();
+        }
+    }
+    public function change_status(Sale $sale)
+    {
+        if ($sale->status == "VALID") {
+            $sale->update(['status'=>'CANCELED']);
+            return redirect()->back();
+        }else{
+            $sale->update(['status'=>'VALID']);
+            return redirect()->back();
+        }
+        
     }
 }

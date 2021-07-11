@@ -73,7 +73,7 @@
                                                 <a class="jsgrid-button jsgrid-edit-button" href="{{ route('sales.pdf', $sale->id) }}" title="Reporte PDF">
                                                     <i class="fas fa-file-pdf"></i>
                                                 </a>
-                                                <a class="jsgrid-button jsgrid-edit-button" title="Imprimir">
+                                                <a class="jsgrid-button jsgrid-edit-button" href="{{ route('sales.print', $sale->id) }}" title="Imprimir">
                                                     <i class="fas fa-print"></i>
                                                 </a>
                                             {{--{!! Form::open(['route'=>['sales.destroy',$sale], 'method'=>'DELETE']) !!}
