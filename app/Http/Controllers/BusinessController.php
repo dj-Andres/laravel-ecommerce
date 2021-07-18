@@ -8,6 +8,13 @@ use Illuminate\Http\Request;
 
 class BusinessController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('can:business.index')->only(['index']);
+        $this->middleware('can:business.update')->only(['update']);
+    }
+
     public function index()
     {
         $business = Business::where('id','=',1)->firstOrFail();
@@ -17,7 +24,7 @@ class BusinessController extends Controller
     public function update(UpdateRequest $request,Business $business)
     {
         $business->update($request->all());
-        return redirect()->route('Business.index');
+        return redirect()->route('business.index');
     }
 
 }

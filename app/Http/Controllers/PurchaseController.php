@@ -23,8 +23,13 @@ class PurchaseController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('can:purchases.index')->only(['index']);
+        $this->middleware('can:purchases.create')->only(['create','store']);
+        $this->middleware('can:purchases.edit')->only(['edit','update']);
+        $this->middleware('can:purchases.destroy')->only(['destroy']);
+        $this->middleware('can:purchase.change_status')->only(['change_status']);
+        $this->middleware('can:purchase.upload')->only(['upload']);
     }
-
     public function index()
     {
         $purchases = Purchase::join('providers', 'providers.id', '=', 'purchases.provider_id')

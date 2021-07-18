@@ -8,6 +8,13 @@ use Illuminate\Http\Request;
 
 class PrinterController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('can:printer.index')->only(['index']);
+        $this->middleware('can:printer.update')->only(['update']);
+    }
+
     public function index()
     {
         $printer = Printer::where('id','=',1)->firstOrFail();

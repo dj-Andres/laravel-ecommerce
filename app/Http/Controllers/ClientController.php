@@ -9,6 +9,15 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('can:client.index')->only(['index']);
+        $this->middleware('can:client.create')->only(['create','store']);
+        $this->middleware('can:client.edit')->only(['edit','update']);
+        $this->middleware('can:client.destroy')->only(['destroy']);
+    }
+
     public function index()
     {
         $clients = Client::get();

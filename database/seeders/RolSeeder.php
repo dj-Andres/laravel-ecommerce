@@ -59,24 +59,30 @@ class RolSeeder extends Seeder
         Permission::create(['name'=>'product.change_status'])->assignRole($role);
         Permission::create(['name'=>'sale.change_status'])->assignRole($role);
 
-        Permission::create(['name'=>'purchases.pdf']);
-        Permission::create(['name'=>'sales.pdf']);
-        Permission::create(['name'=>'sales.print']);
-        Permission::create(['name'=>'report.report_day']);
-        Permission::create(['name'=>'report.report_date']);
-        Permission::create(['name'=>'report.report_results']);
+        Permission::create(['name'=>'purchases.pdf'])->assignRole($role);
+        Permission::create(['name'=>'sales.pdf'])->assignRole($role);
+        Permission::create(['name'=>'sales.print'])->assignRole($role);
+        Permission::create(['name'=>'report.report_day'])->assignRole($role);
+        Permission::create(['name'=>'report.report_date'])->assignRole($role);
+        Permission::create(['name'=>'report.report_results'])->assignRole($role);
 
-        Permission::create(['name'=>'business.index']);
-        Permission::create(['name'=>'business.update']);
+        Permission::create(['name'=>'business.index'])->assignRole($role);
+        Permission::create(['name'=>'business.update'])->assignRole($role);
 
-        Permission::create(['name'=>'printer.index']);
-        Permission::create(['name'=>'printer.update']);
+        Permission::create(['name'=>'printer.index'])->assignRole($role);
+        Permission::create(['name'=>'printer.update'])->assignRole($role);
 
         Permission::create(['name'=>'users.index'])->assignRole($role);
         Permission::create(['name'=>'users.create'])->assignRole($role);
         Permission::create(['name'=>'users.edit'])->assignRole($role);
         Permission::create(['name'=>'users.update'])->assignRole($role);
         Permission::create(['name'=>'users.destroy'])->assignRole($role);
+
+        Permission::create(['name'=>'roles.index'])->assignRole($role);
+        Permission::create(['name'=>'roles.create'])->assignRole($role);
+        Permission::create(['name'=>'roles.edit'])->assignRole($role);
+        Permission::create(['name'=>'roles.update'])->assignRole($role);
+        Permission::create(['name'=>'roles.destroy'])->assignRole($role);
 
     }
 }
