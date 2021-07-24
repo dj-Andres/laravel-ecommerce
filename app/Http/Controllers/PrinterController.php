@@ -17,7 +17,7 @@ class PrinterController extends Controller
 
     public function index()
     {
-        $printer = Printer::where('id','=',1)->firstOrFail();
+        $printer = Printer::where('id',1)->firstOrFail();
         return view("admin.printer.index",compact("printer"));
 
     }
