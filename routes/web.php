@@ -32,7 +32,7 @@ Route::resource('sales', SaleController::class)->names('sales');
 
 Route::get('purchases/upload/{purchase}', [PurchaseController::class, 'upload'])->name('purchase.upload');
 Route::get('change_status/purchases/{purchase}', [PurchaseController::class, 'change_status'])->name('purchase.change_status');
-Route::get('change_status/product/{pruduct}', [ProductController::class, 'change_status'])->name('product.change_status');
+Route::get('change_status/product/{pruduct}', [ProductController::class, 'change_status'])->name('change.status.product');
 Route::get('change_status/sales/{sale}', [SaleController::class, 'change_status'])->name('sale.change_status');
 
 Route::get('purchases/pdf/{purchase}', [PurchaseController::class, 'pdf'])->name('purchases.pdf');
@@ -41,6 +41,7 @@ Route::get('sales/print/{sale}', [SaleController::class, 'print'])->name('sales.
 Route::get('sales/report_day', [ReportController::class, 'report_day'])->name('report.report_day');
 Route::get('sales/report_date', [ReportController::class, 'report_date'])->name('report.report_date');
 Route::post('sales/report_results', [ReportController::class, 'report_results'])->name('report.report_results');
+
 
 Route::resource('Business', BusinessController::class)->only(['index', 'update'])->names('business');
 Route::resource('printer', PrinterController::class)->only(['index', 'update'])->names('printer');

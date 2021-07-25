@@ -26,7 +26,6 @@ class ProductController extends Controller
     {
         $products = Product::join('categories','categories.id','=','products.category_id')
                             ->select('products.id','products.name','products.stock','products.status','categories.name as categoria')
-                            ->where('products.status','=','ACTIVE')
                             ->get();
         return view('admin.product.index', compact('products'));
     }
@@ -44,6 +43,7 @@ class ProductController extends Controller
             $file = $request->file('image');
             $image_name = time().'-'.$file->getClientOriginalName();
             $file->move(public_path("/images/productos"),$image_name);
+            unlink($file);
         }
 
         $product = Product::create($request->all()+[
@@ -95,14 +95,14 @@ class ProductController extends Controller
         return redirect()->route('product.index');
     }
     public function change_status(Product $product)
-    {
-        if ($product->status == "ACTIVE") {
-            $product->update(['status'=>'DESACTIVED']);
+    {   
+        if ($product->status == 'ACTIVE') {
+            $product->update(['status'=>'DEACTIVATED']);
             return redirect()->back();
-        }else{
+        } else {
             $product->update(['status'=>'ACTIVE']);
             return redirect()->back();
-        }
+        } 
         
     }
 }
