@@ -17,8 +17,8 @@
             </h3>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Panel administrador</a></li>
-                    <li class="breadcrumb-item"><a href="{{route('client.index')}}">Cliente</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Panel administrador</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('client.index') }}">Cliente</a></li>
                     <li class="breadcrumb-item active" aria-current="page">{{ $client->name }}</li>
                 </ol>
             </nav>
@@ -51,10 +51,10 @@
                                             <hr>
                                             <strong>
                                                 <i class="fas fa-mobile mr-1"></i>
-                                                 Ruc
+                                                Ruc
                                             </strong>
                                             <p class="text-muted">
-                                                <p>{{$client->ruc}}</p>    
+                                            <p>{{ $client->ruc }}</p>
                                             </p>
                                             <hr>
                                             <strong><i class="fas fa-envelope mr-1"></i> Dirección</strong>
@@ -70,7 +70,6 @@
                                             <p class="text-muted">
                                                 {{ $client->email }}
                                             </p>
-                                            <a href="{{route('client.create')}}">Nuevo Cliente</a>
                                         </div>
                                     </div>
                                 </div>
@@ -78,9 +77,11 @@
                         </div>
                     </div>
                     <div class="card-footer text-muted">
-                        <a href="{{ route('client.index') }}" class="btn btn-primary float-right">
+                        <a href="{{ route('client.index') }}" class="btn btn-secondary float-right">
                             Regresar
                         </a>
+                        <button type="button" class="btn btn-primary float-right mr-1" data-toggle="modal"
+                            data-target="#staticBackdrop">Nuevo Cliente</button>
                     </div>
                 </div>
             </div>
@@ -88,6 +89,4 @@
 
     </div>
 @endsection
-@section('scripts')
-    {!! Html::script('js/data-table.js') !!}
-@endsection
+@include('admin.client._modal')

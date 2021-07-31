@@ -6,6 +6,7 @@ use App\Http\Requests\Client\StoreRequest;
 use App\Http\Requests\Client\UpdateRequest;
 use App\Models\Client;
 use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\TryCatch;
 
 class ClientController extends Controller
 {
@@ -30,8 +31,12 @@ class ClientController extends Controller
 
     public function store(StoreRequest $request)
     {
-        Client::create($request->all());
-        return redirect()->route('client.index');
+        try {
+            Client::create($request->all());
+            return response()->json(array('status' => 'ok', 'code'=>200, 'message'=>'El cliente ha sido guardado'));
+        } catch (\Exception $e) {
+            return response()->json(array('status' => 'error', 'code'=>400, 'message'=>$e->getMessage()));
+        }
     }
     public function show(Client $client)
     {
