@@ -49,7 +49,7 @@
                             <h4 class="card-title">Registro Cliente</h4>
                         </div>
                         {!! Form::open(['route' => 'client.store', 'method' => 'POST', 'id' => 'formulario', 'class' => 'cmxform']) !!}
-                        @include('admin.client._form')
+                            @include('admin.client._form')
                         {!! Form::close() !!}
                     </div>
                 </div>
@@ -60,7 +60,6 @@
 @section('scripts')
     {!! Html::script('js/form-validation.js') !!}
     {!! Html::script('js/bt-maxLength.js') !!}
-    {!! Html::script('js/toastr.min.js') !!}
     <script>
         $(document).ready(function() {
             $.ajaxSetup({
@@ -90,10 +89,21 @@
                     }                
                 });
                 request.done(function(response) {
-                    toastr.success(response.message);
-                    setTimeout(function(){
-                        window.location.href="{{route('client.index')}}"
-                    },3000);
+                    if(response.code == 200){
+                        toastr.success(response.message);
+                        setTimeout(function(){
+                            window.location.href="{{route('client.index')}}"
+                        },3000);
+                    }else{
+                        toastr.error(response.message);
+                        console.error(response.message);
+                    }
+                });
+                request.fail(function(xhr, status, error){
+                    $.each(xhr.responseJSON.errors, function (key, item) 
+                    {
+                        $("#errors").append("<p class='text-danger'>"+item+"</p>")
+                    });
                 });
             });
         });

@@ -6,7 +6,7 @@ use App\Http\Requests\Client\StoreRequest;
 use App\Http\Requests\Client\UpdateRequest;
 use App\Models\Client;
 use Illuminate\Http\Request;
-use PhpParser\Node\Stmt\TryCatch;
+use Illuminate\Validation\Validator;
 
 class ClientController extends Controller
 {
@@ -31,11 +31,18 @@ class ClientController extends Controller
 
     public function store(StoreRequest $request)
     {
+        ///$validator = Validator::make($request->all(), $rules, $messages);
+        /*if($validated->passes()){
+                
+            }else{
+                return response()->json(['type'=> 'validate','errors' => $validated->errors()]);
+            }*/
+        $validated = $request->validated();
         try {
-            Client::create($request->all());
-            return response()->json(array('status' => 'ok', 'code'=>200, 'message'=>'El cliente ha sido guardado'));
+            $client = Client::create($request->all());
+            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'El cliente ha sido guardado','data' => $client],200);
         } catch (\Exception $e) {
-            return response()->json(array('status' => 'error', 'code'=>400, 'message'=>$e->getMessage()));
+            return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
         }
     }
     public function show(Client $client)
@@ -50,8 +57,13 @@ class ClientController extends Controller
 
     public function update(UpdateRequest $request, Client $client)
     {   
-        $client->update($request->all());
-        return redirect()->route('client.index');
+        $validated = $request->validated();
+        try {
+            $client->update($request->all());
+            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'El cliente '.$client['name'].' fue actualizado exitosamente ','data' => $client],200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
+        }
     }
     public function destroy(Client $client)
     {

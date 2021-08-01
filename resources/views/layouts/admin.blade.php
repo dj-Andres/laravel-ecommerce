@@ -441,7 +441,8 @@
     <script src="{{asset('js/settings.js')}}"></script>
     <script src="{{asset('js/todolist.js')}}"></script>
     <script src="{{ asset('js/select2.js') }}"></script>
-    <script src="{{ asset('js/sweetalert.js') }}"></script>
+    <script src="{{ asset('js/sweetalert2.js') }}"></script>
+    <script src="{{ asset('js/toastr.min.js') }}"></script>
     <!-- endinject -->
     <!-- Custom js for this page-->
     <script src="{{asset('js/dashboard.js')}}"></script>

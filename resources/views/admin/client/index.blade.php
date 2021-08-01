@@ -64,12 +64,12 @@
                                         <td>{{$client->email}}</td>
                                         <td style="width: 50px;">
                                             {!! Form::open(['route'=>['client.destroy',$client], 'method'=>'DELETE']) !!}
-                                            <a class="jsgrid-button jsgrid-edit-button" href="{{route('client.edit', $client)}}" title="Editar">
-                                                <i class="far fa-edit"></i>
-                                            </a>
-                                            <button class="jsgrid-button jsgrid-delete-button unstyled-button" type="submit" title="Eliminar">
-                                                <i class="far fa-trash-alt"></i>
-                                            </button>
+                                                <a class="jsgrid-button jsgrid-edit-button" href="{{route('client.edit', $client)}}" title="Editar">
+                                                    <i class="far fa-edit"></i>
+                                                </a>
+                                                <button class="jsgrid-button jsgrid-delete-button unstyled-button" type="submit" title="Eliminar">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </button>
                                             {!! Form::close() !!}
                                         </td>
                                     </tr>
@@ -84,5 +84,6 @@
     </div>
 @endsection
 @section('scripts')
-{!! Html::script('js/data-table.js') !!}
+    {!! Html::script('js/data-table.js') !!}
+    {!! Html::script('js/cliente.js') !!}
 @endsection
