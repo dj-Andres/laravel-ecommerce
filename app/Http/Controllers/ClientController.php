@@ -31,12 +31,6 @@ class ClientController extends Controller
 
     public function store(StoreRequest $request)
     {
-        ///$validator = Validator::make($request->all(), $rules, $messages);
-        /*if($validated->passes()){
-                
-            }else{
-                return response()->json(['type'=> 'validate','errors' => $validated->errors()]);
-            }*/
         $validated = $request->validated();
         try {
             $client = Client::create($request->all());
@@ -56,11 +50,11 @@ class ClientController extends Controller
     }
 
     public function update(UpdateRequest $request, Client $client)
-    {   
+    {
         $validated = $request->validated();
         try {
             $client->update($request->all());
-            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'El cliente '.$client['name'].' fue actualizado exitosamente ','data' => $client],200);
+            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'El cliente ha sido actualizado correctamente','data' => $client],200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
         }

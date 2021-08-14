@@ -26,7 +26,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            <h4 class="card-title">Cliente 
+                            <h4 class="card-title">Cliente
                                 <a href="{{route('client.create')}}" class="btn btn-primary">Crear Nuevo</a>
                             </h4>
                             <div class="btn-group">
@@ -37,7 +37,7 @@
                                 </div>
                               </div>
                         </div>
-    
+
                         <div class="table-responsive">
                             <table id="order-listing" class="table">
                                 <thead>
@@ -67,9 +67,9 @@
                                                 <a class="jsgrid-button jsgrid-edit-button" href="{{route('client.edit', $client)}}" title="Editar">
                                                     <i class="far fa-edit"></i>
                                                 </a>
-                                                <button class="jsgrid-button jsgrid-delete-button unstyled-button" type="submit" title="Eliminar">
+                                                <a class="jsgrid-button jsgrid-delete-button unstyled-button"  type="submit" title="Eliminar">
                                                     <i class="far fa-trash-alt"></i>
-                                                </button>
+                                                </a>
                                             {!! Form::close() !!}
                                         </td>
                                     </tr>
@@ -85,5 +85,9 @@
 @endsection
 @section('scripts')
     {!! Html::script('js/data-table.js') !!}
-    {!! Html::script('js/cliente.js') !!}
+    <script>
+        $('#eliminar').submit(e=>{
+            alert("Desea aliminar el cliente");
+        });
+    </script>
 @endsection

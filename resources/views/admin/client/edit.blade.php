@@ -58,13 +58,14 @@
 @section('scripts')
     {!! Html::script('js/form-validation.js') !!}
     {!! Html::script('js/bt-maxLength.js') !!}
-    <script>
+    <!--<script>
         $(document).ready(function() {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-Token': $('meta[name=_token]').attr('content')
                 }
             });
+            console.log("{{$client->id}}");
             $("#guardar").on("click",function(e){
                 e.preventDefault();
                 let name = $("#name").val();
@@ -73,9 +74,9 @@
                 let address = $("#address").val();
                 let phone = $("#phone").val();
                 let email = $("#email").val();
-
+                let url_action = $("#formulario-edit").find("form").attr("action");
                 const request = $.ajax({
-                    url: url,
+                    url: url_action,
                     type: 'POST',
                     data:{
                         name:name,
@@ -84,7 +85,7 @@
                         address:address,
                         phone:phone,
                         email:email,
-                    }                
+                    }
                 });
                 request.done(function(response) {
                     if(response.code == 200){
@@ -98,12 +99,12 @@
                     }
                 });
                 request.fail(function(xhr, status, error){
-                    $.each(xhr.responseJSON.errors, function (key, item) 
+                    $.each(xhr.responseJSON.errors, function (key, item)
                     {
                         $("#errors").append("<p class='text-danger'>"+item+"</p>")
                     });
                 });
             });
         });
-    </script>
+    </script>-->
 @endsection

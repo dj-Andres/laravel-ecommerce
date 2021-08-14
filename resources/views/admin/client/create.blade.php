@@ -6,17 +6,14 @@
             padding: 0;
             background: none;
         }
-
         .error {
             color: #FF0000;
             padding-top: 2px;
         }
-
         .image-wrapper {
             position: relative;
             padding-bottom: 56.25%;
         }
-
         .image-wrapper img {
             border-radius: 7px;
             border: 2px solid blueviolet;
@@ -86,7 +83,7 @@
                         address:address,
                         phone:phone,
                         email:email,
-                    }                
+                    }
                 });
                 request.done(function(response) {
                     if(response.code == 200){
@@ -100,9 +97,12 @@
                     }
                 });
                 request.fail(function(xhr, status, error){
-                    $.each(xhr.responseJSON.errors, function (key, item) 
+                    $.each(xhr.responseJSON.errors, function (key, item)
                     {
-                        $("#errors").append("<p class='text-danger'>"+item+"</p>")
+                        $("#errors").append("<li class='alert alert-danger'>"+item+"</li>")
+                        setInterval(function(){
+                            $("#errors").hide()
+                        },7000)
                     });
                 });
             });
