@@ -23,15 +23,16 @@ class StoreRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name' => 'required|unique:categories|string|max:50',
             'description' => 'nullable|string|max:250',
         ];
+        return $rules;
     }
 
-    public function messajes()
+    public function messages()
     {
-        return [
+        $messages =  [
             'name.required' => 'Este campo es requerido.',
             'name.unique' => 'La Categoria ya se encuentra registrada.',
             'name.string' => 'El valor no es correcto.',
@@ -40,5 +41,6 @@ class StoreRequest extends FormRequest
             'description.string' => 'El valor no es correcto.',
             'description.max' => 'Solo se permite un maximo de 250 caracteres.'
         ];
+        return $messages;
     }
 }

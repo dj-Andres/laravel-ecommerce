@@ -51,13 +51,8 @@ class ClientController extends Controller
 
     public function update(UpdateRequest $request, Client $client)
     {
-        $validated = $request->validated();
-        try {
-            $client->update($request->all());
-            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'El cliente ha sido actualizado correctamente','data' => $client],200);
-        } catch (\Exception $e) {
-            return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
-        }
+        $client->update($request->all());
+        return redirect()->route('client.index');
     }
     public function destroy(Client $client)
     {

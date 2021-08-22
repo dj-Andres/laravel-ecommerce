@@ -42,7 +42,7 @@ class ProviderController extends Controller
     {
         return view('admin.providers.edit',compact('provider'));
     }
-    public function update(UpdateRequest $request, Provider $provider)
+    public function update(UpdateRequest $request,Provider $provider)
     {
         $provider->update($request->all());
         return redirect()->route('providers.index');

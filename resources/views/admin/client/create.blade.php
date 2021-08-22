@@ -64,15 +64,7 @@
                     'X-CSRF-Token': $('meta[name=_token]').attr('content')
                 }
             });
-            $("#guardar").on("click",function(e){
-                e.preventDefault();
-                let name = $("#name").val();
-                let cedula = $("#cedula").val();
-                let ruc = $("#ruc").val();
-                let address = $("#address").val();
-                let phone = $("#phone").val();
-                let email = $("#email").val();
-
+            function guardar(name,cedula,ruc,address,phone,email){
                 const request = $.ajax({
                     url: "{{ route('client.store') }}",
                     type: 'POST',
@@ -105,6 +97,35 @@
                         },7000)
                     });
                 });
+            }
+            $("#guardar").on("click",function(e){
+                e.preventDefault();
+                let cedula = $("#cedula").val().trim();
+                let name = $("#name").val();
+                let ruc = $("#ruc").val();
+                let address = $("#address").val();
+                let phone = $("#phone").val();
+                let email = $("#email").val();
+                let total = 0; let longitud = cedula.length;  let longcheck = longitud - 1;
+
+                if (cedula !== "" && longitud === 10) {
+                    for (i = 0; i < longcheck; i++) {
+                        if (i % 2 === 0) {
+                        let aux = cedula.charAt(i) * 2;
+                        if (aux > 9) aux -= 9;
+                            total += aux;
+                        } else {
+                            total += parseInt(cedula.charAt(i));
+                        }
+                    }
+                    total = total % 10 ? 10 - (total % 10) : 0;
+                    if (cedula.charAt(longitud - 1) == total){
+                        guardar(name,cedula,ruc,address,phone,email);
+                    }else{
+                        $("#aviso").show();
+                        $("#aviso").text("Cedula invalida");
+                    }
+                }
             });
         });
     </script>

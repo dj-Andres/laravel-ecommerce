@@ -15,8 +15,8 @@
     <!-- inject:css -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/sweetalert2.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/select2.css') }}">
     <link rel="stylesheet" href="{{ asset('css/toastr.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/select2-bootstrap.min.css') }}">
 
     @yield('styles')
     <!-- endinject -->
@@ -440,8 +440,6 @@
     <script src="{{asset('js/misc.js')}}"></script>
     <script src="{{asset('js/settings.js')}}"></script>
     <script src="{{asset('js/todolist.js')}}"></script>
-    <script src="{{ asset('js/select2.js') }}"></script>
-    <script src="{{ asset('js/sweetalert2.js') }}"></script>
     <script src="{{ asset('js/toastr.min.js') }}"></script>
     <!-- endinject -->
     <!-- Custom js for this page-->

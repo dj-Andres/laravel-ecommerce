@@ -39,7 +39,7 @@ class ProductController extends Controller
 
     public function store(StoreRequest $request)
     {
-        if($request->hasFile('image')){
+        /*if($request->hasFile('image')){
             $file = $request->file('image');
             $image_name = time().'-'.$file->getClientOriginalName();
             $file->move(public_path("/images/productos"),$image_name);
@@ -52,7 +52,7 @@ class ProductController extends Controller
 
         $product->update(['code' => $product->id]);
 
-        return redirect()->route('product.index');
+        return redirect()->route('product.index');*/
     }
 
     public function show($id)
@@ -95,14 +95,14 @@ class ProductController extends Controller
         return redirect()->route('product.index');
     }
     public function change_status(Product $product)
-    {   
+    {
         if ($product->status == 'ACTIVE') {
             $product->update(['status'=>'DEACTIVATED']);
             return redirect()->back();
         } else {
             $product->update(['status'=>'ACTIVE']);
             return redirect()->back();
-        } 
-        
+        }
+
     }
 }

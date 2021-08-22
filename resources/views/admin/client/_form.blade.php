@@ -15,6 +15,7 @@
                 {!! Form::label('cedula', 'Cedula',['class'=>'col-sm-3 col-form-label']) !!}
                 <div class="col-sm-9">
                     {!! Form::text('cedula', null, ['class' => 'form-control', 'placeholder' => 'Ingrese la Cedula', 'id' => 'cedula']) !!}
+                    <p id="aviso" class="text-danger font-weight-bold mt-1"></p>
                 </div>
             </div>
         </div>

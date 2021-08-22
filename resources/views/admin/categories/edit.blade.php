@@ -16,7 +16,7 @@
             </h3>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Panel administrador</a></li>
+                    <li class="breadcrumb-item"><a href="{{route('home')}}">Panel administrador</a></li>
                     <li class="breadcrumb-item"><a href="{{route('categories.index')}}">Categorias</a></li>
                 </ol>
             </nav>
@@ -28,8 +28,8 @@
                         <div class="d-flex justify-content-between">
                             <h4 class="card-title">Editar Categorías</h4>
                         </div>
-                        
-                        {!! Form::model($category, ['route'=>['categories.update',$category->id],'method'=>'PUT']) !!}
+
+                        {!! Form::model($category, ['route'=>['categories.update',$category],'method'=>'PUT']) !!}
                             @include('admin.categories._form')
                             <button type="submit" class="btn btn-primary mr-2">Actualizar</button>
                             <a href="{{ route('categories.index')}}" class="btn btn-light">Cancelar</a>

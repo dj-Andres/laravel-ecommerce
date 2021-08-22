@@ -11,11 +11,13 @@
             color: #FF0000;
             padding-top: 2px;
         }
-        .image-wrapper{
+
+        .image-wrapper {
             position: relative;
             padding-bottom: 56.25%;
         }
-        .image-wrapper img{
+
+        .image-wrapper img {
             border-radius: 7px;
             border: 2px solid blueviolet;
             position: absolute;
@@ -23,6 +25,7 @@
             width: 100%;
             height: 100%;
         }
+
     </style>
 @endsection
 @section('content')
@@ -46,10 +49,10 @@
                             <h4 class="card-title">Registro Producto</h4>
                         </div>
 
-                        {!! Form::open(['route' => 'product.store', 'method' => 'POST', 'files' => true, 'id' => 'formulario','class' => 'form-sample']) !!}
-
+                        {!! Form::open(['route' => 'product.store', 'method' => 'POST', 'files' => true, 'id' => 'formulario', 'class' => 'form-sample']) !!}
+                        <fieldset>
                             <div class="row">
-                                <div class="col-md-6 col-lg-12">
+                                <div class="col-md-6">
                                     <div class="form-group row">
                                         {!! Form::label('name', 'Nombre') !!}
                                         {!! Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'Ingrese el Nombre del Proveedor', 'id' => 'name']) !!}
@@ -58,9 +61,7 @@
                                         @enderror
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-lg-12">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         {!! Form::label('sell_price', 'Precio de Compra') !!}
                                         {!! Form::text('sell_price', null, ['class' => 'form-control', 'placeholder' => 'Ingrese el PV', 'id' => 'shell_price']) !!}
@@ -69,10 +70,12 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-md-6-col-lg-12">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="category_id">Categoría</label>
-                                        <select class="form-control" name="category_id" id="category_id">
+                                        <select class="form-control select" name="category_id" id="category_id">
                                             @foreach ($categories as $category)
                                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                                             @endforeach
@@ -82,12 +85,10 @@
                                         @enderror
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-lg-12">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="provider_id">Proveedor</label>
-                                        <select class="form-control" name="provider_id" id="provider_id">
+                                        <select class="form-control select" name="provider_id" id="provider_id">
                                             @foreach ($providers as $provider)
                                                 <option value="{{ $provider->id }}">{{ $provider->name }}</option>
                                             @endforeach
@@ -97,33 +98,27 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6-col-lg-12">
-                                    <div class="custom-file">
-                                        <input type="file" name="image" id="image" class="custom-file-input" lang="es">
-                                        <label for="image" class="custom-file-label">Seleccionar Archivo</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="image-wrapper">
-                                            @isset($product->image)
-                                                <img src="" alt="Producto" id="picture">
-                                            @endisset
-                                        </div>
-                                    </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="image">Logo</label>
+                                    <input type="file" name="image" id="picture" class="dropify" />
                                     @error('image')
                                         <p class="text-danger">
-                                            {{$message}}
+                                            {{ $message }}
                                         </p>
                                     @enderror
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6 col-lg-12">
-                                    <div class="form-group pt-2">
-                                        <button type="submit" class="btn btn-primary mr-2">Guardar</button>
-                                        <a href="{{ route('product.index') }}" class="btn btn-light">Cancelar</a>
-                                    </div>
+                        </fieldset>
+                        <div class="row">
+                            <div class="col-md-6 col-lg-12">
+                                <div class="form-group pt-2">
+                                    <button type="submit" class="btn btn-primary mr-2">Guardar</button>
+                                    <a href="{{ route('product.index') }}" class="btn btn-light">Cancelar</a>
                                 </div>
                             </div>
+                        </div>
                         {!! Form::close() !!}
                     </div>
                 </div>
@@ -132,23 +127,42 @@
     </div>
 @endsection
 @section('scripts')
-    {!! Html::script('js/jquery.min.js') !!}
-    {!! Html::script('js/jquery.validate.min.js') !!}
+    {!! Html::script('js/dropify.js') !!}
+    {!! Html::script('js/sweetalert2.js') !!}
     <script>
-        const file = document.getElementById('image');
-        const image = document.getElementById('picture');
-    
-        file.addEventListener('change',changeImg);
-    
-        function changeImg(event){
-            let file = event.target.files[0];
-            let reader = new FileReader();
-    
-            reader.onload=(event) =>{
-                image.setAttribute('src',event.target.result);
-            };
-    
-            reader.readAsDataURL(file);
-        }
+        $(document).ready(() => {
+            function validateFile() {
+                let filename = $("#picture").val();
+                if (filename == null) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'No ha seleccionado una imagen',
+                        icon: 'error'
+                    });
+                } else {
+                    let extension = filename.replace(/^.*\./, '');
+
+                    if (extension == filename) {
+                        extension = ''
+                        $("#picture").val();
+                    } else {
+                        extension = extension.toLowerCase();
+                        if ((extension != 'jpg') || (extension != 'png') || (extension != 'jpeg'))
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'La extensión del archivo no es valida',
+                                icon: 'error'
+                            });
+                        $("#picture").val();
+                    }
+                }
+            }
+            $(".select").select2({
+                theme: "bootstrap"
+            });
+            $('input[type="file"]').change(function() {
+                validateFile();
+            });
+        });
     </script>
 @endsection

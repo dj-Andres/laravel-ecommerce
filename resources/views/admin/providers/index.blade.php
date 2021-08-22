@@ -26,7 +26,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            <h4 class="card-title">Proveedor 
+                            <h4 class="card-title">Proveedor
                                 <a href="{{route('providers.create')}}" class="btn btn-primary">Crear Nuevo</a>
                             </h4>
                             <div class="btn-group">
@@ -37,14 +37,15 @@
                                 </div>
                               </div>
                         </div>
-    
+
                         <div class="table-responsive">
                             <table id="order-listing" class="table">
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
+                                        <th>Codigo</th>
                                         <th>Nombre</th>
                                         <th>Correo</th>
+                                        <th>Numero Ruc</th>
                                         <th>Dirección</th>
                                         <th>Telefono</th>
                                         <th>Acciones</th>
@@ -58,19 +59,20 @@
                                             <a href="{{route('providers.show',$provider)}}">{{$provider->name}}</a>
                                         </td>
                                         <td>{{$provider->email}}</td>
+                                        <td>{{$provider->ruc_number}}</td>
                                         <td>{{$provider->address}}</td>
                                         <td>{{$provider->phone}}</td>
                                         <td style="width: 50px;">
                                             {!! Form::open(['route'=>['providers.destroy',$provider], 'method'=>'DELETE']) !!}
-    
+
                                             <a class="jsgrid-button jsgrid-edit-button" href="{{route('providers.edit', $provider)}}" title="Editar">
                                                 <i class="far fa-edit"></i>
                                             </a>
-                                            
+
                                             <button class="jsgrid-button jsgrid-delete-button unstyled-button" type="submit" title="Eliminar">
                                                 <i class="far fa-trash-alt"></i>
                                             </button>
-    
+
                                             {!! Form::close() !!}
                                         </td>
                                     </tr>

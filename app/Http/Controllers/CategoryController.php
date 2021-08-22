@@ -31,13 +31,18 @@ class CategoryController extends Controller
 
     public function store(StoreRequest $request)
     {
-        Category::create($request->all());
-        return redirect()->route('categories.index');
+        $validated = $request->validated();
+        try {
+            $category = Category::create($request->all());
+            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'La categoria ha sido guardada exitosamente','data' => $category],200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
+        }
     }
 
     public function show(Category $category)
     {
-        return view('admin.categories.show',compact('category')); 
+        return view('admin.categories.show',compact('category'));
     }
 
     public function edit(Category $category)
