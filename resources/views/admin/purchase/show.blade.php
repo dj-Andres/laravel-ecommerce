@@ -17,7 +17,7 @@
             </h3>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('purchases.index') }}">Panel administrador</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Panel administrador</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('purchases.index') }}">Compras</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Detalle de Compra N° {{ $purchase->id }}</li>
                 </ol>

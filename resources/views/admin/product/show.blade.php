@@ -17,7 +17,7 @@
             </h3>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Panel administrador</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('home')}}">Panel administrador</a></li>
                     <li class="breadcrumb-item"><a href="{{route('product.index')}}">Producto</a></li>
                     <li class="breadcrumb-item active" aria-current="page">{{ $product->name }}</li>
                 </ol>
@@ -60,7 +60,7 @@
                                             </strong>
                                             <p class="text-muted">
                                                 @if ($product->status === 'ACTIVE')
-                                                    <p class="text-success">Activo</p>    
+                                                    <p class="text-success">Activo</p>
                                                 @endif
                                             </p>
                                             <hr>

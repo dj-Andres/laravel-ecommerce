@@ -39,11 +39,10 @@ class ProductController extends Controller
 
     public function store(StoreRequest $request)
     {
-        /*if($request->hasFile('image')){
+        if($request->hasFile('image')){
             $file = $request->file('image');
             $image_name = time().'-'.$file->getClientOriginalName();
             $file->move(public_path("/images/productos"),$image_name);
-            unlink($file);
         }
 
         $product = Product::create($request->all()+[
@@ -52,7 +51,7 @@ class ProductController extends Controller
 
         $product->update(['code' => $product->id]);
 
-        return redirect()->route('product.index');*/
+        return redirect()->route('product.index');
     }
 
     public function show($id)
