@@ -1,192 +1,233 @@
-<!DOCTYPE>
-<html lang="es">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Ventas|Reportes</title>
+@extends('layouts.reports.report')
+@section('title')Compras @endsection
+@section('styles')
     <style>
-      body {
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-}
-#datos {
-    float: left;
-    margin-top: 0%;
-    margin-left: 2%;
-    margin-right: 2%;
-}
-#encabezado {
-    text-align: center;
-    margin-left: 35%;
-    margin-right: 35%;
-    font-size: 15px;
-}
-#fact {
-    float: right;
-    margin-top: 2%;
-    margin-left: 2%;
-    margin-right: 2%;
-    font-size: 20px;
-    background: #33AFFF;
-}
-section {
-    clear: left;
-}
-#cliente {
-    text-align: left;
-}
-#faproveedor {
-    width: 40%;
-    border-collapse: collapse;
-    border-spacing: 0;
-    margin-bottom: 15px;
-}
-#fac,
-#fv,
-#fa {
-    color: #FFFFFF;
-    font-size: 15px;
-}
-#faproveedor thead {
-    padding: 20px;
-    background: #33AFFF;
-    text-align: left;
-    border-bottom: 1px solid #FFFFFF;
-}
-#faccomprador {
-    width: 100%;
-    border-collapse: collapse;
-    border-spacing: 0;
-    margin-bottom: 15px;
-}
-#faccomprador thead {
-    padding: 20px;
-    background: #33AFFF;
-    text-align: center;
-    border-bottom: 1px solid #FFFFFF;
-}
-#facproducto {
-    width: 100%;
-    border-collapse: collapse;
-    border-spacing: 0;
-    margin-bottom: 15px;
-}
-#facproducto thead {
-    padding: 20px;
-    background: #33AFFF;
-    text-align: center;
-    border-bottom: 1px solid #FFFFFF;
-}
-  </style>
-  <body>
-    <header>
-      <div>
-        <table id="datos">
-          <thead>
-            <tr>
-              <th id="">Datos del Proveedor</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th>
-                <p id="proveedor">Nombre: {{ $purchase->provider->name }}<br>
-                  Direccion: {{ $purchase->provider->address }}<br>
-                  Telefono: {{ $purchase->provider->phone }}<br>
-                  Email: {{ $purchase->provider->email }}
-                </p>
-              </th>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div id="fact">
-        <p>NUMERO DE COMPRA <br />
-          {{$purchase->id}}</p>
-      </div>
+        .clearfix:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        a {
+            color: #5D6975;
+            text-decoration: underline;
+        }
+
+        body {
+            position: relative;
+            width: 21cm;
+            height: 29.7cm;
+            margin: 0 auto;
+            color: #001028;
+            background: #FFFFFF;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            font-family: Arial;
+        }
+
+        header {
+            padding: 10px 0;
+            margin-bottom: 30px;
+        }
+
+        #logo {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        #logo img {
+            width: 90px;
+        }
+
+        h1 {
+            border-top: 1px solid #5D6975;
+            border-bottom: 1px solid #5D6975;
+            color: #5D6975;
+            font-size: 2.4em;
+            line-height: 1.4em;
+            font-weight: normal;
+            text-align: center;
+            margin: 0 0 20px 0;
+            background: url(../public/images/dimension.png);
+        }
+
+        #project {
+            float: left;
+        }
+
+        #project span {
+            color: #5D6975;
+            text-align: right;
+            width: 52px;
+            margin-right: 10px;
+            display: inline-block;
+            font-size: 0.8em;
+        }
+
+        #company {
+            float: right;
+            text-align: right;
+        }
+
+        #project div,
+        #company div {
+            white-space: nowrap;
+        }
+        .right{
+            float: right;
+        }
+        .right span{
+            color: #5D6975;
+            /*text-align: right;
+            /*font-size: 0.8em;*/
+        }
+        .center{
+            text-align: center;
+        }
+        .center span{
+            color: #5D6975;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+            margin-bottom: 20px;
+        }
+
+        table tr:nth-child(2n-1) td {
+            background: #F5F5F5;
+        }
+
+        table th,
+        table td {
+            text-align: center;
+        }
+
+        table th {
+            padding: 5px 20px;
+            color: #5D6975;
+            border-bottom: 1px solid #C1CED9;
+            white-space: nowrap;
+            font-weight: normal;
+        }
+
+        table .service,
+        table .desc {
+            text-align: left;
+        }
+
+        table td {
+            padding: 20px;
+            text-align: right;
+        }
+
+        table td.service,
+        table td.desc {
+            vertical-align: top;
+        }
+
+        table td.unit,
+        table td.qty,
+        table td.total {
+            font-size: 1.2em;
+        }
+
+        table td.grand {
+            border-top: 1px solid #5D6975;
+            ;
+        }
+        #notices .notice {
+            color: #5D6975;
+            font-size: 1.2em;
+        }
+
+        footer {
+            color: #5D6975;
+            width: 100%;
+            height: 30px;
+            position: absolute;
+            bottom: 0;
+            border-top: 1px solid #C1CED9;
+            padding: 8px 0;
+            text-align: center;
+        }
+
+    </style>
+@endsection
+@section('header')
+    <header class="clearfix">
+        <div id="logo">
+            <img src="../public/images/logo.png">
+        </div>
+        <div class="center">
+            <h4>Datos de la Empresa</h4>
+            <div><span>Empresa </span>Test</div>
+            <div><span>N° Ruc </span>0707012605</div>
+            <div><span>Dirección </span>Pasaje</div>
+        </div>
+        <div id="project">
+            <h4>Datos del Proveedor</h4>
+            <div><span>Proveedor</span>{{ $purchase->provider->name }}</div>
+            <div><span>Dirección</span>{{ $purchase->provider->address }}</div>
+            <div><span>Telefono</span>{{ $purchase->provider->phone }}</div>
+            <div><span>EMAIL</span>{{ $purchase->provider->email }}</div>
+        </div>
+        <div class="right">
+            <h4>Datos del Comprador</h4>
+            <div><span>Comprador</span> {{$purchase->user->name}} </div>
+            <div><span>Fecha Compra</span> {{$purchase->purchase_date}} </div>
+        </div>
     </header>
-    <br>
-    <br>
-    <section>
-      <div>
-        <table id="faccomprador">
-          <thead>
-            <tr id="fv">
-              <th>Comprador</th>
-              <th>Fecha de Compra</th>
-            </tr>
-          </thead>
-          <tbody>
+@endsection
+@section('content')
+    @include('layouts.reports.title_reporte',['reporte' => 'Compras'])
+    <table>
+        <thead>
             <tr>
-              <td>{{$purchase->user->name}}</td>
-              <td>{{$purchase->created_at}}</td>
+                <th style="border-bottom: 1px solid #C1CED9;">CANTIDAD</th>
+                <th style="border-bottom: 1px solid #C1CED9;">PRODUCTO</th>
+                <th style="border-bottom: 1px solid #C1CED9;">PRECIO COMPRA $</th>
+                <th style="border-bottom: 1px solid #C1CED9;">SUBTOTAL $</th>
             </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-    <br>
-    <section>
-      <div>
-        <table id="facproducto">
-          <thead>
-            <tr id="fa">
-              <th>CANTIDAD</th>
-              <th>PRODUCTO</th>
-              <th>PRECIO COMPRA $</th>
-              <th>SUBTOTAL $</th>
-            </tr>
-          </thead>
-          <tbody>
+        </thead>
+        <tbody>
             @foreach ($purchaseDetails as $detalle)
                 <tr>
-                  <td>{{$detalle->cantidad}}</td>
-                  <td>{{$detalle->product->name}}</td>
-                  <td>$ {{$detalle->price}}</td>
-                  <td>$ {{number_format($detalle->cantidad*$detalle->price,2)}}</td>
+                    <td style="text-align: center;">{{ $detalle->cantidad }}</td>
+                    <td style="text-align: center;">{{ $detalle->product->name }}</td>
+                    <td style="text-align: center;">$ {{ $detalle->price }}</td>
+                    <td style="text-align: center;">$ {{ number_format($detalle->cantidad * $detalle->price, 2) }}</td>
                 </tr>
             @endforeach
-          </tbody>
-          <tfoot>
+        </tbody>
+        <tfoot>
             <tr>
-              <tr>
-                <th colspan="3">
-                  <p align="right">SUBTOTAL:</p>
-                </th>
-                <td>
-                  <p align="right">$ {{number_format($subtotal,2)}}<p>
+                <td colspan="3">
+                    <p align="right" style="margin-left: -20px;">SUBTOTAL:</p>
                 </td>
-              </tr>
-              <tr>
-                <th colspan="3">
-                  <p align="right">TOTAL IMPUESTO ({{$purchase->impuesto}}%):</p>
-                </th>
-                <td>
-                  <p align="right">$ {{number_format($subtotal*$purchase->impuesto/100,2)}}</p>
+                <td class="total">
+                    <p align="right" style="text-align: center;">$ {{ number_format($subtotal, 2) }}
+                    <p>
                 </td>
-              </tr>
-              <tr>
-                <th colspan="3">
-                  <p align="right">TOTAL PAGAR:</p>
-                </th>
-                <td>
-                  <p align="right">$ {{number_format($purchase->total,2)}}<p>
-                </td>
-              </tr>
             </tr>
-          </tfoot>
-        </table>
-      </div>
-    </section>
-    <br>
-    <br>
-    <footer>
-      <!--puedes poner un mensaje aqui-->
-      <div id="datos">
-          <p id="encabezado">
-              {{--  <b>{{$company->name}}</b><br>{{$company->description}}<br>Telefono:{{$company->telephone}}<br>Email:{{$company->email}}  --}}
-          </p>
-      </div>
-    </footer>
-  </body>
-</html>
+            <tr>
+                <td colspan="3">
+                    <p align="right">TOTAL IMPUESTO ({{ $purchase->impuesto }}%):</p>
+                </td>
+                <td class="total">
+                    <p align="right" style="text-align: center;">$ {{ number_format(($subtotal * $purchase->impuesto) / 100, 2) }}
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" class="grand total">
+                    <p align="right">TOTAL PAGAR:</p>
+                </td>
+                <td class="grand total">
+                    <p align="right" style="text-align: center;">$ {{ number_format($purchase->total, 2) }}
+                    <p>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+@endsection

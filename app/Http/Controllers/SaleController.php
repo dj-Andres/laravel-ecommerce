@@ -18,7 +18,6 @@ use Mike42\Escpos\Printer;
 use Mike42\Escpos\EscposImage;
 Use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 
-
 class SaleController extends Controller
 {
     public function __construct()
@@ -52,12 +51,12 @@ class SaleController extends Controller
     {
         try {
             DB::beginTransaction();
-                
+
                 $sales = Sale::create($request->all() + [
                     'user_id' => Auth::user()->id,
                     'sale_date' => Carbon::now('America/Guayaquil')
                 ]);
-    
+
                 $sales->save();
 
                 $contador = 0;
@@ -70,7 +69,7 @@ class SaleController extends Controller
                     $detalle->cantidad = $request->cantidad[$contador];
                     $detalle->price = $request->price[$contador];
                     $detalle->descuento = $request->descuento[$contador];
-                    
+
                     $detalle->save();
                     $contador= $contador+1;
                 }
@@ -86,11 +85,11 @@ class SaleController extends Controller
         $subtotal = 0;
 
         $saleDetails = SaleDetail::where('sale_id','=',$sale->id)->get();
-        
+
         foreach ($saleDetails as $detalle) {
             $subtotal += $detalle->cantidad*$detalle->price - $detalle->cantidad * $detalle->price * $detalle->descuento /100;
         }
-        
+
         return view('admin.sale.show', compact('sale','saleDetails','subtotal'));
     }
 
@@ -123,13 +122,13 @@ class SaleController extends Controller
         $subtotal = 0;
 
         $saleDetails = SaleDetail::where('sale_id','=',$sale->id)->get();
-        
+
         foreach ($saleDetails as $detalle) {
             $subtotal += $detalle->cantidad*$detalle->price - $detalle->cantidad * $detalle->price * $detalle->descuento /100;
         }
-        
+
         $pdf = PDF::loadView('admin.sale.pdf', compact('sale','subtotal','saleDetails'));
-        return $pdf->download('reporte_compra_'.$sale->id.'_'.$sale->sale_date.'.pdf');    
+        return $pdf->download('reporte_compra_'.$sale->id.'_'.$sale->sale_date.'.pdf');
     }
     public function print(Sale $sale)
     {
@@ -137,13 +136,14 @@ class SaleController extends Controller
             $subtotal = 0;
 
             $saleDetails = SaleDetail::where('sale_id','=',$sale->id)->get();
-            
+
             foreach ($saleDetails as $detalle) {
                 $subtotal += $detalle->cantidad*$detalle->price - $detalle->cantidad * $detalle->price * $detalle->descuento /100;
             }
             $printer_name = "TM20";
-            $conector = new WindowsPrintConnector($printer_name);
+            $connector = new WindowsPrintConnector($printer_name);
             $printer = new Printer($connector);
+
             $printer->text("€ 9,95\n");
 
             $printer->cut();
@@ -161,6 +161,6 @@ class SaleController extends Controller
             $sale->update(['status'=>'VALID']);
             return redirect()->back();
         }
-        
+
     }
 }

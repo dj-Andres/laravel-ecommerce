@@ -17,7 +17,7 @@
             </h3>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('sales.index') }}">Panel administrador</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Panel administrador</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Ventas</li>
                 </ol>
             </nav>
@@ -74,7 +74,7 @@
                                                 {!! Form::open(['route' => ['sales.destroy', $sale], 'method' => 'DELETE']) !!}
                                                 <a class="jsgrid-button jsgrid-edit-button" href="{{ route('sales.show', $sale->id) }}" title="Ver Detalle"><i class="fas fa-eye"></i></a>
                                                 <a class="jsgrid-button jsgrid-edit-button" href="{{ route('sales.pdf', $sale->id) }}" title="Reporte PDF"><i class="fas fa-file-pdf"></i></a>
-                                                <a class="jsgrid-button jsgrid-edit-button" href="{{ route('sales.print', $sale->id) }}" title="Imprimir"><i class="fas fa-print"></i></a>
+                                                <a class="jsgrid-button jsgrid-edit-button" href="{{ route('sales.print',$sale->id) }}" id="print" title="Imprimir"><i class="fas fa-print"></i></a>
                                                 <button class="jsgrid-button jsgrid-delete-button unstyled-button" type="submit" title="Anular Compra"><i class="far fa-trash-alt"></i></button>
                                                 {!! Form::close() !!}
                                             </td>

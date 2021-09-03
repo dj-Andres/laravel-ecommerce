@@ -29,7 +29,9 @@
 
                         <div class="d-flex justify-content-between">
                             <h4 class="card-title">Categorías
-                                <a href="{{ route('categories.create') }}" class="btn btn-primary">Crear Nueva</a>
+                                @can('categories.create')
+                                    <a href="{{ route('categories.create') }}" class="btn btn-primary">Crear Nueva</a>
+                                @endcan
                             </h4>
                             <div class="btn-group">
                                 <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -60,14 +62,14 @@
                                             <td>{{ $category->description }}</td>
                                             <td style="width: 50px;">
                                                 {!! Form::open(['route' => ['categories.destroy', $category], 'method' => 'DELETE']) !!}
-                                                    <a class="jsgrid-button jsgrid-edit-button"
-                                                        href="{{ route('categories.edit', $category) }}" title="Editar">
-                                                        <i class="far fa-edit"></i>
-                                                    </a>
-                                                    <button class="jsgrid-button jsgrid-delete-button unstyled-button"
-                                                        type="submit" title="Eliminar">
-                                                        <i class="far fa-trash-alt"></i>
-                                                    </button>
+                                                    @can('categories.edit','categories.destroy')
+                                                        <a class="jsgrid-button jsgrid-edit-button" href="{{ route('categories.edit', $category) }}" title="Editar">
+                                                            <i class="far fa-edit"></i>
+                                                        </a>
+                                                        <button class="jsgrid-button jsgrid-delete-button unstyled-button" type="submit" title="Eliminar">
+                                                            <i class="far fa-trash-alt"></i>
+                                                        </button>
+                                                    @endcan
                                                 {!! Form::close() !!}
                                             </td>
                                         </tr>

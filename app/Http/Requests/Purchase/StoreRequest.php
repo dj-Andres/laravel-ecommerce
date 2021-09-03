@@ -24,7 +24,9 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'provider_id' => 'required',
+            'impuesto' => 'required|numeric|regex:/^[\d]{0,11}(\.[\d]{1,2})?$/',
+            'total' => 'required|numeric|regex:/^[\d]{0,11}(\.[\d]{1,2})?$/',
         ];
     }
 }

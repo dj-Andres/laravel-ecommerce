@@ -30,7 +30,7 @@ class RolesController extends Controller
     public function store(Request $request)
     {
         $role = Role::create($request->all());
-        $role->permissions()->sync($request->permissions);
+        $role->syncPermissions($request->permissions);
         return redirect()->route('roles.index');
     }
     public function show(Role $rols)
@@ -45,7 +45,7 @@ class RolesController extends Controller
     public function update(Request $request, Role $rols)
     {
         $rols->update($request->all());
-        $rols->permissions()->sync($request->permissions);
+        $rols->syncPermissions($request->permissions);
         return redirect()->route('roles.index');
     }
     public function destroy(Role $role)

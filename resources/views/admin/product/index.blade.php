@@ -28,7 +28,9 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <h4 class="card-title">Producto
-                                <a href="{{ route('product.create') }}" class="btn btn-primary">Crear Nuevo</a>
+                                @can('product.create')
+                                    <a href="{{ route('product.create') }}" class="btn btn-primary">Crear Nuevo</a>
+                                @endcan
                             </h4>
                             <div class="btn-group">
                                 <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -69,19 +71,18 @@
                                                   <a class="jsgrid-button btn btn-danger" href="{{ route('change.status.product', $product) }}">Desactivado <i class="fas fa-times"></i></a>
                                                 </td>
                                             @endif
-
                                             <td>{{ $product->categoria }}</td>
                                             <td style="width: 50px;">
-                                                {!! Form::open(['route' => ['product.destroy', $product], 'method' => 'DELETE']) !!}
-                                                <a class="jsgrid-button jsgrid-edit-button"
-                                                    href="{{ route('product.edit', $product) }}" title="Editar">
-                                                    <i class="far fa-edit"></i>
-                                                </a>
-                                                <button class="jsgrid-button jsgrid-delete-button unstyled-button"
-                                                    type="submit" title="Eliminar">
-                                                    <i class="far fa-trash-alt"></i>
-                                                </button>
-                                                {!! Form::close() !!}
+                                                @can('product.destroy','product.edit')
+                                                    {!! Form::open(['route' => ['product.destroy', $product], 'method' => 'DELETE']) !!}
+                                                    <a class="jsgrid-button jsgrid-edit-button" href="{{ route('product.edit', $product) }}" title="Editar">
+                                                        <i class="far fa-edit"></i>
+                                                    </a>
+                                                    <button class="jsgrid-button jsgrid-delete-button unstyled-button" type="submit" title="Eliminar">
+                                                        <i class="far fa-trash-alt"></i>
+                                                    </button>
+                                                    {!! Form::close() !!}
+                                                @endcan
                                             </td>
                                         </tr>
                                     @endforeach

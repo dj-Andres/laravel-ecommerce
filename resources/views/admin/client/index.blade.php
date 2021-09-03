@@ -27,7 +27,9 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <h4 class="card-title">Cliente
-                                <a href="{{route('client.create')}}" class="btn btn-primary">Crear Nuevo</a>
+                                @can('client.create')
+                                    <a href="{{route('client.create')}}" class="btn btn-primary">Crear Nuevo</a>
+                                @endcan
                             </h4>
                             <div class="btn-group">
                                 <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -64,12 +66,14 @@
                                         <td>{{$client->email}}</td>
                                         <td style="width: 50px;">
                                             {!! Form::open(['route'=>['client.destroy',$client], 'method'=>'DELETE']) !!}
-                                            <a class="jsgrid-button jsgrid-edit-button" href="{{route('client.edit', $client)}}" title="Editar">
-                                                <i class="far fa-edit"></i>
-                                            </a>
-                                            <button class="jsgrid-button jsgrid-delete-button unstyled-button" type="submit" title="Eliminar">
-                                                <i class="far fa-trash-alt"></i>
-                                            </button>
+                                            @can('client.edit','client.destroy')
+                                                <a class="jsgrid-button jsgrid-edit-button" href="{{route('client.edit', $client)}}" title="Editar">
+                                                    <i class="far fa-edit"></i>
+                                                </a>
+                                                <button class="jsgrid-button jsgrid-delete-button unstyled-button" type="submit" title="Eliminar">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </button>
+                                            @endcan
                                             {!! Form::close() !!}
                                         </td>
                                     </tr>

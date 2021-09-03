@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Purchase\StoreRequest;
 use App\Http\Requests\Purchase\UpdateRequest;
+use App\Models\Business;
 use App\Models\Product;
 use App\Models\Provider;
 use App\Models\Purchase;
@@ -33,7 +34,7 @@ class PurchaseController extends Controller
     public function index()
     {
         $purchases = Purchase::join('providers', 'providers.id', '=', 'purchases.provider_id')
-            ->select('purchases.id as compra_id', 'providers.id', 'providers.name as proveedor', 'purchases.purchase_date', 'purchases.impuesto', 'purchases.total', 'status')
+            ->select('purchases.id as compra_id', 'providers.id', 'providers.name as proveedor', 'purchases.purchase_date', 'purchases.impuesto', 'purchases.total', 'purchases.status')
             ->get();
         return view('admin.purchase.index', compact('purchases'));
     }
@@ -54,7 +55,7 @@ class PurchaseController extends Controller
                     'user_id' => Auth::user()->id,
                     'purchase_date' => Carbon::now('America/Guayaquil')
                 ]);
-            
+
                 $purchase->save();
 
                 $contador = 0;
@@ -66,7 +67,7 @@ class PurchaseController extends Controller
                     $detalle->product_id = $request->product_id[$contador];
                     $detalle->cantidad = $request->cantidad[$contador];
                     $detalle->price = $request->price[$contador];
-                    
+
                     $detalle->save();
                     $contador= $contador+1;
                 }
@@ -79,11 +80,11 @@ class PurchaseController extends Controller
     }
 
     public function show(Purchase $purchase)
-    {   
+    {
         $subtotal = 0;
 
         $purchaseDetails = PurchaseDetails::where('pruchase_id','=',$purchase->id)->get();
-        
+
         foreach ($purchaseDetails as $detalle) {
             $subtotal += $detalle->cantidad*$detalle->price;
         }
@@ -113,21 +114,23 @@ class PurchaseController extends Controller
     }
     public function pdf(Purchase $purchase)
     {
+        //$business = Business::where('id',1)->firstOrFail();
+
         $subtotal = 0;
 
         $purchaseDetails = PurchaseDetails::where('pruchase_id','=',$purchase->id)->get();
-        
+
         foreach ($purchaseDetails as $detalle) {
             $subtotal += $detalle->cantidad*$detalle->price;
         }
 
         $pdf = PDF::loadView('admin.purchase.pdf', compact('purchase','subtotal','purchaseDetails'));
-        return $pdf->download('reporte_compra_'.$purchase->id.'_'.$purchase->purchase_date.'.pdf');    
+        return $pdf->download('reporte_compra_'.$purchase->id.'_'.$purchase->purchase_date.'.pdf');
     }
     public function upload(Request $request,Purchase $purchase)
     {
         $purchase->update($request->all());
-        return redirect()->route('purchase.index');        
+        return redirect()->route('purchase.index');
     }
     public function change_status(Purchase $purchase)
     {
@@ -138,6 +141,5 @@ class PurchaseController extends Controller
             $purchase->update(['status'=>'VALID']);
             return redirect()->back();
         }
-        
     }
 }
