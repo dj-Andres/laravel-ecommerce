@@ -30,13 +30,13 @@
         <div class="col-md-4">
             <div class="form-group">
                 {!! Form::label('Cantidad', 'cantidad') !!}
-                {!! Form::number('cantidad', null, ['class' => 'form-control', 'placeholder' => 'Ingrese la Cantidad', 'id' => 'cantidad','required' => 'true']) !!}
+                {!! Form::number('cantidad', null, ['class' => 'form-control', 'placeholder' => 'Ingrese la Cantidad', 'id' => 'cantidad']) !!}
             </div>
         </div>
         <div class="col-md-4">
             <div class="form-group">
                 {!! Form::label('precio', 'Precio Compra') !!}
-                {!! Form::text('price', null, ['class' => 'form-control', 'placeholder' => 'Ingrese el Precio Compra', 'id' => 'price','required' => 'true']) !!}
+                {!! Form::text('price', null, ['class' => 'form-control', 'placeholder' => 'Ingrese el Precio Compra', 'id' => 'price']) !!}
             </div>
         </div>
         <div class="col-md-4">

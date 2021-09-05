@@ -48,7 +48,9 @@
                                         <th>Id</th>
                                         <th>Nombre</th>
                                         <th>Stock</th>
-                                        <th>Estado</th>
+                                        @can('change.status.product')
+                                            <th>Estado</th>
+                                        @endcan
                                         <th>Categoria</th>
                                         <th>Acciones</th>
                                     </tr>
@@ -63,13 +65,17 @@
                                             <td>{{ $product->stock }}</td>
 
                                             @if ($product->status == 'ACTIVE')
+                                            @can('change.status.product')
                                                 <td>
                                                     <a class="jsgrid-button btn btn-success" href="{{ route('change.status.product', $product) }}"> Activo <i class="fas fa-check"></i></a>
                                                 </td>
+                                            @endcan
                                             @else
+                                            @can('change.status.product')
                                                 <td>
-                                                  <a class="jsgrid-button btn btn-danger" href="{{ route('change.status.product', $product) }}">Desactivado <i class="fas fa-times"></i></a>
+                                                    <a class="jsgrid-button btn btn-danger" href="{{ route('change.status.product', $product) }}">Desactivado <i class="fas fa-times"></i></a>
                                                 </td>
+                                            @endcan
                                             @endif
                                             <td>{{ $product->categoria }}</td>
                                             <td style="width: 50px;">

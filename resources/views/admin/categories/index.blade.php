@@ -61,16 +61,16 @@
                                             </td>
                                             <td>{{ $category->description }}</td>
                                             <td style="width: 50px;">
+                                                @can('categories.edit','categories.destroy')
                                                 {!! Form::open(['route' => ['categories.destroy', $category], 'method' => 'DELETE']) !!}
-                                                    @can('categories.edit','categories.destroy')
-                                                        <a class="jsgrid-button jsgrid-edit-button" href="{{ route('categories.edit', $category) }}" title="Editar">
-                                                            <i class="far fa-edit"></i>
-                                                        </a>
-                                                        <button class="jsgrid-button jsgrid-delete-button unstyled-button" type="submit" title="Eliminar">
-                                                            <i class="far fa-trash-alt"></i>
-                                                        </button>
-                                                    @endcan
+                                                    <a class="jsgrid-button jsgrid-edit-button" href="{{ route('categories.edit', $category) }}" title="Editar">
+                                                        <i class="far fa-edit"></i>
+                                                    </a>
+                                                    <button class="jsgrid-button jsgrid-delete-button unstyled-button" type="submit" title="Eliminar">
+                                                        <i class="far fa-trash-alt"></i>
+                                                    </button>
                                                 {!! Form::close() !!}
+                                                @endcan
                                             </td>
                                         </tr>
                                     @endforeach

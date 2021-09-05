@@ -17,11 +17,11 @@
         <div class="form-group">
             <ul class="list-unstyled">
                 <h4>Listado de Permisos</h4>
-                @foreach ($permisions as $permision)
+                @foreach ($permissions as $id => $permission)
                     <div>
                         <label>
-                            {!! Form::checkbox('permisions[]', $permision->id, null, ['class' => 'mr-1']) !!}
-                            {{ $permision->name }} - <em>Entorno {{ $permision->guard_name }} </em>
+                            {!! Form::checkbox('permisions[]', $id, null, ['class' => 'mr-1']) !!}
+                            {{ $permission }}
                         </label>
                     </div>
                 @endforeach

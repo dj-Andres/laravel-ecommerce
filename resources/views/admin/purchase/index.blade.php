@@ -79,17 +79,17 @@
                                             <td>{{ $purchase->impuesto }}</td>
                                             <td>{{ number_format($purchase->total,2) }}</td>
                                             <td style="width: 100px;">
-                                            {!! Form::open(['route' => ['purchases.destroy', $purchase], 'method' => 'DELETE']) !!}
-                                                @can('purchases.show','purchases.pdf','purchases.destroy')
-                                                    <a class="jsgrid-button jsgrid-edit-button" href="{{ route('purchases.show', $purchase->compra_id) }}" title="Ver Detalle">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                    <a class="jsgrid-button jsgrid-edit-button" href="{{ route('purchases.pdf', $purchase->compra_id) }}" title="Reporte PDF">
-                                                        <i class="fas fa-file-pdf"></i>
-                                                    </a>
-                                                    <button class="jsgrid-button jsgrid-delete-button unstyled-button" type="submit" title="Anular Compra"><i class="far fa-trash-alt"></i></button>
-                                                @endcan
-                                            {!! Form::close() !!}
+                                            @can('purchases.destroy','purchases.pdf','purchases.show')
+                                                {!! Form::open(['route' => ['purchases.destroy', $purchase], 'method' => 'DELETE']) !!}
+                                                <a class="jsgrid-button jsgrid-edit-button" href="{{ route('purchases.show', $purchase->compra_id) }}" title="Ver Detalle">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a class="jsgrid-button jsgrid-edit-button" href="{{ route('purchases.pdf', $purchase->compra_id) }}" title="Reporte PDF">
+                                                    <i class="fas fa-file-pdf"></i>
+                                                </a>
+                                                <button class="jsgrid-button jsgrid-delete-button unstyled-button" type="submit" title="Anular Compra"><i class="far fa-trash-alt"></i></button>
+                                                {!! Form::close() !!}
+                                            @endcan
                                             </td>
                                         </tr>
                                     @endforeach

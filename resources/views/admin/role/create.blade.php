@@ -16,7 +16,7 @@
             </h3>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Panel administrador</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Panel administrador</a></li>
                     <li class="breadcrumb-item"><a href="{{route('roles.index')}}">Roles</a></li>
                 </ol>
             </nav>
@@ -28,7 +28,7 @@
                         <div class="d-flex justify-content-between">
                             <h4 class="card-title">Registro Roles</h4>
                         </div>
-                        
+
                         {!! Form::open(['route' => 'roles.store','method' => 'POST']) !!}
                             @include('admin.role._form')
                             <button type="submit" class="btn btn-primary mr-2">Guardar</button>

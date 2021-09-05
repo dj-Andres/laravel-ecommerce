@@ -25,10 +25,11 @@
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-
                         <div class="d-flex justify-content-between">
                             <h4 class="card-title">Roles
-                                <a href="{{route('roles.create')}}" class="btn btn-primary">Crear Nuevo</a>
+                                @can('roles.create')
+                                    <a href="{{route('roles.create')}}" class="btn btn-primary">Crear Nuevo</a>
+                                @endcan
                             </h4>
                         </div>
                         <div class="table-responsive">
@@ -36,8 +37,8 @@
                                 <thead>
                                     <tr>
                                         <th>Id</th>
-                                        <th>Cargo</th>
-                                        <th>Nombre</th>
+                                        <th>Rol</th>
+                                        <th>Descripción</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
