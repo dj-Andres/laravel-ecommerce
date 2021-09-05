@@ -40,6 +40,20 @@ class SaleController extends Controller
         return view('admin.sale.index', compact('sales'));
     }
 
+    public function search(Request $request)
+    {
+        if($request->ajax()){
+            switch ($request->input('getClients')) {
+                case 'getClients':
+                    $clients = Client::get();
+                    return compact('clients');
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     public function create()
     {
         $clients = Client::get();

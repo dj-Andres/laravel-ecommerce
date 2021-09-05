@@ -1,14 +1,19 @@
 <fieldset>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 col-sm-12">
             <div class="form-group">
                 {!! Form::label('cliente', 'Cliente') !!}
-                <select name="client_id" id="client_id" class="form-control select2" style="width:100%">
-                    <option value="" disabled selected>Seleccionar...</option>
-                    @foreach ($clients as $client)
-                        <option value="{{$client->id}}">{{$client->name }} -  {{ $client->cedula }}</option>
-                    @endforeach
-                </select>
+                <div class="input-group">
+                    <select name="client_id" id="client_id" class="form-control select2 " style="width:80%">
+                        <option value="" disabled selected>Seleccionar...</option>
+                        @foreach ($clients as $client)
+                            <option value="{{$client->id}}">{{$client->name }} -  {{ $client->cedula }}</option>
+                        @endforeach
+                    </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-success" id="cliente" type="button" title="Agregar Cliente"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-md-6">
@@ -111,4 +116,5 @@
         </div>
     </div>
 </fieldset>
+@include('components._modal_cliente')
 
