@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-6 col-sm-12">
             <div class="form-group">
-                {!! Form::label('cliente', 'Cliente') !!}
+                {!! Form::label('cliente', 'Cliente',['class' => 'required']) !!}
                 <div class="input-group">
                     <select name="client_id" id="client_id" class="form-control select2 " style="width:80%">
                         <option value="" disabled selected>Seleccionar...</option>
@@ -16,9 +16,20 @@
                 </div>
             </div>
         </div>
+        <!--<div class="col-md-3">
+            <div class="form-group">
+                <label for="code">Codigo</label>
+                <div class="input-group">
+                    <input type="text" id="code" name="code" class="form-control form-control-sm">
+                    <div class="input-group-append">
+                        <button class="btn btn-success" id="buscar" type="button" title="Buscar Producto"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>-->
         <div class="col-md-6">
             <div class="form-group">
-                {!! Form::label('product', 'Producto') !!}
+                {!! Form::label('product', 'Producto',['class' => 'required']) !!}
                 <select name="product_id" id="product_id" class="form-control select2 " style="width:100%">
                     <option value="" disabled selected>Seleccionar...</option>
                     @foreach ($products as $product)
@@ -45,19 +56,19 @@
     <div class="row">
         <div class="col-md-3">
             <div class="form-group">
-                {!! Form::label('impuesto', 'Impuesto') !!}
+                {!! Form::label('impuesto', 'Impuesto',['class' => 'required']) !!}
                 {!! Form::number('impuesto', null, ['class' => 'form-control', 'placeholder' => 'Ingrese el Impuesto', 'id' => 'impuesto']) !!}
             </div>
         </div>
         <div class="col-md-3">
             <div class="form-group">
-                {!! Form::label('cantidad', 'cantidad') !!}
+                {!! Form::label('cantidad', 'Cantidad',['class' => 'required']) !!}
                 {!! Form::number('cantidad', null, ['class' => 'form-control', 'placeholder' => 'Ingrese la cantidad', 'id' => 'cantidad']) !!}
             </div>
         </div>
         <div class="col-md-3">
             <div class="form-group">
-                {!! Form::label('descuento', 'Descuento') !!}
+                {!! Form::label('descuento', 'Descuento',['class' => 'required']) !!}
                 {!! Form::text('descuento', null, ['class' => 'form-control', 'placeholder' => 'Ingrese el Descuento', 'id' => 'descuento']) !!}
             </div>
         </div>

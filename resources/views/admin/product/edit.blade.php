@@ -1,11 +1,6 @@
 @extends('layouts.admin')
 @section('styles')
     <style type="text/css">
-        .unstyled-button {
-            border: none;
-            padding: 0;
-            background: none;
-        }
     </style>
 @endsection
 @section('content')
@@ -35,13 +30,18 @@
                                 </div>
                               </div>
                         </div>
-    
+
                         {!! Form::model($product, ['route'=>['product.update',$product->id],'method'=>'PUT']) !!}
                             @include('admin.product._form')
-                            <button type="submit" class="btn btn-primary mr-2">Actualizar</button>
-                            <a href="{{ route('product.index')}}" class="btn btn-light">Cancelar</a>
+                            <div class="row">
+                                <div class="col-md-6 col-lg-12">
+                                    <div class="form-group pt-2">
+                                        <button type="submit" class="btn btn-primary mr-2">Actualizar</button>
+                                        <a href="{{ route('product.index') }}" class="btn btn-light">Cancelar</a>
+                                    </div>
+                                </div>
+                            </div>
                         {!! Form::close() !!}
-
                     </div>
                 </div>
             </div>
@@ -49,5 +49,11 @@
     </div>
 @endsection
 @section('scripts')
-{!! Html::script('js/data-table.js') !!}
+    {!! Html::script('js/dropify.js') !!}
+    {!! Html::script('js/sweetalert2.js') !!}
+    <script>
+        $(document).ready(function() {
+            $(".select2").select2();
+        });
+    </script>
 @endsection

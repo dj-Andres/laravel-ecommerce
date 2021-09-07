@@ -20,7 +20,7 @@ class ReportController extends Controller
     {
         $sales = Sale::whereDate('sale_date',Carbon::today('America/Guayaquil'))->get();
         $total = $sales->sum('total');
-        return view('admin.report.report_day',compact('sales','total'));
+        return view('admin.report.reports_day', compact('sales', 'total'));
     }
     public function report_date()
     {
@@ -34,6 +34,6 @@ class ReportController extends Controller
         $ff = $request->fecha_fin. ' 23:59:59';
         $sales = Sale::whereBetween('sale_date', [$fi, $ff])->get();
         $total = $sales->sum('total');
-        return view('admin.report.report_results', compact('sales', 'total')); 
+        return view('admin.report.report_results', compact('sales', 'total'));
     }
 }

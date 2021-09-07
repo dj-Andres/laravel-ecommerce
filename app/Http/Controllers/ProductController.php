@@ -8,7 +8,8 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Provider;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -30,6 +31,28 @@ class ProductController extends Controller
         return view('admin.product.index', compact('products'));
     }
 
+    public function search(Request $request)
+    {
+        if($request->ajax()){
+            switch ($request->input('getProducts')) {
+                case 'getProducts':
+                    $products = Product::where('code',$request->code)->firstOrFail();
+                    return response()->json($products->toArray());
+                    break;
+                default:
+                    break;
+            }
+            switch ($request->input('getProductById')) {
+                case 'getProductById':
+                    $product = Product::firstOrFail($request->product_id);
+                    return response()->json($product->toArray());
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     public function create()
     {
         $categories = Category::get();
@@ -39,14 +62,11 @@ class ProductController extends Controller
 
     public function store(StoreRequest $request)
     {
-        if($request->hasFile('image')){
-            $file = $request->file('image');
-            $image_name = time().'-'.$file->getClientOriginalName();
-            $file->move(public_path("/images/productos"),$image_name);
-        }
+        $file = $request->file('image');
+        $file->move(public_path("/images/productos"),$file->getClientOriginalName());
 
         $product = Product::create($request->all()+[
-            'image' => $image_name
+            'image'=>$file,
         ]);
 
         $product->update(['code' => $product->id]);
@@ -58,10 +78,9 @@ class ProductController extends Controller
     {
         $product = Product::join('categories','categories.id','=','products.category_id')
                     ->join('providers','providers.id','=','products.provider_id')
-                    ->select('products.id','providers.id as provider_id','categories.id as category_id','products.name','products.sell_price','products.status','categories.name as categoria','providers.name as proveedor')
+                    ->select('products.id','products.code','providers.id as provider_id','categories.id as category_id','products.name','products.sell_price','products.status','products.image','categories.name as categoria','providers.name as proveedor')
                     ->where('products.id','=',$id)
                     ->first();
-
         return view('admin.product.show', compact('product'));
     }
 
@@ -102,6 +121,5 @@ class ProductController extends Controller
             $product->update(['status'=>'ACTIVE']);
             return redirect()->back();
         }
-
     }
 }

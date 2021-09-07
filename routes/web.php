@@ -41,7 +41,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('sales/report_day', [ReportController::class, 'report_day'])->name('report.report_day');
     Route::get('sales/report_date', [ReportController::class, 'report_date'])->name('report.report_date');
     Route::post('sales/report_results', [ReportController::class, 'report_results'])->name('report.report_results');
+
     Route::post('sales/search', [SaleController::class, 'search'])->name('sales.search');
+    Route::post('product/search', [ProductController::class, 'search'])->name('product.search');
 
 
     Route::resource('Business', BusinessController::class)->only(['index', 'update'])->names('business');

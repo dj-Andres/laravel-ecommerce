@@ -1,17 +1,12 @@
 @extends('layouts.admin')
 @section('styles')
     <style type="text/css">
-        .unstyled-button {
-            border: none;
-            padding: 0;
-            background: none;
+        .required::before {
+            content: "* ";
+		    color: #0cdf98;
+		    font-weight: bold;
+            font-size: 20px;
         }
-
-        .error {
-            color: #FF0000;
-            padding-top: 2px;
-        }
-
     </style>
 @endsection
 @section('content')
@@ -134,7 +129,7 @@
             $(".select2").select2();
             $("#agregar").click(function(e) {
                 e.preventDefault();
-                agregar();
+                 agregar();
             });
 
             $("#guardar").hide();
@@ -144,6 +139,49 @@
                 $("#stock").val(datosProduct[1]);
                 $("#price").val(datosProduct[2]);
             }
+            /*let product_id = $('#product_id');
+            product_id.change(function(){
+                $.ajax({
+                    url: "{{route('product.search')}}",
+                    type: 'POST',
+                    data:{
+                        getProductById:'getProductById',
+                        product_id: product_id.val(),
+                    },
+                    dataType: 'json',
+                    success:function(data){
+                        console.log(data);
+                        $("#price").val(data.sell_price);
+                        $("#stock").val(data.stock);
+                        $("#code").val(data.code);
+                    }
+                });
+            });
+            function obtener_registro(code){
+                $.ajax({
+                    url: "{{route('product.search')}}",
+                    type: 'POST',
+                    data:{
+                        getProducts:'getProducts',
+                        code: code
+                    },
+                    dataType: 'json',
+                    success:function(data){
+                        console.log(data);
+                        $("#price").val(data.sell_price);
+                        $("#stock").val(data.stock);
+                        $("#product_id").val(data.id);
+                    }
+                });
+            }
+            $(document).on('click', '#buscar', function(){
+                let valorResultado = $('#code').val();
+                if(valorResultado!=""){
+                    obtener_registro(valorResultado);
+                }else{
+                    obtener_registro();
+                }
+            });*/
             function agregar() {
                 datosProduct = document.getElementById("product_id").value.split('_');
 
