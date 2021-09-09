@@ -13,15 +13,15 @@ class ProviderController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('can:providers.index')->only(['index']);
-        $this->middleware('can:providers.create')->only(['create','store']);
-        $this->middleware('can:providers.edit')->only(['edit','update']);
+        $this->middleware('can:providers.create')->only(['create', 'store']);
+        $this->middleware('can:providers.edit')->only(['edit', 'update']);
         $this->middleware('can:providers.destroy')->only(['destroy']);
     }
 
     public function index()
     {
         $providers = Provider::get();
-        return view('admin.providers.index',compact('providers'));
+        return view('admin.providers.index', compact('providers'));
     }
 
     public function create()
@@ -30,26 +30,36 @@ class ProviderController extends Controller
     }
     public function store(StoreRequest $request)
     {
-        Provider::create($request->all());
-        return  redirect()->route('providers.index');
+        $validated = $request->validated();
+        try {
+            $provider = Provider::create($request->all());
+            return response()->json(['status' => 'ok', 'code' => 200, 'message' => 'El proveedor ha sido guardado', 'data' => $provider], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'code' => 400, 'message' => $e->getMessage()]);
+        }
     }
     public function show(Provider $provider)
     {
-        return view('admin.providers.show',compact('provider'));
+        return view('admin.providers.show', compact('provider'));
     }
 
     public function edit(Provider $provider)
     {
-        return view('admin.providers.edit',compact('provider'));
+        return view('admin.providers.edit', compact('provider'));
     }
-    public function update(UpdateRequest $request,Provider $provider)
+    public function update(Request $request, Provider $provider)
     {
         $provider->update($request->all());
         return redirect()->route('providers.index');
     }
-    public function destroy(Provider $provider)
+    public function destroy($id)
     {
-        $provider->delete();
-        return redirect()->route('providers.index');
+        try {
+            $provider = Provider::find($id);
+            $provider->delete();
+            return response()->json(['status' => 'ok','message' => 'El Proveedor se elimino correctamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error','message' => $e->getMessage()], 400);
+        }
     }
 }

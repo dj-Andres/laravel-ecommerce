@@ -14,6 +14,7 @@
     <!-- End plugin css for this page -->
     <!-- inject:css -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('css/sweetalert2.css') }}">
     <link rel="stylesheet" href="{{ asset('css/toastr.css') }}">
     <link rel="stylesheet" href="{{ asset('css/select2-bootstrap.min.css') }}">
@@ -443,6 +444,7 @@
     <script src="{{ asset('js/toastr.min.js') }}"></script>
     <!-- endinject -->
     <!-- Custom js for this page-->
+    <script src="{{asset('js/custom.js')}}"></script>
     <script src="{{asset('js/dashboard.js')}}"></script>
     <!--<script src=""></script>-->
     <!-- End custom js for this page-->

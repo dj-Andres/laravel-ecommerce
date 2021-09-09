@@ -1,12 +1,7 @@
 @extends('layouts.admin')
 @section('styles')
     <style type="text/css">
-        .required::before {
-            content: "* ";
-		    color: #0cdf98;
-		    font-weight: bold;
-            font-size: 20px;
-        }
+
     </style>
 @endsection
 @section('content')

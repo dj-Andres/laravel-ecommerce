@@ -23,10 +23,10 @@ class CreateProductsTable extends Migration
             $table->decimal('sell_price',12,2);
             $table->enum('status',['ACTIVE','DESACTIVED'])->default('ACTIVE');
             $table->unsignedBigInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->unsignedBigInteger('provider_id');
-            $table->foreign('provider_id')->references('id')->on('providers');
-            
+            $table->foreign('provider_id')->references('id')->on('providers')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

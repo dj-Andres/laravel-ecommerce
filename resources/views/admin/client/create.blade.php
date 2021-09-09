@@ -1,28 +1,6 @@
 @extends('layouts.admin')
 @section('styles')
     <style type="text/css">
-        .unstyled-button {
-            border: none;
-            padding: 0;
-            background: none;
-        }
-        .error {
-            color: #FF0000;
-            padding-top: 2px;
-        }
-        .image-wrapper {
-            position: relative;
-            padding-bottom: 56.25%;
-        }
-        .image-wrapper img {
-            border-radius: 7px;
-            border: 2px solid blueviolet;
-            position: absolute;
-            object-fit: cover;
-            width: 100%;
-            height: 100%;
-        }
-
     </style>
 @endsection
 @section('content')
@@ -55,8 +33,6 @@
     </div>
 @endsection
 @section('scripts')
-    {!! Html::script('js/form-validation.js') !!}
-    {!! Html::script('js/bt-maxLength.js') !!}
     <script>
         $(document).ready(function() {
             $.ajaxSetup({
@@ -64,18 +40,11 @@
                     'X-CSRF-Token': $('meta[name=_token]').attr('content')
                 }
             });
-            function guardar(name,cedula,ruc,address,phone,email){
+            function guardar(datos){
                 const request = $.ajax({
                     url: "{{ route('client.store') }}",
                     type: 'POST',
-                    data:{
-                        name:name,
-                        cedula:cedula,
-                        ruc:ruc,
-                        address:address,
-                        phone:phone,
-                        email:email,
-                    }
+                    data:datos
                 });
                 request.done(function(response) {
                     if(response.code == 200){
@@ -101,11 +70,7 @@
             $("#guardar").on("click",function(e){
                 e.preventDefault();
                 let cedula = $("#cedula").val().trim();
-                let name = $("#name").val();
-                let ruc = $("#ruc").val();
-                let address = $("#address").val();
-                let phone = $("#phone").val();
-                let email = $("#email").val();
+                let formulario = $('#formulario').serialize();
                 let total = 0; let longitud = cedula.length;  let longcheck = longitud - 1;
 
                 if (cedula !== "" && longitud === 10) {
@@ -120,7 +85,7 @@
                     }
                     total = total % 10 ? 10 - (total % 10) : 0;
                     if (cedula.charAt(longitud - 1) == total){
-                        guardar(name,cedula,ruc,address,phone,email);
+                        guardar(formulario);
                     }else{
                         $("#aviso").show();
                         $("#aviso").text("Cedula invalida");

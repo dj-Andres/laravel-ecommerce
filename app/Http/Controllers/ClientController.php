@@ -57,6 +57,6 @@ class ClientController extends Controller
     public function destroy(Client $client)
     {
         $client->delete();
-        return redirect()->route('client.index');
+        return redirect()->route('client.index')->with("message","El Cliente ha sido anulado existosamente .$client->name");
     }
 }

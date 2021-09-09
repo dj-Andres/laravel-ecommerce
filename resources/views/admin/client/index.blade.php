@@ -10,6 +10,11 @@
 @endsection
 @section('content')
     <div class="content-wrapper">
+        @if (Session::has('message'))
+        <div class="alert alert-success text-center">
+            <span><i class="fas fa-check m-1"></i>{{ Session::get('message') }}</span>
+        </div>
+        @endif
         <div class="page-header">
             <h3 class="page-title">
                 Clientes
@@ -26,20 +31,12 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            <h4 class="card-title">Cliente
+                            <h4 class="card-title">
                                 @can('client.create')
-                                    <a href="{{route('client.create')}}" class="btn btn-primary">Crear Nuevo</a>
+                                    <a href="{{route('client.create')}}" class="btn btn-primary"><i class="fas fa-plus"></i> Nuevo Cliente</a>
                                 @endcan
                             </h4>
-                            <div class="btn-group">
-                                <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                </div>
-                              </div>
                         </div>
-
                         <div class="table-responsive">
                             <table id="order-listing" class="table">
                                 <thead>
@@ -65,12 +62,12 @@
                                         <td>{{$client->phone}}</td>
                                         <td>{{$client->email}}</td>
                                         <td style="width: 50px;">
-                                            {!! Form::open(['route'=>['client.destroy',$client], 'method'=>'DELETE']) !!}
+                                            {!! Form::open(['route'=>['client.destroy',$client], 'method'=>'DELETE','id' => 'delete']) !!}
                                             @can('client.edit','client.destroy')
                                                 <a class="jsgrid-button jsgrid-edit-button" href="{{route('client.edit', $client)}}" title="Editar">
                                                     <i class="far fa-edit"></i>
                                                 </a>
-                                                <button class="jsgrid-button jsgrid-delete-button unstyled-button" type="submit" title="Eliminar">
+                                                <button class="jsgrid-button jsgrid-edit-button unstyled-button" title="Eliminar" id="delete">
                                                     <i class="far fa-trash-alt"></i>
                                                 </button>
                                             @endcan

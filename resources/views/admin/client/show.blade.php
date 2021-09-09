@@ -1,12 +1,6 @@
 @extends('layouts.admin')
 @section('styles')
     <style type="text/css">
-        .unstyled-button {
-            border: none;
-            padding: 0;
-            background: none;
-        }
-
     </style>
 @endsection
 @section('content')
@@ -80,7 +74,7 @@
                         <a href="{{ route('client.index') }}" class="btn btn-info float-right">
                             Regresar
                         </a>
-                        <button type="button" class="registrar btn btn-primary float-right mr-1" data-toggle="modal" data-target="#staticBackdrop">Nuevo Cliente</button>
+                        <button class="btn btn-primary float-right mr-1" id="cliente" type="button" title="Agregar Cliente">Nuevo Cliente<i class="fas fa-user-alt"></i></button>
                     </div>
                 </div>
             </div>
@@ -88,7 +82,7 @@
 
     </div>
 @endsection
-@include('admin.client._modal')
+@include('components._modal_cliente')
 @section('scripts')
     <script>
         $(document).ready(function() {
@@ -97,48 +91,41 @@
                     'X-CSRF-Token': $('meta[name=_token]').attr('content')
                 }
             });
-            $("#save").on("click",function(e){
+            $("#cliente").on('click',function(e){
                 e.preventDefault();
-                let name = $("#name").val();
-                let cedula = $("#cedula").val();
-                let ruc = $("#ruc").val();
-                let address = $("#address").val();
-                let phone = $("#phone").val();
-                let email = $("#email").val();
-
+                $("#cliente-registro").modal('show');
+            });
+            function guardar(datos) {
                 const request = $.ajax({
-                    url: "{{ route('client.store') }}",
-                    type: 'POST',
-                    data:{
-                        name:name,
-                        cedula:cedula,
-                        ruc:ruc,
-                        address:address,
-                        phone:phone,
-                        email:email,
-                    }
-                });
-                request.done(function(response) {
-                    if(response.code == 200){
-                        toastr.success(response.message);
-                        setTimeout(function(){
-                            $('#staticBackdrop').modal('show');
-                            window.location.href="{{route('client.index')}}"
-                        },3000);
-                    }else{
-                        toastr.error(response.message);
-                        console.error(response.message);
-                    }
-                });
-                request.fail(function(xhr, status, error){
-                    $.each(xhr.responseJSON.errors, function (key, item)
-                    {
-                        $("#errors").append("<li class='alert alert-danger'>"+item+"</li>")
-                        setInterval(function(){
-                            $("#errors").hide()
-                        },7000)
+                        url: "{{ route('client.store') }}",
+                        type: 'POST',
+                        data:datos
                     });
-                });
+                    request.done(function(response) {
+                        if(response.code == 200){
+                            toastr.success(response.message);
+                            setTimeout(function(){
+                                $("#cliente-registro").modal('hide');
+                            },1500);
+                        }else{
+                            toastr.error(response.message);
+                            console.error(response.message);
+                        }
+                    });
+                    request.fail(function(xhr, status, error){
+                        $.each(xhr.responseJSON.errors, function (key, item)
+                        {
+                            $("#errors").append("<li class='alert alert-danger'>"+item+"</li>")
+                            setInterval(function(){
+                                $("#errors").hide()
+                            },7000)
+                        });
+                    });
+            }
+            $("#guardar-client").on("click",function(e){
+                e.preventDefault();
+                let datos = $("#formulario-cliente").serialize();
+                guardar(datos);
             });
         });
     </script>

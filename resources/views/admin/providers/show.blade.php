@@ -17,7 +17,7 @@
             </h3>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Panel administrador</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Panel administrador</a></li>
                     <li class="breadcrumb-item"><a href="{{route('providers.index')}}">Proveedores</a></li>
                     <li class="breadcrumb-item active" aria-current="page">{{ $provider->name }}</li>
                 </ol>
@@ -34,17 +34,6 @@
                                     <div class="d-flex justify-content-between">
                                     </div>
                                 </div>
-                                <div class="border-bottom py-4">
-                                    <div class="list-group">
-                                        <button type="button" class="list-group-item list-group-item-action active">
-                                            Sobre proveedor
-                                        </button>
-                                        <button type="button"
-                                            class="list-group-item list-group-item-action">Productos</button>
-                                        <button type="button" class="list-group-item list-group-item-action">Registrar
-                                            producto</button>
-                                    </div>
-                                </div>
                             </div>
                             <div class="col-lg-8 pl-lg-5">
                                 <div class="d-flex justify-content-between">
@@ -54,9 +43,6 @@
                                 </div>
                                 <div class="profile-feed">
                                     <div class="d-flex align-items-start profile-feed-item">
-
-
-
                                         <div class="form-group col-md-6">
                                             <strong><i class="fab fa-product-hunt mr-1"></i> Nombre</strong>
                                             <p class="text-muted">

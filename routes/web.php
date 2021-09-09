@@ -38,7 +38,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('purchases/pdf/{purchase}', [PurchaseController::class, 'pdf'])->name('purchases.pdf');
     Route::get('sales/pdf/{sale}', [SaleController::class, 'pdf'])->name('sales.pdf');
     Route::get('sales/print/{sale}', [SaleController::class, 'print'])->name('sales.print');
-    Route::get('sales/report_day', [ReportController::class, 'report_day'])->name('report.report_day');
+    Route::get('sales/report_day', [ReportController::class, 'report_day'])->name('reports_day');
     Route::get('sales/report_date', [ReportController::class, 'report_date'])->name('report.report_date');
     Route::post('sales/report_results', [ReportController::class, 'report_results'])->name('report.report_results');
 

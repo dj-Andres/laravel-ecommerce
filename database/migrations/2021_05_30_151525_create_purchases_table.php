@@ -17,9 +17,9 @@ class CreatePurchasesTable extends Migration
             $table->id();
 
             $table->unsignedBigInteger('provider_id');
-            $table->foreign('provider_id')->references('id')->on('providers');
+            $table->foreign('provider_id')->references('id')->on('providers')->onDelete('cascade');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');     
+            $table->foreign('user_id')->references('id')->on('users');
             $table->dateTime('purchase_date');
             $table->decimal('impuesto',12,2);
             $table->decimal('total',12,2);
