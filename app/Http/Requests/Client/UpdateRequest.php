@@ -25,11 +25,11 @@ class UpdateRequest extends FormRequest
     {
         $rules = [
             'name' => 'string|required|max:150',
-            'cedula' => 'string|required|unique:clients,cedula,'.$this->route('client')->id.'|max:10',
-            'ruc'=> 'string|required|max:10',
-            'address'=>'string|required|max:150',
-            'phone'=>'string|required|unique:clients,phone,'.$this->route('client')->id.'|max:10',
-            'email'=> 'string|email|required|unique:clients,email,'.$this->route('client')->id.'|max:200',
+            //'cedula' => 'required|unique:clients,cedula,'.$this->route('client')->id.'|max:10',
+            'ruc'=> 'required|max:10',
+            'address'=>'required|max:150',
+            //'phone'=>'required|unique:clients,phone,'.$this->route('client')->id.'|max:10',
+            //'email'=> 'email|required|unique:clients,email,'.$this->route('client')->id.'|max:200',
         ];
         return $rules;
     }
@@ -58,7 +58,7 @@ class UpdateRequest extends FormRequest
             'email.email'=> 'El formato debe ser de un email valido.',
             'email.string' => 'El valor no es correcto.',
             'email.max' => 'Solo se permite 200 caracteres.',
-            'email.uniqued' => 'El correo electronico ya se encuentra registrado!',        
+            'email.uniqued' => 'El correo electronico ya se encuentra registrado!',
 
             'phone.required' => 'Este campo es requerido.',
             'phone.string' => 'El valor no es correcto.',

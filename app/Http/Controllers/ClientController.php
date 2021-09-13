@@ -49,14 +49,25 @@ class ClientController extends Controller
         return view('admin.client.edit', compact('client'));
     }
 
-    public function update(UpdateRequest $request, Client $client)
+    public function update(UpdateRequest $request, $id)
     {
-        $client->update($request->all());
-        return redirect()->route('client.index');
+        $validated = $request->validated();
+        try {
+            $client = Client::findOrFail($id);
+            $client->update($request->all());
+            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'El cliente '.$request->name.' ha sido actualizado exitosamente.','data' => $client],200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
+        }
     }
-    public function destroy(Client $client)
+    public function destroy($id)
     {
-        $client->delete();
-        return redirect()->route('client.index')->with("message","El Cliente ha sido anulado existosamente .$client->name");
+        try {
+            $client = Client::findOrFail($id);
+            $client->delete();
+            return response()->json(['status' => 'ok','code'=>200,'message' => 'El Cliente se elimino correctamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error','code'=>400,'message' => $e->getMessage()], 400);
+        }
     }
 }

@@ -47,7 +47,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($providers as $provider)
-                                    <tr id="proveedores">
+                                    <tr id="{{ $provider->id }}">
                                         <th scope="row">{{$provider->id}}</th>
                                         <td>
                                             <a href="{{route('providers.show',$provider)}}">{{$provider->name}}</a>
@@ -115,13 +115,8 @@ $(document).ready(function(){
                             _method:'DELETE'
                         },
                         success: function (response){
-                            if(response.code == 200){
-                                toastr.success(response.message);
-                                swalWithBootstrapButtons.fire('Eliminado!','El proveedor :'+name+' se ha eliminado','success');
-                                $("td#formulario[data-id="+id+"]").remove();
-                            }else{
-                                toastr.success(response.message);
-                            }
+                            toastr.success(response.message);
+                            $('#'+id).remove();
                         }
                     });
                 }else if(result.dismiss === Swal.DismissReason.cancel){

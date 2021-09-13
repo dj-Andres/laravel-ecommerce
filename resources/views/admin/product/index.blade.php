@@ -23,24 +23,16 @@
             </nav>
         </div>
         <div class="row">
-            <div class="col-lg-12 grid-margin stretch-card">
+            <div class="col-lg-12 col-md-12 col-sm-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            <h4 class="card-title">Producto
+                            <h4 class="card-title">
                                 @can('product.create')
-                                    <a href="{{ route('product.create') }}" class="btn btn-primary">Crear Nuevo</a>
+                                    <a href="{{ route('product.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Nuevo Producto</a>
                                 @endcan
                             </h4>
-                            <div class="btn-group">
-                                <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                </div>
-                            </div>
                         </div>
-
                         <div class="table-responsive">
                             <table id="order-listing" class="table">
                                 <thead>

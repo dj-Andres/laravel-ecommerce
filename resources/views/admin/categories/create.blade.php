@@ -31,9 +31,7 @@
                         </div>
 
                         {!! Form::open(['route' => 'categories.store', 'method' => 'POST', 'id' => 'formulario']) !!}
-                        @include('admin.categories._form')
-                        <button type="submit" id="guardar" class="btn btn-primary mr-2">Guardar</button>
-                        <a href="{{ route('categories.index') }}" class="btn btn-light">Cancelar</a>
+                            @include('admin.categories._form')
                         {!! Form::close() !!}
                     </div>
                 </div>
@@ -42,23 +40,15 @@
     </div>
 @endsection
 @section('scripts')
-    {!! Html::script('js/data-table.js') !!}
+    {!! Html::script('js/sweetalert2.js') !!}
     <script>
         $(document).ready(() => {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-Token': $('meta[name=_token]').attr('content')
-                }
-            });
-
-            function guardar(name, description) {
+            $.ajaxSetup({headers: {'X-CSRF-Token': $('meta[name=_token]').attr('content')}});
+            function guardar(datos) {
                 const request = $.ajax({
                     url: "{{ route('categories.store') }}",
                     type: 'POST',
-                    data: {
-                        name: name,
-                        description: description
-                    }
+                    data:datos
                 });
                 request.done(function(response) {
                     if (response.code == 200) {
@@ -81,10 +71,21 @@
                 });
             }
             $("#formulario").submit((e) => {
-                let name = $("#name").val();
-                let description = $("#description").val();
-                guardar(name, description);
                 e.preventDefault();
+                let datos = $("#formulario").serialize();
+                const swalWithBootstrapButtons = Swal.mixin({customClass: {confirmButton: 'btn btn-success',cancelButton: 'btn btn-danger mr-1'},buttonsStyling: false});
+                swalWithBootstrapButtons.fire({
+                    title : 'Está seguro de crear un nuevo registro',
+                    'icon':'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si, Guardar!',
+                    cancelButtonText: 'No, Cancelar!',
+                    reverseButtons: true
+                }).then((result)=>{
+                    if (result.value) {
+                        guardar(datos);
+                    }
+                });
             });
         });
     </script>

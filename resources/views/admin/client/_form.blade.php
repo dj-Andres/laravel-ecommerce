@@ -59,7 +59,7 @@
     <div class="row">
         <div class="col-md-6 col-sm-12">
             <div class="form-group pt-2">
-                <button type="submit" class="btn btn-primary mr-2 editar" id="guardar"><i class="fas fa-save"></i> Guardar</button>
+                <button type="submit" class="btn btn-primary mr-2" id="guardar" @if (isset($client)) data-id="{{ $client->id }}" @endif><i class="fas fa-save"></i> Guardar</button>
                 <a href="{{ route('client.index') }}" class="btn btn-light">Cancelar</a>
             </div>
         </div>

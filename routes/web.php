@@ -44,6 +44,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('sales/search', [SaleController::class, 'search'])->name('sales.search');
     Route::post('product/search', [ProductController::class, 'search'])->name('product.search');
+    Route::post('categories/search', [CategoryController::class, 'search'])->name('categories.search');
 
 
     Route::resource('Business', BusinessController::class)->only(['index', 'update'])->names('business');

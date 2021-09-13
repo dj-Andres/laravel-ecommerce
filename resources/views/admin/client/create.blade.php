@@ -33,6 +33,7 @@
     </div>
 @endsection
 @section('scripts')
+    {!! Html::script('js/sweetalert2.js') !!}
     <script>
         $(document).ready(function() {
             $.ajaxSetup({
@@ -85,7 +86,19 @@
                     }
                     total = total % 10 ? 10 - (total % 10) : 0;
                     if (cedula.charAt(longitud - 1) == total){
-                        guardar(formulario);
+                        const swalWithBootstrapButtons = Swal.mixin({customClass: {confirmButton: 'btn btn-success',cancelButton: 'btn btn-danger mr-1'},buttonsStyling: false});
+                        swalWithBootstrapButtons.fire({
+                            title : 'Está seguro de crear un nuevo registro',
+                            'icon':'question',
+                            showCancelButton: true,
+                            confirmButtonText: 'Si, Guardar!',
+                            cancelButtonText: 'No, Cancelar!',
+                            reverseButtons: true
+                        }).then((result)=>{
+                            if (result.value) {
+                                guardar(formulario);
+                            }
+                        });
                     }else{
                         $("#aviso").show();
                         $("#aviso").text("Cedula invalida");

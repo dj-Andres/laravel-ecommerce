@@ -47,10 +47,16 @@ class ProviderController extends Controller
     {
         return view('admin.providers.edit', compact('provider'));
     }
-    public function update(Request $request, Provider $provider)
+    public function update(Request $request,$id)
     {
-        $provider->update($request->all());
-        return redirect()->route('providers.index');
+        //$validated = $request->validated();
+        try {
+            $provider = Provider::findOrFail($id);
+            $provider->update($request->all());
+            return response()->json(['status' => 'ok', 'code' => 200, 'message' => 'El proveedor '.$request->name. ' ha sido actualizado exitosamente.', 'data' => $provider], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'code' => 400, 'message' => $e->getMessage()]);
+        }
     }
     public function destroy($id)
     {

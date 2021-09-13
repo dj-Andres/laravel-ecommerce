@@ -33,7 +33,23 @@ class ProductController extends Controller
 
     public function search(Request $request)
     {
-        if($request->ajax()){
+        $a = $request->all();
+        if(isset($a['action'])){
+            switch($a['action']){
+                case 'getProducts':
+                    $products = Product::where('code',$request->code)->firstOrFail();
+                    return response()->json($products->toArray());
+                break;
+                case 'getProductById':
+                    $product = Product::firstOrFail($request->product_id);
+                    return response()->json($product->toArray());
+                break;
+                default:
+                break;
+            }
+            return ['success' => false,'message' => 'No se encontro la accion'];
+        }
+        /*if($request->ajax()){
             switch ($request->input('getProducts')) {
                 case 'getProducts':
                     $products = Product::where('code',$request->code)->firstOrFail();
@@ -50,7 +66,7 @@ class ProductController extends Controller
                 default:
                     break;
             }
-        }
+        }*/
     }
 
     public function create()
@@ -62,16 +78,16 @@ class ProductController extends Controller
 
     public function store(StoreRequest $request)
     {
-        $file = $request->file('image');
-        $file->move(public_path("/images/productos"),$file->getClientOriginalName());
-
-        $product = Product::create($request->all()+[
-            'image'=>$file,
-        ]);
-
-        $product->update(['code' => $product->id]);
-
-        return redirect()->route('product.index');
+        $validated = $request->validated();
+        try {
+            $file = $request->file('image');
+            $file->move(public_path("/images/productos"),$file->getClientOriginalName());
+            $product = Product::create($request->all()+['image'=>$file]);
+            $product->update(['code' => $product->id]);
+            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'El Producto se  creo exitosamente.','data' => $product],200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
+        }
     }
 
     public function show($id)

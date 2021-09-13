@@ -1,6 +1,7 @@
 $(document).ready(function () {
     soloLetras();
     soloNumeros();
+    $(".select2").select2();
     function soloLetras() {
         let regex = new RegExp("^[a-zA-Z ]+$");
         $(".letters").bind("keypress", function (event) {

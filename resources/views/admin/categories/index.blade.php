@@ -26,22 +26,13 @@
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-
                         <div class="d-flex justify-content-between">
-                            <h4 class="card-title">Categorías
+                            <h4 class="card-title">
                                 @can('categories.create')
-                                    <a href="{{ route('categories.create') }}" class="btn btn-primary">Crear Nueva</a>
+                                    <a href="{{ route('categories.create') }}" class="btn btn-primary"><i class="fas fa-plus"> Nueva Categoria</i></a>
                                 @endcan
                             </h4>
-                            <div class="btn-group">
-                                <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                </div>
-                            </div>
                         </div>
-
                         <div class="table-responsive">
                             <table id="order-listing" class="table">
                                 <thead>
@@ -54,7 +45,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($categories as $category)
-                                        <tr>
+                                        <tr id="{{ $category->id }}">
                                             <th scope="row">{{ $category->id }}</th>
                                             <td>
                                                 {{ $category->name }}
@@ -63,10 +54,11 @@
                                             <td style="width: 50px;">
                                                 @can('categories.edit','categories.destroy')
                                                 {!! Form::open(['route' => ['categories.destroy', $category], 'method' => 'DELETE']) !!}
+                                                    <meta name="_token" content="{!! csrf_token() !!}"/>
                                                     <a class="jsgrid-button jsgrid-edit-button" href="{{ route('categories.edit', $category) }}" title="Editar">
                                                         <i class="far fa-edit"></i>
                                                     </a>
-                                                    <button class="jsgrid-button jsgrid-delete-button unstyled-button" type="submit" title="Eliminar">
+                                                    <button class="jsgrid-button jsgrid-delete-button unstyled-button" id="delete" type="submit" title="Eliminar" @if(isset($category)) data-id="{{ $category->id }}" @endif @if(isset($category)) data-name="{{ $category->name }}" @endif>
                                                         <i class="far fa-trash-alt"></i>
                                                     </button>
                                                 {!! Form::close() !!}
@@ -85,4 +77,47 @@
 @endsection
 @section('scripts')
     {!! Html::script('js/data-table.js') !!}
+    {!! Html::script('js/sweetalert2.js') !!}
+    <script>
+        $(document).ready(function(){
+            $.ajaxSetup({headers: {'X-CSRF-Token': $('meta[name=_token]').attr('content')}});
+        });
+        $("body").on('click','#delete',function(e){
+            e.preventDefault();
+            let id = $(this).data("id");
+            let name = $(this).data("name");
+            const swalWithBootstrapButtons = Swal.mixin({customClass: {confirmButton: 'btn btn-success',cancelButton: 'btn btn-danger mr-1'},buttonsStyling: false});
+
+            swalWithBootstrapButtons.fire({
+                title : 'Está seguro de eliminar la categoria:' +name,
+                'icon':'question',
+                showCancelButton: true,
+                confirmButtonText: 'Si, Eliminar!',
+                cancelButtonText: 'No, Cancelar!',
+                reverseButtons: true
+            }).then((result)=>{
+                if(result.value){
+                    $.ajax({
+                        url: "{{route('categories.destroy',$category->id)}}",
+                        type: 'POST',
+                        data: {
+                            id: id,
+                            _method:'DELETE'
+                        },
+                        success: function (response){
+                            toastr.success(response.message);
+                            $('#'+id).remove();
+                        },
+                        error:function(response){
+                            toastr.error(response.message);
+                            console.log(response);
+                        }
+                    });
+                }else if(result.dismiss === Swal.DismissReason.cancel){
+                    swalWithBootstrapButtons.fire('Cancelar','La Categoria :'+name+' no se elimino','error');
+                }
+            });
+            return false;
+        });
+    </script>
 @endsection

@@ -10,11 +10,6 @@
 @endsection
 @section('content')
     <div class="content-wrapper">
-        @if (Session::has('message'))
-        <div class="alert alert-success text-center">
-            <span><i class="fas fa-check m-1"></i>{{ Session::get('message') }}</span>
-        </div>
-        @endif
         <div class="page-header">
             <h3 class="page-title">
                 Clientes
@@ -22,7 +17,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{route('home')}}">Panel administrador</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">clientes</li>
+                    <li class="breadcrumb-item active" aria-current="page">Clientes</li>
                 </ol>
             </nav>
         </div>
@@ -52,7 +47,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($clients as $client)
-                                    <tr>
+                                    <tr id="{{ $client->id}}">
                                         <th scope="row">{{$client->id}}</th>
                                         <td>
                                             <a href="{{route('client.show',$client)}}">{{$client->name}}</a>
@@ -63,11 +58,12 @@
                                         <td>{{$client->email}}</td>
                                         <td style="width: 50px;">
                                             {!! Form::open(['route'=>['client.destroy',$client], 'method'=>'DELETE','id' => 'delete']) !!}
+                                            <meta name="_token" content="{!! csrf_token() !!}"/>
                                             @can('client.edit','client.destroy')
                                                 <a class="jsgrid-button jsgrid-edit-button" href="{{route('client.edit', $client)}}" title="Editar">
                                                     <i class="far fa-edit"></i>
                                                 </a>
-                                                <button class="jsgrid-button jsgrid-edit-button unstyled-button" title="Eliminar" id="delete">
+                                                <button class="jsgrid-button jsgrid-edit-button unstyled-button" title="Eliminar" id="delete-client" @if(isset($client)) data-id="{{ $client->id }}" @endif @if(isset($client)) data-name="{{ $client->name }}" @endif>
                                                     <i class="far fa-trash-alt"></i>
                                                 </button>
                                             @endcan
@@ -86,4 +82,52 @@
 @endsection
 @section('scripts')
     {!! Html::script('js/data-table.js') !!}
+    {!! Html::script('js/sweetalert2.js') !!}
+    <script>
+        $(document).ready(function(){
+            $.ajaxSetup({headers: {'X-CSRF-Token': $('meta[name=_token]').attr('content')}});
+            $("body").on("click","#delete-client",function(e){
+                e.preventDefault();
+                let id = $(this).data("id");
+                let name = $(this).data("name");
+                let url = e.target
+                const swalWithBootstrapButtons = Swal.mixin({customClass: {confirmButton: 'btn btn-success',cancelButton: 'btn btn-danger mr-1'},buttonsStyling: false});
+
+                swalWithBootstrapButtons.fire({
+                    title : 'Está seguro de eliminar al cliente:' +name,
+                    'icon':'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si, Eliminar!',
+                    cancelButtonText: 'No, Cancelar!',
+                    reverseButtons: true
+                }).then((result)=>{
+                    if (result.value) {
+                        $.ajax({
+                            url: "{{route('client.destroy',$client->id)}}",
+                            type: 'POST',
+                            data: {
+                                id: id,
+                                _method:'DELETE'
+                            },
+                            success: function (response){
+                                toastr.success(response.message);
+                                $('#'+id).remove();
+                            },
+                            error:function(response){
+                                toastr.error(response.message);
+                                console.log(response);
+                            }
+                        });
+                    }else if(result.dismiss === Swal.DismissReason.cancel){
+                        swalWithBootstrapButtons.fire(
+                            'Cancelar',
+                            'El Cliente :'+name+' no se elimino',
+                            'error'
+                        );
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
 @endsection
