@@ -23,10 +23,11 @@ class StoreRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules =  [
             'provider_id' => 'required',
             'impuesto' => 'required|numeric|regex:/^[\d]{0,11}(\.[\d]{1,2})?$/',
             'total' => 'required|numeric|regex:/^[\d]{0,11}(\.[\d]{1,2})?$/',
         ];
+        return $rules;
     }
 }

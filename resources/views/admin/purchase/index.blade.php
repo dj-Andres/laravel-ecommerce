@@ -28,20 +28,12 @@
                     <div class="card-body">
 
                         <div class="d-flex justify-content-between">
-                            <h4 class="card-title">Compras
+                            <h4 class="card-title">
                                 @can('purchases.create')
-                                    <a href="{{ route('purchases.create') }}" class="btn btn-primary">Crear Nueva</a>
+                                    <a href="{{ route('purchases.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Nueva Compra</a>
                                 @endcan
                             </h4>
-                            <div class="btn-group">
-                                <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                </div>
-                            </div>
                         </div>
-
                         <div class="table-responsive">
                             <table id="order-listing" class="table">
                                 <thead>
@@ -80,15 +72,19 @@
                                             <td>{{ number_format($purchase->total,2) }}</td>
                                             <td style="width: 100px;">
                                             @can('purchases.destroy','purchases.pdf','purchases.show')
-                                                {!! Form::open(['route' => ['purchases.destroy', $purchase], 'method' => 'DELETE']) !!}
-                                                <a class="jsgrid-button jsgrid-edit-button" href="{{ route('purchases.show', $purchase->compra_id) }}" title="Ver Detalle">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                                <a class="jsgrid-button jsgrid-edit-button" href="{{ route('purchases.pdf', $purchase->compra_id) }}" title="Reporte PDF">
-                                                    <i class="fas fa-file-pdf"></i>
-                                                </a>
-                                                <button class="jsgrid-button jsgrid-delete-button unstyled-button" type="submit" title="Anular Compra"><i class="far fa-trash-alt"></i></button>
-                                                {!! Form::close() !!}
+                                            {!! Form::open(['route' => ['purchases.destroy', $purchase->compra_id], 'method' => 'DELETE']) !!}
+                                                <div class="dropdown">
+                                                    <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Opciones</a>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                        <a class="dropdown-item" href="{{ route('purchases.edit', $purchase->compra_id) }}"><i class="far fa-edit"></i> Actualizar</a>
+                                                        <a class="dropdown-item" href="{{ route('purchases.show', $purchase->compra_id) }}"><i class="fas fa-eye"></i> Detalle</a>
+                                                        <a class="dropdown-item" href="{{ route('purchases.pdf', $purchase->compra_id) }}"><i class="fas fa-file-pdf"></i> Exportar PDF</a>
+                                                        <a class="dropdown-item" href="#">
+                                                            <button class="jsgrid-button jsgrid-delete-button unstyled-button" type="submit" title="Anular Compra"><i class="far fa-trash-alt"></i> Anular Compra</button>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            {!! Form::close() !!}
                                             @endcan
                                             </td>
                                         </tr>

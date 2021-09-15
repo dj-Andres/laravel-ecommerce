@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Mail;
+use PhpParser\Node\Stmt\Foreach_;
+
 use function GuzzleHttp\Promise\all;
 
 
@@ -42,7 +44,7 @@ class PurchaseController extends Controller
     public function create()
     {
         $providers = Provider::get();
-        $products = Product::get();
+        $products = Product::where('status','ACTIVE')->get();
         return view('admin.purchase.create', compact('providers', 'products'));
     }
 
@@ -51,15 +53,9 @@ class PurchaseController extends Controller
         try {
             DB::beginTransaction();
 
-                $purchase = Purchase::create($request->all() + [
-                    'user_id' => Auth::user()->id,
-                    'purchase_date' => Carbon::now('America/Guayaquil')
-                ]);
-
+                $purchase = Purchase::create($request->all() + ['user_id' => Auth::user()->id,'purchase_date' => Carbon::now('America/Guayaquil')]);
                 $purchase->save();
-
                 $contador = 0;
-
                 while($contador < count($request->product_id))
                 {
                     $detalle  = new PurchaseDetails();
@@ -71,7 +67,6 @@ class PurchaseController extends Controller
                     $detalle->save();
                     $contador= $contador+1;
                 }
-
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -94,15 +89,34 @@ class PurchaseController extends Controller
 
     public function edit(Purchase $purchase)
     {
+        $subtotal = 0;
         $providers = Provider::get();
-        $products = Product::get();
-        return view('admin.purchase.edit', compact('providers','products'));
+        $products = Product::where('status','ACTIVE')->get();
+        $purchaseDetails = PurchaseDetails::where('pruchase_id',$purchase->id)->get();
+        foreach ($purchaseDetails as $detalle) {
+            $subtotal += $detalle->cantidad*$detalle->price;
+        }
+        return view('admin.purchase.edit', compact('purchase','providers', 'products','purchaseDetails','subtotal'));
     }
 
-    public function update(UpdateRequest $request, Purchase $purchase)
+    public function update(UpdateRequest $request, $id)
     {
-        /*$purchase->update($request->all());
-        return redirect()->route('purchase.index');*/
+        try {
+            DB::beginTransaction();
+                $purchase = Purchase::findOrFail($id);
+                $purchase->update($request->all());
+                $purchase->shoppingDatails = PurchaseDetails::find($id);
+                dd($purchase->shoppingDatails->update([
+                    'pruchase_id' => $purchase['id'],
+                    'product_id' => $request->product_id,
+                    'cantidad' => $request->cantidad,
+                    'price' => $request->price
+                ]));
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+        }
+        return redirect()->route('purchases.index');
     }
 
     public function destroy($id)
@@ -110,7 +124,7 @@ class PurchaseController extends Controller
         $purchase = Purchase::findOrFail($id);
         $purchase->status = "CANCELED";
         $purchase->update();
-        return redirect()->route('purchase.index');
+        return redirect()->route('purchases.index');
     }
     public function pdf(Purchase $purchase)
     {

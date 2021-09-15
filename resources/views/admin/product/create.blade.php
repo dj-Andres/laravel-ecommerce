@@ -45,9 +45,6 @@
                 $.post("{{ route('categories.search') }}",{getCategories:'getCategories'},(response)=>{
                     $.each(response, function (key, categoria){
                         let template='';
-                        template+=`
-                            <option value="" disabled selected>Seleccionar...</option>
-                        `;
                         categoria.forEach(element => {
                             template+=`
                                 <option value="${element.id}">${element.name}</option>
@@ -101,7 +98,7 @@
                     processData:false,
                     cache:false,
                     contentType: false
-                }).done(function(){
+                }).done(function(response){
                     if(response.code == 200){
                         toastr.success(response.message);
                         setTimeout(function() {

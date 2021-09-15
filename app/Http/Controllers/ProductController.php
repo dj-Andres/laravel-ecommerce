@@ -107,26 +107,27 @@ class ProductController extends Controller
         return view('admin.product.edit', compact('product', 'categories', 'providers'));
     }
 
-    public function update(UpdateRequest $request, Product $product)
+    public function update(UpdateRequest $request,$id)
     {
-        if($request->hasFile('image')){
-            $file = $request->file('image');
-            $image_name = time().'-'.$file->getClientOriginalName();
-            $file->move(public_path("/images/productos"),$image_name);
+        $validated = $request->validated();
+        try {
+            $product = Product::findOrFail($id);
+            $product->update($request->all());
+            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'El Producto se '.$request->name. ' actualizo exitosamente.','data' => $product],200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
         }
-
-
-        $product->update($request->all()+[
-            'image' => $image_name
-        ]);
-
-        return redirect()->route('product.index');
     }
     public function destroy($id)
-    {   $product = Product::findOrFail($id);
-        $product->status = 'DESACTIVED';
-        $product->update();
-        return redirect()->route('product.index');
+    {
+        try {
+            $product = Product::findOrFail($id);
+            $product->status = 'DESACTIVED';
+            $product->update();
+            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'El Producto se '.$product->name. ' se anulo exitosamente.','data' => $product],200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
+        }
     }
     public function change_status(Product $product)
     {

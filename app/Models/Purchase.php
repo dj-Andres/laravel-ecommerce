@@ -31,6 +31,6 @@ class Purchase extends Model
 
     public function shoppingDatails()
     {
-        return $this->hasMany(PurchaseDetails::class);
+        return $this->hasMany(PurchaseDetails::class,'pruchase_id');
     }
 }

@@ -49,34 +49,32 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($products as $product)
-                                        <tr>
+                                        <tr id="{{ $product->id }}">
                                             <th scope="row">{{ $product->id }}</th>
                                             <td>
                                                 <a href="{{ route('product.show', $product) }}">{{ $product->name }}</a>
                                             </td>
                                             <td>{{ $product->stock }}</td>
-
                                             @if ($product->status == 'ACTIVE')
-                                            @can('change.status.product')
-                                                <td>
-                                                    <a class="jsgrid-button btn btn-success" href="{{ route('change.status.product', $product) }}"> Activo <i class="fas fa-check"></i></a>
-                                                </td>
-                                            @endcan
+                                                @can('change.status.product')
+                                                    <td>
+                                                        <a class="jsgrid-button btn btn-success" href="{{ route('change.status.product', $product) }}"> Activo <i class="fas fa-check"></i></a>
+                                                    </td>
+                                                @endcan
                                             @else
-                                            @can('change.status.product')
-                                                <td>
-                                                    <a class="jsgrid-button btn btn-danger" href="{{ route('change.status.product', $product) }}">Desactivado <i class="fas fa-times"></i></a>
-                                                </td>
-                                            @endcan
+                                                @can('change.status.product')
+                                                    <td>
+                                                        <a class="jsgrid-button btn btn-danger" href="{{ route('change.status.product', $product) }}">Desactivado <i class="fas fa-times"></i></a>
+                                                    </td>
+                                                @endcan
                                             @endif
                                             <td>{{ $product->categoria }}</td>
                                             <td style="width: 50px;">
                                                 @can('product.destroy','product.edit')
                                                     {!! Form::open(['route' => ['product.destroy', $product], 'method' => 'DELETE']) !!}
-                                                    <a class="jsgrid-button jsgrid-edit-button" href="{{ route('product.edit', $product) }}" title="Editar">
-                                                        <i class="far fa-edit"></i>
-                                                    </a>
-                                                    <button class="jsgrid-button jsgrid-delete-button unstyled-button" type="submit" title="Eliminar">
+                                                    <meta name="_token" content="{!! csrf_token() !!}"/>
+                                                    <a class="jsgrid-button jsgrid-edit-button" href="{{ route('product.edit', $product) }}" title="Editar"><i class="far fa-edit"></i></a>
+                                                    <button class="jsgrid-button jsgrid-delete-button unstyled-button" id="delete" type="submit" title="Eliminar" @if(isset($product)) data-id="{{ $product->id }}" @endif @if(isset($product)) data-name="{{ $product->name }}" @endif>
                                                         <i class="far fa-trash-alt"></i>
                                                     </button>
                                                     {!! Form::close() !!}
@@ -95,4 +93,43 @@
 @endsection
 @section('scripts')
     {!! Html::script('js/data-table.js') !!}
+    {!! Html::script('js/sweetalert2.js') !!}
+    <script>
+        $.ajaxSetup({headers: {'X-CSRF-Token': $('meta[name=_token]').attr('content')}});
+        $("body").on("click","#delete",function(e){
+           e.preventDefault();
+           let id = $(this).data("id"),name = $(this).data("name");
+           const swalWithBootstrapButtons = Swal.mixin({customClass: {confirmButton: 'btn btn-success',cancelButton: 'btn btn-danger mr-1'},buttonsStyling: false});
+           swalWithBootstrapButtons.fire({
+                title : 'Está seguro de anular el Producto:' +name,
+                'icon':'question',
+                showCancelButton: true,
+                confirmButtonText: 'Si, Eliminar!',
+                cancelButtonText: 'No, Cancelar!',
+                reverseButtons: true
+            }).then((result)=>{
+                if(result.value){
+                    $.ajax({
+                        url: "{{route('product.destroy',$product)}}",
+                        type: 'POST',
+                        data: {
+                            id: id,
+                            _method:'DELETE'
+                        }
+                    }).done(function(response){
+                        if(response.code == 200){
+                            toastr.success(response.message);
+                            $('#'+id).remove();
+                        }else{
+                            toastr.error(response.message);
+                            console.error(response.message);
+                        }
+                    });
+                }else if(result.dismiss === Swal.DismissReason.cancel){
+                    swalWithBootstrapButtons.fire('Cancelar','El Poroducto :'+name+' no se elimino','error');
+                }
+            });
+            return false;
+        });
+    </script>
 @endsection

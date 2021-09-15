@@ -18,18 +18,19 @@ class UpdateRequest extends FormRequest
 
     public function rules()
     {
-        return [
-            'name' => 'required|string|unique:products,name'.$this->route('product')->id.'|max:250',
-            'image' => 'required|dimensions:min_width=100,min_height=200',
+        $rules =  [
+            //'name' => 'required|string|unique:products,name'.$this->route('product')->id.'|max:250',
+            //'image' => 'required|dimensions:min_width=100,min_height=200',
             'sell_price' => 'required',
             'category_id'=>'integer|required|exists:App\Models\Category,id',
             'provider_id'=>'integer|required|exists:App\Models\Provider,id',
         ];
-    } 
+        return $rules;
+    }
 
     public function messajes()
     {
-        return [
+        $messajes = [
             'name.required' => 'Este campo es requerido.',
             'name.string' => 'El valor no es correcto.',
             'name.unique' => 'El producto ya se encuentra registrado',
@@ -48,5 +49,6 @@ class UpdateRequest extends FormRequest
             'provider_id.required' => 'Este campo es requerido',
             'provider_id.exists' => 'El Proveedor no existe.',
         ];
+        return $messajes;
     }
 }
