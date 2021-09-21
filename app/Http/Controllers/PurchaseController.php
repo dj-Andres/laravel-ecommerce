@@ -34,7 +34,7 @@ class PurchaseController extends Controller
     }
     public function index()
     {
-        $purchases = Purchase::join('providers', 'providers.id', '=', 'purchases.provider_id')
+        $purchases = Purchase::Providers()
             ->select('purchases.id as compra_id', 'providers.id', 'providers.name as proveedor', 'purchases.purchase_date', 'purchases.impuesto', 'purchases.total', 'purchases.status')
             ->get();
         return view('admin.purchase.index', compact('purchases'));
@@ -120,9 +120,9 @@ class PurchaseController extends Controller
             $purchase = Purchase::findOrFail($id);
             $purchase->status = "CANCELED";
             $purchase->update();
-            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'La Compra con Codigo '.$id. ' se anulo exitosamente.','data' => $purchase],200);
+            return response()->json(['status' => 'ok', 'code' => 200, 'message' => 'La Compra con Codigo ' . $id . ' se anulo exitosamente.', 'data' => $purchase], 200);
         } catch (\Exception $e) {
-            return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
+            return response()->json(['status' => 'error', 'code' => 400, 'message' => $e->getMessage()]);
         }
     }
     public function pdf(Purchase $purchase)
@@ -154,9 +154,9 @@ class PurchaseController extends Controller
             } else {
                 $purchase->update(['status' => 'VALID']);
             }
-            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'La Compra con Codigo '.$id. ' ha cambiado el estado.','data' => $purchase],200);
+            return response()->json(['status' => 'ok', 'code' => 200, 'message' => 'La Compra con Codigo ' . $id . ' ha cambiado el estado.', 'data' => $purchase], 200);
         } catch (\Exception $e) {
-            return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
+            return response()->json(['status' => 'error', 'code' => 400, 'message' => $e->getMessage()]);
         }
     }
 }

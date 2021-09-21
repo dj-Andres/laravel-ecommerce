@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
@@ -16,12 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
-
-Route::get('/prueba', function () {
-    return view('prueba');
-});
-
+})->name('index');
 Route::middleware(['auth'])->group(function () {
     Route::resource('categories', CategoryController::class)->names('categories');
     Route::resource('client', ClientController::class)->names('client');
@@ -49,6 +45,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('Business', BusinessController::class)->only(['index', 'update'])->names('business');
     Route::resource('printer', PrinterController::class)->only(['index', 'update'])->names('printer');
+
+    Route::get('logout',[LoginController::class,'logout'])->name('logout');
 
     Route::group(['middleware' => ['role:admin']], function () {
         Route::resource('users', UserController::class)->names('users');

@@ -31,6 +31,10 @@ class Purchase extends Model
 
     public function shoppingDatails()
     {
-        return $this->hasMany(PurchaseDetails::class,'pruchase_id');
+        return $this->hasMany(PurchaseDetails::class, 'pruchase_id');
+    }
+    public function scopeProviders($query)
+    {
+        return $query->join('providers', 'providers.id', 'purchases.provider_id');
     }
 }

@@ -15,7 +15,10 @@ class ReportController extends Controller
         $this->middleware('can:report.report_date')->only(['report_date']);
         $this->middleware('can:report.report_results')->only(['report_results']);
     }
-
+    public function index()
+    {
+        return view('admin.report.index');
+    }
     public function report_day()
     {
         $sales = Sale::whereDate('sale_date',Carbon::today('America/Guayaquil'))->get();

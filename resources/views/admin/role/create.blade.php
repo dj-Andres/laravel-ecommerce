@@ -28,13 +28,9 @@
                         <div class="d-flex justify-content-between">
                             <h4 class="card-title">Registro Roles</h4>
                         </div>
-
                         {!! Form::open(['route' => 'roles.store','method' => 'POST']) !!}
                             @include('admin.role._form')
-                            <button type="submit" class="btn btn-primary mr-2">Guardar</button>
-                            <a href="{{ route('roles.index')}}" class="btn btn-light">Cancelar</a>
                         {!! Form::close() !!}
-
                     </div>
                 </div>
             </div>

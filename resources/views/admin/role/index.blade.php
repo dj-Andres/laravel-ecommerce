@@ -26,9 +26,9 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            <h4 class="card-title">Roles
+                            <h4 class="card-title">
                                 @can('roles.create')
-                                    <a href="{{route('roles.create')}}" class="btn btn-primary">Crear Nuevo</a>
+                                    <a href="{{route('roles.create')}}" class="btn btn-primary"><i class="fas fa-plus"></i> Nuevo Rol</a>
                                 @endcan
                             </h4>
                         </div>

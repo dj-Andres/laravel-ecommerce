@@ -32,5 +32,9 @@ class Sale extends Model
     {
         return $this->hasMany(SaleDetail::class);
     }
-
+    public function scopeDetalle($query)
+    {
+        return $query->join('clients', 'clients.id', 'sales.client_id')
+            ->join('users', 'users.id', 'sales.user_id');
+    }
 }

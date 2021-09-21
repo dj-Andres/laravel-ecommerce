@@ -3,11 +3,7 @@
     <meta charset="utf-8">
     <title>@yield('title')</title>
     @yield('styles')
-
 <body>
-    <div>
-        @yield('header')
-    </div>
     <main>
         @yield('content')
     </main>
