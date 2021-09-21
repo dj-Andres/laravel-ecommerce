@@ -51,20 +51,20 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($purchases as $purchase)
-                                        <tr>
+                                        <tr id="{{ $purchase->compra_id }}">
                                             <th scope="row">{{ $purchase->compra_id }}</th>
                                             <td>{{ $purchase->proveedor }}</td>
                                             <td>{{ $purchase->purchase_date }}</td>
                                             @if ($purchase->status === 'VALID')
                                                 @can('purchase.change_status')
                                                     <td style="width: 50px;">
-                                                        <a class="jsgrid-button btn btn-success" href="{{ route('purchase.change_status', $purchase->compra_id) }}"> Valida<i class="fas fa-check"></i></a>
+                                                        <a class="status jsgrid-button btn btn-success" href="{{ route('purchase.change_status', $purchase->compra_id) }}" @if(isset($purchase)) data-id="{{ $purchase->compra_id }}" @endif @if(isset($purchase)) data-status="{{ $purchase->status }}" @endif> Valida<i class="fas fa-check"></i></a>
                                                     </td>
                                                 @endcan
                                             @else
                                                 @can('purchase.change_status')
                                                     <td style="width: 50px;">
-                                                        <a class="jsgrid-button btn btn-danger" href="{{ route('purchase.change_status', $purchase->compra_id) }}"> Cancelada <i class="fas fa-times"></i></a>
+                                                        <a class="status jsgrid-button btn btn-danger" href="{{ route('purchase.change_status', $purchase->compra_id) }}" @if(isset($purchase)) data-id="{{ $purchase->compra_id }}" @endif @if(isset($purchase)) data-status="{{ $purchase->status }}" @endif> Cancelada <i class="fas fa-times"></i></a>
                                                     </td>
                                                 @endcan
                                             @endif
@@ -73,6 +73,7 @@
                                             <td style="width: 100px;">
                                             @can('purchases.destroy','purchases.pdf','purchases.show')
                                             {!! Form::open(['route' => ['purchases.destroy', $purchase->compra_id], 'method' => 'DELETE']) !!}
+                                                <meta name="_token" content="{!! csrf_token() !!}"/>
                                                 <div class="dropdown">
                                                     <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Opciones</a>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -80,7 +81,7 @@
                                                         <a class="dropdown-item" href="{{ route('purchases.show', $purchase->compra_id) }}"><i class="fas fa-eye"></i> Detalle</a>
                                                         <a class="dropdown-item" href="{{ route('purchases.pdf', $purchase->compra_id) }}"><i class="fas fa-file-pdf"></i> Exportar PDF</a>
                                                         <a class="dropdown-item" href="#">
-                                                            <button class="jsgrid-button jsgrid-delete-button unstyled-button" type="submit" title="Anular Compra"><i class="far fa-trash-alt"></i> Anular Compra</button>
+                                                            <button class="jsgrid-button jsgrid-delete-button unstyled-button" id="delete-compra" type="submit" title="Anular Compra" @if(isset($purchase)) data-id="{{ $purchase->compra_id }}" @endif><i class="far fa-trash-alt"></i> Anular Compra</button>
                                                         </a>
                                                     </div>
                                                 </div>
@@ -100,4 +101,79 @@
 @endsection
 @section('scripts')
     {!! Html::script('js/data-table.js') !!}
+    {!! Html::script('js/sweetalert2.js') !!}
+    <script>
+        $(document).ready(function(){
+            $.ajaxSetup({headers: {'X-CSRF-Token': $('meta[name=_token]').attr('content')}});
+            $("body").on("click","#delete-compra",function(e){
+                e.preventDefault();
+                let id = $(this).data("id"),name = $(this).data("name");
+                const swalWithBootstrapButtons = Swal.mixin({customClass: {confirmButton: 'btn btn-success',cancelButton: 'btn btn-danger mr-1'},buttonsStyling: false});
+                swalWithBootstrapButtons.fire({
+                    title : 'Está seguro de anular la Compra con Codigo:' +name,
+                    'icon':'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si, Eliminar!',
+                    cancelButtonText: 'No, Cancelar!',
+                    reverseButtons: true
+                }).then((result)=>{
+                    if(result.value){
+                        $.ajax({
+                            url: "{{route('purchases.destroy',$purchase)}}",
+                            type: 'POST',
+                            data: {
+                                id: id,
+                                _method:'DELETE'
+                            }
+                        }).done(function(response){
+                            if(response.code == 200){
+                                toastr.success(response.message);
+                                $('#'+id).remove();
+                            }else{
+                                toastr.error(response.message);
+                                console.error(response.message);
+                            }
+                        });
+                    }else if(result.dismiss === Swal.DismissReason.cancel){
+                        swalWithBootstrapButtons.fire('Cancelar','La Compra con Codigo :'+id+' no se elimino','error');
+                    }
+                });
+                return false;
+            });
+            $(document).on('click','.status',function(e){
+                let id = $(this).data("id");
+                let status = $(this).data("status");
+                e.preventDefault();
+                const swalWithBootstrapButtons = Swal.mixin({customClass: {confirmButton: 'btn btn-success',cancelButton: 'btn btn-danger mr-1'},buttonsStyling: false});
+                swalWithBootstrapButtons.fire({
+                    title : 'Está seguro de Cambiar el Estado de la Compra con el Codigo:' +id,
+                    'icon':'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si, Eliminar!',
+                    cancelButtonText: 'No, Cancelar!',
+                    reverseButtons: true
+                }).then((result)=>{
+                    if(result.value){
+                        $.ajax({
+                            url: "{{route('purchase.change_status',$purchase->compra_id)}}",
+                            type: 'GET',
+                            data: {
+                                id: id,
+                                status:status
+                            }
+                        }).done(function(response){
+                            if(response.code == 200){
+                                toastr.success(response.message);
+                            }else{
+                                toastr.error(response.message);
+                                console.error(response.message);
+                            }
+                        });
+                    }else if(result.dismiss === Swal.DismissReason.cancel){
+                        swalWithBootstrapButtons.fire('Cancelar','La Compra con Codigo :'+id+' no se elimino','error');
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

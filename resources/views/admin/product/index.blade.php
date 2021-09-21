@@ -58,13 +58,13 @@
                                             @if ($product->status == 'ACTIVE')
                                                 @can('change.status.product')
                                                     <td>
-                                                        <a class="jsgrid-button btn btn-success" href="{{ route('change.status.product', $product) }}"> Activo <i class="fas fa-check"></i></a>
+                                                        <a class="status jsgrid-button btn btn-success" href="{{ route('change.status.product', $product) }}" @if(isset($product)) data-id="{{ $product->id }}" @endif> Activo <i class="fas fa-check"></i></a>
                                                     </td>
                                                 @endcan
                                             @else
                                                 @can('change.status.product')
                                                     <td>
-                                                        <a class="jsgrid-button btn btn-danger" href="{{ route('change.status.product', $product) }}">Desactivado <i class="fas fa-times"></i></a>
+                                                        <a class="status jsgrid-button btn btn-danger" href="{{ route('change.status.product', $product) }}" @if(isset($product)) data-id="{{ $product->id }}" @endif>Desactivado <i class="fas fa-times"></i></a>
                                                     </td>
                                                 @endcan
                                             @endif
