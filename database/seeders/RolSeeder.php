@@ -17,6 +17,7 @@ class RolSeeder extends Seeder
     public function run()
     {
         $role = Role::create(['name'=>'admin']);
+        $rol_vendedor = Role::create(['name'=>'vendedor']);
 
         Permission::create(['name'=>'categories.index'])->assignRole($role);
         Permission::create(['name'=>'categories.create'])->assignRole($role);
@@ -36,32 +37,32 @@ class RolSeeder extends Seeder
         Permission::create(['name'=>'product.update'])->assignRole($role);
         Permission::create(['name'=>'product.destroy'])->assignRole($role);
 
-        Permission::create(['name'=>'providers.index'])->assignRole($role);
-        Permission::create(['name'=>'providers.create'])->assignRole($role);
-        Permission::create(['name'=>'providers.edit'])->assignRole($role);
-        Permission::create(['name'=>'providers.update'])->assignRole($role);
+        Permission::create(['name'=>'providers.index'])->assignRole($role,$rol_vendedor);
+        Permission::create(['name'=>'providers.create'])->assignRole($role,$rol_vendedor);
+        Permission::create(['name'=>'providers.edit'])->assignRole($role,$rol_vendedor);
+        Permission::create(['name'=>'providers.update'])->assignRole($role,$rol_vendedor);
         Permission::create(['name'=>'providers.destroy'])->assignRole($role);
 
-        Permission::create(['name'=>'purchases.index'])->assignRole($role);
-        Permission::create(['name'=>'purchases.create'])->assignRole($role);
-        Permission::create(['name'=>'purchases.edit'])->assignRole($role);
-        Permission::create(['name'=>'purchases.update'])->assignRole($role);
+        Permission::create(['name'=>'purchases.index'])->assignRole($role,$rol_vendedor);
+        Permission::create(['name'=>'purchases.create'])->assignRole($role,$rol_vendedor);
+        Permission::create(['name'=>'purchases.edit'])->assignRole($role,$rol_vendedor);
+        Permission::create(['name'=>'purchases.update'])->assignRole($role,$rol_vendedor);
         Permission::create(['name'=>'purchases.destroy'])->assignRole($role);
 
-        Permission::create(['name'=>'sales.index'])->assignRole($role);
-        Permission::create(['name'=>'sales.create'])->assignRole($role);
-        Permission::create(['name'=>'sales.edit'])->assignRole($role);
-        Permission::create(['name'=>'sales.update'])->assignRole($role);
-        Permission::create(['name'=>'sales.destroy'])->assignRole($role);
+        Permission::create(['name'=>'sales.index'])->assignRole($role,$rol_vendedor);
+        Permission::create(['name'=>'sales.create'])->assignRole($role,$rol_vendedor);
+        Permission::create(['name'=>'sales.edit'])->assignRole($role,$rol_vendedor);
+        Permission::create(['name'=>'sales.update'])->assignRole($role,$rol_vendedor);
+        Permission::create(['name'=>'sales.destroy'])->assignRole($role,$rol_vendedor);
 
-        Permission::create(['name'=>'purchase.upload'])->assignRole($role);
-        Permission::create(['name'=>'purchase.change_status'])->assignRole($role);
-        Permission::create(['name'=>'product.change_status'])->assignRole($role);
-        Permission::create(['name'=>'sale.change_status'])->assignRole($role);
+        Permission::create(['name'=>'purchase.upload'])->assignRole($role,$rol_vendedor);
+        Permission::create(['name'=>'purchase.change_status'])->assignRole($role,$rol_vendedor);
+        Permission::create(['name'=>'product.change_status'])->assignRole($role,$rol_vendedor);
+        Permission::create(['name'=>'sale.change_status'])->assignRole($role,$rol_vendedor);
 
-        Permission::create(['name'=>'purchases.pdf'])->assignRole($role);
-        Permission::create(['name'=>'sales.pdf'])->assignRole($role);
-        Permission::create(['name'=>'sales.print'])->assignRole($role);
+        Permission::create(['name'=>'purchases.pdf'])->assignRole($role,$rol_vendedor);
+        Permission::create(['name'=>'sales.pdf'])->assignRole($role,$rol_vendedor);
+        Permission::create(['name'=>'sales.print'])->assignRole($role,$rol_vendedor);
         Permission::create(['name'=>'report.report_day'])->assignRole($role);
         Permission::create(['name'=>'report.report_date'])->assignRole($role);
         Permission::create(['name'=>'report.report_results'])->assignRole($role);

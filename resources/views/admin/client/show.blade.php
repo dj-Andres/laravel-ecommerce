@@ -1,12 +1,6 @@
 @extends('layouts.admin')
 @section('styles')
     <style type="text/css">
-        .unstyled-button {
-            border: none;
-            padding: 0;
-            background: none;
-        }
-
     </style>
 @endsection
 @section('content')
@@ -17,8 +11,8 @@
             </h3>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Panel administrador</a></li>
-                    <li class="breadcrumb-item"><a href="{{route('client.index')}}">Cliente</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Panel administrador</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('client.index') }}">Cliente</a></li>
                     <li class="breadcrumb-item active" aria-current="page">{{ $client->name }}</li>
                 </ol>
             </nav>
@@ -51,10 +45,10 @@
                                             <hr>
                                             <strong>
                                                 <i class="fas fa-mobile mr-1"></i>
-                                                 Ruc
+                                                Ruc
                                             </strong>
                                             <p class="text-muted">
-                                                <p>{{$client->ruc}}</p>    
+                                            <p>{{ $client->ruc }}</p>
                                             </p>
                                             <hr>
                                             <strong><i class="fas fa-envelope mr-1"></i> Dirección</strong>
@@ -70,7 +64,6 @@
                                             <p class="text-muted">
                                                 {{ $client->email }}
                                             </p>
-                                            <a href="{{route('client.create')}}">Nuevo Cliente</a>
                                         </div>
                                     </div>
                                 </div>
@@ -78,9 +71,10 @@
                         </div>
                     </div>
                     <div class="card-footer text-muted">
-                        <a href="{{ route('client.index') }}" class="btn btn-primary float-right">
+                        <a href="{{ route('client.index') }}" class="btn btn-info float-right">
                             Regresar
                         </a>
+                        <button class="btn btn-primary float-right mr-1" id="cliente" type="button" title="Agregar Cliente">Nuevo Cliente<i class="fas fa-user-alt"></i></button>
                     </div>
                 </div>
             </div>
@@ -88,6 +82,51 @@
 
     </div>
 @endsection
+@include('components._modal_cliente')
 @section('scripts')
-    {!! Html::script('js/data-table.js') !!}
+    <script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': $('meta[name=_token]').attr('content')
+                }
+            });
+            $("#cliente").on('click',function(e){
+                e.preventDefault();
+                $("#cliente-registro").modal('show');
+            });
+            function guardar(datos) {
+                const request = $.ajax({
+                        url: "{{ route('client.store') }}",
+                        type: 'POST',
+                        data:datos
+                    });
+                    request.done(function(response) {
+                        if(response.code == 200){
+                            toastr.success(response.message);
+                            setTimeout(function(){
+                                $("#cliente-registro").modal('hide');
+                            },1500);
+                        }else{
+                            toastr.error(response.message);
+                            console.error(response.message);
+                        }
+                    });
+                    request.fail(function(xhr, status, error){
+                        $.each(xhr.responseJSON.errors, function (key, item)
+                        {
+                            $("#errors").append("<li class='alert alert-danger'>"+item+"</li>")
+                            setInterval(function(){
+                                $("#errors").hide()
+                            },7000)
+                        });
+                    });
+            }
+            $("#guardar-client").on("click",function(e){
+                e.preventDefault();
+                let datos = $("#formulario-cliente").serialize();
+                guardar(datos);
+            });
+        });
+    </script>
 @endsection

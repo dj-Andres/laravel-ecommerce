@@ -1,0 +1,1 @@
+<h1>Reporte de {{ $reporte }}</h1>

@@ -16,7 +16,7 @@
             </h3>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Panel administrador</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Panel administrador</a></li>
                     <li class="breadcrumb-item"><a href="{{route('users.index')}}">Usuarios</a></li>
                 </ol>
             </nav>
@@ -28,7 +28,7 @@
                         <div class="d-flex justify-content-between">
                             <h4 class="card-title">Editar Usuarios</h4>
                         </div>
-                        
+
                         {!! Form::model($user, ['route'=>['users.update',$user->id],'method'=>'PUT']) !!}
                             @include('admin.users._form')
                             <button type="submit" class="btn btn-primary mr-2">Actualizar</button>

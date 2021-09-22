@@ -1,0 +1,6 @@
+.required::before {
+    content: "* ";
+    color: #0cdf98;
+    font-weight: bold;
+    font-size: 20px;
+}

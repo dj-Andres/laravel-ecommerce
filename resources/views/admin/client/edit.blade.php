@@ -16,7 +16,7 @@
             </h3>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Panel administrador</a></li>
+                    <li class="breadcrumb-item"><a href="{{route('home')}}">Panel administrador</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Clientes</li>
                 </ol>
             </nav>
@@ -42,80 +42,8 @@
                                         <div class="d-flex justify-content-between">
                                             <h4 class="card-title">Actualizar Cliente</h4>
                                         </div>
-                
-                                        {!! Form::model($client, ['route'=>['client.update',$client->id],'method'=>'PUT']) !!}
-                
-                                            <div class="row">
-                                                <div class="col-md-6 col-lg-12">
-                                                    <div class="form-group row">
-                                                        {!! Form::label('name', 'Nombre') !!}
-                                                        {!! Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'Ingrese el Nombre del Cliente', 'id' => 'name']) !!}
-                                                        @error('name')
-                                                            <p class="text-danger">{{ $message }}</p>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6 col-lg-12">
-                                                    <div class="form-group">
-                                                        {!! Form::label('cedula', 'Cedula') !!}
-                                                        {!! Form::text('cedula', null, ['class' => 'form-control', 'placeholder' => 'Ingrese la Cedula', 'id' => 'cedula']) !!}
-                                                        @error('cedula')
-                                                            <p class="text-danger">{{ $message }}</p>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6-col-lg-12">
-                                                    <div class="form-group">
-                                                        {!! Form::label('ruc', 'Numero Ruc') !!}
-                                                        {!! Form::text('ruc', null, ['class' => 'form-control', 'placeholder' => 'Ingrese el RUC', 'id' => 'rucs']) !!}
-                                                            
-                                                        @error('ruc')
-                                                            <p class="text-danger">{{ $message }}</p>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6 col-lg-12">
-                                                    <div class="form-group">
-                                                        {!! Form::label('email', 'Email') !!}
-                                                        {!! Form::email('email', null, ['class'=>'form-control','id' => 'email','placeholder'=>'Ingresar el Email']) !!}
-                                                        @error('email')
-                                                            <p class="text-danger">{{ $message }}</p>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6-col-lg-12">
-                                                    <div class="form-group">
-                                                        {!! Form::label('direccion', 'Dirección') !!}
-                                                        {!! Form::text('address', null, ['class'=>'form-control','id' => 'addres','placeholder'=>'Ingresar su Dirección']) !!}
-                                                        @error('address')
-                                                            <p class="text-danger">{{ $message }}</p>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            ,<div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        {!! Form::label('Telefono', 'Telefono/Celular') !!}
-                                                        {!! Form::text('phone', null, ['class'=>'form-control','id' => 'phone','placeholder'=>'Ingresar su Telefono']) !!}
-                                                        @error('phone')
-                                                            <p class="text-danger">{{ $message }}</p>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6 col-lg-12">
-                                                    <div class="form-group pt-2">
-                                                        <button type="submit" class="btn btn-primary mr-2">Guardar</button>
-                                                        <a href="{{ route('client.index') }}" class="btn btn-light">Cancelar</a>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        {!! Form::model($client, ['route'=>['client.update',$client->id],'method'=>'PUT','class'=> 'cmxform','id' => 'formulario-edit']) !!}
+                                            @include('admin.client._form')
                                         {!! Form::close() !!}
                                     </div>
                                 </div>
@@ -128,5 +56,69 @@
     </div>
 @endsection
 @section('scripts')
-{!! Html::script('js/data-table.js') !!}
+{!! Html::script('js/sweetalert2.js') !!}
+<script>
+$(document).ready(function(){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-Token': $('meta[name=_token]').attr('content')
+            }
+        });
+        function editar(id,name,email,ruc,address,phone,cedula){
+            $.ajax({
+                url: "{{route('client.update',$client->id)}}",
+                type: 'POST',
+                data:{
+                    id:id,
+                    name,
+                    cedula,
+                    email,
+                    ruc,
+                    address,
+                    phone,
+                    _method:'PUT'
+                },
+                success:function(response){
+                    if(response.code == 200){
+                        toastr.success(response.message);
+                        setTimeout(function(){
+                            window.location.href="{{route('client.index')}}"
+                        },2500);
+                    }else{
+                        toastr.error(response.message);
+                        console.error(response.message);
+                    }
+                },
+                error:function(xhr, status, error){
+                    $.each(xhr.responseJSON.errors, function (key, item)
+                    {
+                        $("#errors").append("<li class='alert alert-danger'>"+item+"</li>")
+                        setInterval(function(){
+                            $("#errors").hide()
+                        },7000)
+                    });
+                }
+            });
+        }
+        $("#guardar").on("click",function(e){
+            e.preventDefault();
+            let id = $(this).data("id");
+            let name = $('#name').val(),email=$('#email').val(),ruc=$('#ruc').val(),address=$('#address').val(),phone=$('#phone').val(),cedula=$('#cedula').val();
+
+            const swalWithBootstrapButtons = Swal.mixin({customClass: {confirmButton: 'btn btn-success',cancelButton: 'btn btn-danger mr-1'},buttonsStyling: false});
+            swalWithBootstrapButtons.fire({
+                title : 'Está seguro de actualizar el registro',
+                'icon':'question',
+                showCancelButton: true,
+                confirmButtonText: 'Si, Guardar!',
+                cancelButtonText: 'No, Cancelar!',
+                reverseButtons: true
+            }).then((result)=>{
+                if (result.value) {
+                    editar(id,name,email,ruc,address,phone,cedula);
+                }
+            });
+        });
+    });
+</script>
 @endsection

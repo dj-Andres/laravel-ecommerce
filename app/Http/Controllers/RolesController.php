@@ -24,14 +24,18 @@ class RolesController extends Controller
     }
     public function create()
     {
-        $permisions = Permission::get();
-        return view('admin.role.create', compact('permisions'));
+        $permissions = Permission::all()->pluck('name','id');
+        return view('admin.role.create', compact('permissions'));
     }
     public function store(Request $request)
     {
-        $role = Role::create($request->all());
-        $role->permissions()->sync($request->permissions);
-        return redirect()->route('roles.index');
+        try {
+            $role = Role::create($request->all());
+            $role->permissions()->sync($request->input('permisions',[]));
+            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'El Rol se Guardo exitosamente','data' => $role],200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
+        }
     }
     public function show(Role $rols)
     {
@@ -39,13 +43,14 @@ class RolesController extends Controller
     }
     public function edit(Role $role)
     {
-        $permisions = Permission::get();
-        return view('admin.role.edit', compact('role', 'permisions'));
+        $permissions = Permission::all()->pluck('name','id');
+        $role->load('permissions');
+        return view('admin.role.edit', compact('role', 'permissions'));
     }
-    public function update(Request $request, Role $rols)
+    public function update(Request $request, Role $role)
     {
-        $rols->update($request->all());
-        $rols->permissions()->sync($request->permissions);
+        $role->update($request->all());
+        $role->permissions()->sync($request->input('permisions',[]));
         return redirect()->route('roles.index');
     }
     public function destroy(Role $role)

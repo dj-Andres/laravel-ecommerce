@@ -1,28 +1,6 @@
 @extends('layouts.admin')
 @section('styles')
     <style type="text/css">
-        .unstyled-button {
-            border: none;
-            padding: 0;
-            background: none;
-        }
-
-        .error {
-            color: #FF0000;
-            padding-top: 2px;
-        }
-        .image-wrapper{
-            position: relative;
-            padding-bottom: 56.25%;
-        }
-        .image-wrapper img{
-            border-radius: 7px;
-            border: 2px solid blueviolet;
-            position: absolute;
-            object-fit: cover;
-            width: 100%;
-            height: 100%;
-        }
     </style>
 @endsection
 @section('content')
@@ -33,7 +11,7 @@
             </h3>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Panel administrador</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Panel administrador</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('client.index') }}">Clientes</a></li>
                 </ol>
             </nav>
@@ -43,82 +21,10 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            <h4 class="card-title">Registro cliento</h4>
+                            <h4 class="card-title">Registro Cliente</h4>
                         </div>
-
-                        {!! Form::open(['route' => 'client.store', 'method' => 'POST','id' => 'formulario','class' => 'form-sample']) !!}
-
-                            <div class="row">
-                                <div class="col-md-6 col-lg-12">
-                                    <div class="form-group row">
-                                        {!! Form::label('name', 'Nombre') !!}
-                                        {!! Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'Ingrese el Nombre del Cliente', 'id' => 'name']) !!}
-                                        @error('name')
-                                            <p class="text-danger">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-lg-12">
-                                    <div class="form-group">
-                                        {!! Form::label('cedula', 'Cedula') !!}
-                                        {!! Form::text('cedula', null, ['class' => 'form-control', 'placeholder' => 'Ingrese la Cedula', 'id' => 'cedula']) !!}
-                                        @error('cedula')
-                                            <p class="text-danger">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-md-6-col-lg-12">
-                                    <div class="form-group">
-                                        {!! Form::label('ruc', 'Numero Ruc') !!}
-                                        {!! Form::text('ruc', null, ['class' => 'form-control', 'placeholder' => 'Ingrese el RUC', 'id' => 'rucs']) !!}
-                                            
-                                        @error('ruc')
-                                            <p class="text-danger">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-lg-12">
-                                    <div class="form-group">
-                                        {!! Form::label('email', 'Email') !!}
-                                        {!! Form::email('email', null, ['class'=>'form-control','id' => 'email','placeholder'=>'Ingresar el Email']) !!}
-                                        @error('email')
-                                            <p class="text-danger">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-md-6-col-lg-12">
-                                    <div class="form-group">
-                                        {!! Form::label('direccion', 'Dirección') !!}
-                                        {!! Form::text('address', null, ['class'=>'form-control','id' => 'addres','placeholder'=>'Ingresar su Dirección']) !!}
-                                        @error('address')
-                                            <p class="text-danger">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                            ,<div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        {!! Form::label('Telefono', 'Telefono/Celular') !!}
-                                        {!! Form::text('phone', null, ['class'=>'form-control','id' => 'phone','placeholder'=>'Ingresar su Telefono']) !!}
-                                        @error('phone')
-                                            <p class="text-danger">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-lg-12">
-                                    <div class="form-group pt-2">
-                                        <button type="submit" class="btn btn-primary mr-2">Guardar</button>
-                                        <a href="{{ route('client.index') }}" class="btn btn-light">Cancelar</a>
-                                    </div>
-                                </div>
-                            </div>
+                        {!! Form::open(['route' => 'client.store', 'method' => 'POST', 'id' => 'formulario', 'class' => 'cmxform']) !!}
+                            @include('admin.client._form')
                         {!! Form::close() !!}
                     </div>
                 </div>
@@ -127,6 +33,78 @@
     </div>
 @endsection
 @section('scripts')
-    {!! Html::script('js/jquery.min.js') !!}
-    {!! Html::script('js/jquery.validate.min.js') !!}
+    {!! Html::script('js/sweetalert2.js') !!}
+    <script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': $('meta[name=_token]').attr('content')
+                }
+            });
+            function guardar(datos){
+                const request = $.ajax({
+                    url: "{{ route('client.store') }}",
+                    type: 'POST',
+                    data:datos
+                });
+                request.done(function(response) {
+                    if(response.code == 200){
+                        toastr.success(response.message);
+                        setTimeout(function(){
+                            window.location.href="{{route('client.index')}}"
+                        },3000);
+                    }else{
+                        toastr.error(response.message);
+                        console.error(response.message);
+                    }
+                });
+                request.fail(function(xhr, status, error){
+                    $.each(xhr.responseJSON.errors, function (key, item)
+                    {
+                        $("#errors").append("<li class='alert alert-danger'>"+item+"</li>")
+                        setInterval(function(){
+                            $("#errors").hide()
+                        },7000)
+                    });
+                });
+            }
+            $("#guardar").on("click",function(e){
+                e.preventDefault();
+                let cedula = $("#cedula").val().trim();
+                let formulario = $('#formulario').serialize();
+                let total = 0; let longitud = cedula.length;  let longcheck = longitud - 1;
+
+                if (cedula !== "" && longitud === 10) {
+                    for (i = 0; i < longcheck; i++) {
+                        if (i % 2 === 0) {
+                        let aux = cedula.charAt(i) * 2;
+                        if (aux > 9) aux -= 9;
+                            total += aux;
+                        } else {
+                            total += parseInt(cedula.charAt(i));
+                        }
+                    }
+                    total = total % 10 ? 10 - (total % 10) : 0;
+                    if (cedula.charAt(longitud - 1) == total){
+                        const swalWithBootstrapButtons = Swal.mixin({customClass: {confirmButton: 'btn btn-success',cancelButton: 'btn btn-danger mr-1'},buttonsStyling: false});
+                        swalWithBootstrapButtons.fire({
+                            title : 'Está seguro de crear un nuevo registro',
+                            'icon':'question',
+                            showCancelButton: true,
+                            confirmButtonText: 'Si, Guardar!',
+                            cancelButtonText: 'No, Cancelar!',
+                            reverseButtons: true
+                        }).then((result)=>{
+                            if (result.value) {
+                                guardar(formulario);
+                            }
+                        });
+                    }else{
+                        $("#aviso").show();
+                        $("#aviso").text("Cedula invalida");
+                    }
+                }
+            });
+        });
+    </script>
 @endsection

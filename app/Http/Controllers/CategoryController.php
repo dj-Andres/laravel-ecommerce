@@ -23,7 +23,19 @@ class CategoryController extends Controller
 
         return view('admin.categories.index',compact('categories'));
     }
-
+    public function search(Request $request){
+        if($request->ajax()){
+            switch ($request->input('getCategories')){
+                case 'getCategories':
+                    $categories = Category::get();
+                    return compact('categories');
+                break;
+                default:
+                break;
+            }
+            return response()->json(['status' => 'error','code' => 400,'message' =>'Solicitud no encontrada']);
+        }
+    }
     public function create()
     {
         return view('admin.categories.create');
@@ -31,13 +43,18 @@ class CategoryController extends Controller
 
     public function store(StoreRequest $request)
     {
-        Category::create($request->all());
-        return redirect()->route('categories.index');
+        $validated = $request->validated();
+        try {
+            $category = Category::create($request->all());
+            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'La categoria ha sido guardada exitosamente','data' => $category],200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
+        }
     }
 
     public function show(Category $category)
     {
-        return view('admin.categories.show',compact('category')); 
+        return view('admin.categories.show',compact('category'));
     }
 
     public function edit(Category $category)
@@ -45,16 +62,26 @@ class CategoryController extends Controller
         return view('admin.categories.edit',compact('category'));
     }
 
-    public function update(UpdateRequest $request, Category $category)
+    public function update(UpdateRequest $request,$id)
     {
-        $this->debug();
-        $category->update($request->all());
-        return redirect()->route('categories.index');
+        $validated = $request->validated();
+        try {
+            $category = Category::findOrFail($id);
+            $category->update($request->all());
+            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'La categoria '.$request->name.'  ha sido actualizada exitosamente','data' => $category],200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
+        }
     }
 
-    public function destroy(Category $category)
+    public function destroy($id)
     {
-        $category->delete();
-        return redirect()->route('categories.index');
+        try {
+            $category = Category::find($id);
+            $category->delete();
+            return response()->json(['status' => 'ok','code'=>200,'message' => 'La categoria se elimino correctamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error','code'=>400,'message' => $e->getMessage()], 400);
+        }
     }
 }

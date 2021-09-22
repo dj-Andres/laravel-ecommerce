@@ -1,17 +1,6 @@
 @extends('layouts.admin')
 @section('styles')
     <style type="text/css">
-        .unstyled-button {
-            border: none;
-            padding: 0;
-            background: none;
-        }
-
-        .error {
-            color: #FF0000;
-            padding-top: 2px;
-        }
-
     </style>
 @endsection
 @section('content')
@@ -34,17 +23,8 @@
                         <div class="d-flex justify-content-between">
                             <h4 class="card-title">Registro Compras</h4>
                         </div>
-
                         {!! Form::open(['route' => 'purchases.store', 'method' => 'POST', 'files' => true, 'id' => 'formulario', 'class' => 'form-sample']) !!}
-                        @include('admin.purchase._form')
-                        <div class="row">
-                            <div class="col-md-6 col-lg-12">
-                                <div class="form-group pt-2">
-                                    <button type="submit" id="guardar" class="btn btn-primary mr-2">Guardar</button>
-                                    <a href="{{ route('purchases.index') }}" class="btn btn-light">Cancelar</a>
-                                </div>
-                            </div>
-                        </div>
+                            @include('admin.purchase._form')
                         {!! Form::close() !!}
                     </div>
                 </div>
@@ -53,23 +33,16 @@
     </div>
 @endsection
 @section('scripts')
-    {!! Html::script('js/alerts.js') !!}
-    {!! Html::script('js/avgrund.js') !!}
     {!! Html::script('js/sweetalert2.js') !!}
     <script>
         $(document).ready(function() {
             var cont = 0;
             total = 0;
             subtotal = [];
-
-            $(".select2").select2();
-
             $("#agregar").click(function (e) {
                 e.preventDefault();
                 agregar();
-            }); 
-            
-    
+            });
             $("#guardar").hide();
 
             function agregar(){
@@ -78,14 +51,12 @@
                 let cantidad = $("#cantidad").val();
                 let precio = $("#price").val();
                 let impuesto = $("#impuesto").val();
-                //let compra_id = $("#compra_id").val();
 
                 if(product_id != "" && cantidad != "" && cantidad > 0 && precio != ""){
                     subtotal [cont] = cantidad * precio;
                     total = total + subtotal [cont];
 
                     let  fila = '<tr class="selected" id="fila'+cont+'"><td><button type="button" class="elimar-art btn btn-danger btn-sm"><i class="fa fa-times"></i></button></td> <td><input type="hidden" name="product_id[]" value="'+product_id+'">'+producto+'</td> <td> <input type="hidden" id="price[]" name="price[]" value="' + precio + '"> <input class="form-control" type="text" id="price[]" value="' + precio + '" disabled> </td> </td> <td> <input type="hidden" name="cantidad[]" value="' + cantidad + '"> <input class="form-control" type="number" value="' + cantidad + '" disabled> </td> <td align="right">s/' + subtotal[cont] + ' </td></tr>';
-                    /*<tr class="selected" id="fila'+cont+'"><td><button type="button" class="elimar-art btn btn-danger btn-sm"><i class="fa fa-times"></i></button></td> <td><input type="hidden" name="product_id[]" value="'+product_id+'">'+producto+'</td> <td> <input type="text" id="price[]" name="price[]" value="' + precio + '" class="form-control" disabled>  </td>  <td> <input type="text" name="cantidad[]" value="' + cantidad + '" class="form-control" disabled> </td> <td align="right">s/' + subtotal[cont] + ' </td></tr>*/
                     cont++;
                     limpiar();
                     totales();
@@ -99,7 +70,6 @@
                     });
                 }
             }
-
             function limpiar(){
                 let cantidad = $("#cantidad").val("");
                 let precio = $("#price").val("");
@@ -120,26 +90,20 @@
                     $("#guardar").hide();
                 }
             }
-                $(document).on('click', '.elimar-art', (e) => {
-                    let elememto = $(this)[0].activeElement.parentElement.parentElement;
-        
-                     total = total - subtotal[elememto];
-                     total_impuesto = total * impuesto / 100;
-                     total_pagar_html = total + total_impuesto;
+            $(document).on('click', '.elimar-art', (e) => {
+                let elememto = $(this)[0].activeElement.parentElement.parentElement;
 
-                    $("#total").html("PEN" + total);
-                    $("#total_impuesto").html("PEN" + total_impuesto);
-                    $("#total_pagar_html").html("PEN" + total_pagar_html);
-                    $("#total_pagar").val(total_pagar_html.toFixed(2));
+                total = total - subtotal[elememto];
+                total_impuesto = total * impuesto / 100;
+                total_pagar_html = total + total_impuesto;
 
-                    elememto.remove();
-
-                    evaluar();
-                    
-                    /*$("#fila" + index).remove();
-                    evaluar();*/
-                });
-            
+                $("#total").html("PEN" + total);
+                $("#total_impuesto").html("PEN" + total_impuesto);
+                $("#total_pagar_html").html("PEN" + total_pagar_html);
+                $("#total_pagar").val(total_pagar_html.toFixed(2));
+                elememto.remove();
+                evaluar();
+            });
         });
     </script>
 @endsection

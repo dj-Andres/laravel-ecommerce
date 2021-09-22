@@ -6,6 +6,7 @@ use App\Http\Requests\Client\StoreRequest;
 use App\Http\Requests\Client\UpdateRequest;
 use App\Models\Client;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Validator;
 
 class ClientController extends Controller
 {
@@ -30,8 +31,13 @@ class ClientController extends Controller
 
     public function store(StoreRequest $request)
     {
-        Client::create($request->all());
-        return redirect()->route('client.index');
+        $validated = $request->validated();
+        try {
+            $client = Client::create($request->all());
+            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'El cliente ha sido guardado','data' => $client],200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
+        }
     }
     public function show(Client $client)
     {
@@ -43,14 +49,25 @@ class ClientController extends Controller
         return view('admin.client.edit', compact('client'));
     }
 
-    public function update(UpdateRequest $request, Client $client)
-    {   
-        $client->update($request->all());
-        return redirect()->route('client.index');
-    }
-    public function destroy(Client $client)
+    public function update(UpdateRequest $request, $id)
     {
-        $client->delete();
-        return redirect()->route('client.index');
+        $validated = $request->validated();
+        try {
+            $client = Client::findOrFail($id);
+            $client->update($request->all());
+            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'El cliente '.$request->name.' ha sido actualizado exitosamente.','data' => $client],200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
+        }
+    }
+    public function destroy($id)
+    {
+        try {
+            $client = Client::findOrFail($id);
+            $client->delete();
+            return response()->json(['status' => 'ok','code'=>200,'message' => 'El Cliente se elimino correctamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error','code'=>400,'message' => $e->getMessage()], 400);
+        }
     }
 }

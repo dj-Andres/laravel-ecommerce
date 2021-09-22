@@ -32,7 +32,7 @@ class UserController extends Controller
     {
         $user = User::create($request->all());
         $user->update(['password'=> Hash::make($request->password)]);
-        $user->roles()->sync($request->get('roles'));
+        $user->roles()->sync($request->roles);
 
         return redirect()->route('users.index');
     }
@@ -51,7 +51,7 @@ class UserController extends Controller
     {
         $user->update($request->all());
         $user->update(['password'=> Hash::make($request->password)]);
-        $user->roles()->sync($request->get('roles'));
+        $user->roles()->sync($request->roles);
         return redirect()->route('users.index');
     }
 

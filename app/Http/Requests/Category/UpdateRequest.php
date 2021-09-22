@@ -23,20 +23,22 @@ class UpdateRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'required|string|unique:categories'.$this->route('category')->id.'|max:50',
+        $rules = [
+            //'name' => 'required|string|unique:categories'.$this->route('category')->id.'|max:50',
             'description' => 'nullable|string|max:250',
         ];
+        return $rules;
     }
 
     public function messajes()
     {
-        return [
+        $messajes = [
             'name.required' => 'Este campo es requerido.',
             'name.string' => 'El valor no es correcto.',
             'name.max' => 'Solo se permite un maximo de 50 caracteres.',
             'description.string' => 'El valor no es correcto.',
             'description.max' => 'Solo se permite un maximo de 250 caracteres.'
         ];
+        return $messajes;
     }
 }

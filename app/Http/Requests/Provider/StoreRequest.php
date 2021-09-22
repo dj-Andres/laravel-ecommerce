@@ -18,18 +18,19 @@ class StoreRequest extends FormRequest
 
     public function rules()
     {
-        return [
+        $rules = [
             'name' => 'required|string|max:250',
             'email' => 'required|email|string|max:200|unique:providers',
             'ruc_number'=> 'required|string|max:11|min:11|unique:providers',
             'address' => 'nullable|string|max:250',
             'phone' => 'required|string|max:10|min:10|unique:providers',
         ];
+        return $rules;
     }
 
     public function messajes()
     {
-        return [
+        $messajes =  [
             'name.required' => 'Este campo es requerido.',
             'name.string' => 'El valor no es correcto.',
             'name.max' => 'Solo se permite un maximo de 250 caracteres.',
@@ -55,5 +56,7 @@ class StoreRequest extends FormRequest
             'phone.min'=> 'Minimo de numeros  debe ser 10.',
             'phone.uniqued' => 'El numero ya se encuentra registrado!',
         ];
+
+        return $messajes;
     }
 }

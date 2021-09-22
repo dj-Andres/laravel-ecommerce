@@ -17,7 +17,7 @@
             </h3>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Panel administrador</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('home')}}">Panel administrador</a></li>
                     <li class="breadcrumb-item"><a href="{{route('product.index')}}">Producto</a></li>
                     <li class="breadcrumb-item active" aria-current="page">{{ $product->name }}</li>
                 </ol>
@@ -36,7 +36,7 @@
                                 </div>
                                 <div class="border-bottom py-4">
                                     <div class="list-group">
-                                        <img src="{{asset('images/productos'.$product->image)}}" alt="Producto">
+                                        <img src="{{asset('images/productos/'.$product->image)}}" alt="{{ $product->name }}" class="img-lg  mb-3" />
                                     </div>
                                 </div>
                             </div>
@@ -49,22 +49,30 @@
                                 <div class="profile-feed">
                                     <div class="d-flex align-items-start profile-feed-item">
                                         <div class="form-group col-md-6">
-                                            <strong><i class="fab fa-product-hunt mr-1"></i> Precio de Compra</strong>
+                                            <strong><i class="far fa-money-bill-alt mr-1"></i> Precio de Compra</strong>
                                             <p class="text-muted">
                                                 {{ $product->sell_price }}
                                             </p>
                                             <hr>
+                                            <strong><i class="fas fa-barcode mr-1"></i> Código de barras</strong>
+                                            <p class="text-muted">
+                                                {!! DNS1D::getBarcodeHTML($product->code, 'EAN13'); !!}
+                                                {{ $product->code }}
+                                            </p>
+                                            <hr>
                                             <strong>
-                                                <i class="fas fa-mobile mr-1"></i>
+                                                <i class="fas fa-thermometer-empty mr-1"></i>
                                                  Estado
                                             </strong>
                                             <p class="text-muted">
                                                 @if ($product->status === 'ACTIVE')
-                                                    <p class="text-success">Activo</p>    
+                                                    <a href="{{route('change.status.product', $product)}}" class="btn btn-warning btn-block">Activo</a>
+                                                @else
+                                                    <a href="{{route('change.status.product', $product)}}" class="btn btn-danger btn-block">Inactivo</a>
                                                 @endif
                                             </p>
                                             <hr>
-                                            <strong><i class="fas fa-envelope mr-1"></i> Porveedor</strong>
+                                            <strong><i class="fas fa-envelope mr-1"></i> Proveedor</strong>
                                             <p class="text-muted">
                                                 <a class="bnt btn-link" href="{{route('providers.show',$product->provider_id)}}">
                                                     {{ $product->proveedor }}
@@ -75,7 +83,7 @@
                                             <p class="text-muted">
                                                 {{ $product->categoria }}
                                             </p>
-                                            <a href="{{route('product.create')}}">Nuevo Producto</a>
+                                            <a href="{{route('product.create')}}" class="btn btn-success">Nuevo Producto</a>
                                         </div>
                                     </div>
                                 </div>

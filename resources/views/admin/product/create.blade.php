@@ -1,29 +1,6 @@
 @extends('layouts.admin')
 @section('styles')
-    <style type="text/css">
-        .unstyled-button {
-            border: none;
-            padding: 0;
-            background: none;
-        }
-
-        .error {
-            color: #FF0000;
-            padding-top: 2px;
-        }
-        .image-wrapper{
-            position: relative;
-            padding-bottom: 56.25%;
-        }
-        .image-wrapper img{
-            border-radius: 7px;
-            border: 2px solid blueviolet;
-            position: absolute;
-            object-fit: cover;
-            width: 100%;
-            height: 100%;
-        }
-    </style>
+    <style type="text/css"></style>
 @endsection
 @section('content')
     <div class="content-wrapper">
@@ -33,7 +10,7 @@
             </h3>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Panel administrador</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Panel administrador</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('product.index') }}">Productos</a></li>
                 </ol>
             </nav>
@@ -45,85 +22,8 @@
                         <div class="d-flex justify-content-between">
                             <h4 class="card-title">Registro Producto</h4>
                         </div>
-
-                        {!! Form::open(['route' => 'product.store', 'method' => 'POST', 'files' => true, 'id' => 'formulario','class' => 'form-sample']) !!}
-
-                            <div class="row">
-                                <div class="col-md-6 col-lg-12">
-                                    <div class="form-group row">
-                                        {!! Form::label('name', 'Nombre') !!}
-                                        {!! Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'Ingrese el Nombre del Proveedor', 'id' => 'name']) !!}
-                                        @error('name')
-                                            <p class="text-danger">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-lg-12">
-                                    <div class="form-group">
-                                        {!! Form::label('sell_price', 'Precio de Compra') !!}
-                                        {!! Form::text('sell_price', null, ['class' => 'form-control', 'placeholder' => 'Ingrese el PV', 'id' => 'shell_price']) !!}
-                                        @error('sell_price')
-                                            <p class="text-danger">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-md-6-col-lg-12">
-                                    <div class="form-group">
-                                        <label for="category_id">Categoría</label>
-                                        <select class="form-control" name="category_id" id="category_id">
-                                            @foreach ($categories as $category)
-                                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('category_id')
-                                            <p class="text-danger">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-lg-12">
-                                    <div class="form-group">
-                                        <label for="provider_id">Proveedor</label>
-                                        <select class="form-control" name="provider_id" id="provider_id">
-                                            @foreach ($providers as $provider)
-                                                <option value="{{ $provider->id }}">{{ $provider->name }}</option>
-                                            @endforeach
-                                            @error('provider_id')
-                                                <p class="text-danger">{{ $message }}</p>
-                                            @enderror
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6-col-lg-12">
-                                    <div class="custom-file">
-                                        <input type="file" name="image" id="image" class="custom-file-input" lang="es">
-                                        <label for="image" class="custom-file-label">Seleccionar Archivo</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="image-wrapper">
-                                            @isset($product->image)
-                                                <img src="" alt="Producto" id="picture">
-                                            @endisset
-                                        </div>
-                                    </div>
-                                    @error('image')
-                                        <p class="text-danger">
-                                            {{$message}}
-                                        </p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-lg-12">
-                                    <div class="form-group pt-2">
-                                        <button type="submit" class="btn btn-primary mr-2">Guardar</button>
-                                        <a href="{{ route('product.index') }}" class="btn btn-light">Cancelar</a>
-                                    </div>
-                                </div>
-                            </div>
+                        {!! Form::open(['route' => 'product.store', 'method' => 'POST', 'files' => true, 'id' => 'formulario', 'class' => 'form-sample']) !!}
+                            @include('admin.product._form')
                         {!! Form::close() !!}
                     </div>
                 </div>
@@ -132,23 +32,117 @@
     </div>
 @endsection
 @section('scripts')
-    {!! Html::script('js/jquery.min.js') !!}
-    {!! Html::script('js/jquery.validate.min.js') !!}
+    {!! Html::script('js/dropify.js') !!}
+    {!! Html::script('js/sweetalert2.js') !!}
     <script>
-        const file = document.getElementById('image');
-        const image = document.getElementById('picture');
-    
-        file.addEventListener('change',changeImg);
-    
-        function changeImg(event){
-            let file = event.target.files[0];
-            let reader = new FileReader();
-    
-            reader.onload=(event) =>{
-                image.setAttribute('src',event.target.result);
-            };
-    
-            reader.readAsDataURL(file);
-        }
+        $(document).ready(function() {
+            $.ajaxSetup({headers: {'X-CSRF-Token': $('meta[name=_token]').attr('content')}});
+            $("#categoria").on('click',function(e){
+                e.preventDefault();
+                $("#categoria-registro").modal('show');
+            });
+            function getCategories(){
+                $.post("{{ route('categories.search') }}",{getCategories:'getCategories'},(response)=>{
+                    $.each(response, function (key, categoria){
+                        let template='';
+                        categoria.forEach(element => {
+                            template+=`
+                                <option value="${element.id}">${element.name}</option>
+                            `;
+                        });
+                        $('#category_id').html(template);
+                    });
+                });
+            }
+            function createCategory(name,description){
+                $.ajax({
+                    url: "{{route('categories.store')}}",
+                    type: 'POST',
+                    data:{
+                        name:name,
+                        description:description
+                    },
+                    success: function (response){
+                        if(response.code == 200){
+                            toastr.success(response.message);
+                            setTimeout(function(){
+                                $("#categoria-registro").modal('hide');
+                                getCategories();
+                            },1500);
+                        }else{
+                            toastr.error(response.message);
+                            console.error(response.message);
+                        }
+                    },
+                    fail:function(xhr, status, error){
+                        $.each(xhr.responseJSON.errors, function (key, item)
+                        {
+                            $("#errors").append("<li class='alert alert-danger'>"+item+"</li>")
+                            setInterval(function(){
+                                $("#errors").hide()
+                            },7000)
+                        });
+                    }
+                });
+            }
+            $("#guardar-categoria").on('click',function(e){
+                e.preventDefault();
+                let name = $("#name-categoria").val(),description=$("#description").val();
+                createCategory(name,description);
+            });
+            const createProduct = (datos) => {
+                $.ajax({
+                    url: "{{route('product.store')}}",
+                    type: 'POST',
+                    data:datos,
+                    processData:false,
+                    cache:false,
+                    contentType: false
+                }).done(function(response){
+                    if(response.code == 200){
+                        toastr.success(response.message);
+                        setTimeout(function() {
+                             window.location.href = "{{ route('product.index') }}";
+                        },1500)
+                    }else{
+                        toastr.error(response.message);
+                        console.error(response.message);
+                    }
+                }).fail(function(xhr, status, error){
+                    $.each(xhr.responseJSON.errors, function (key, item)
+                    {
+                        $("#errors_prod").append("<li class='alert alert-danger'>"+item+"</li>")
+                        setInterval(function(){
+                            $("#errors_prod").hide()
+                        },7000)
+                    });
+                });
+            }
+            $("#formulario").submit((e)=>{
+                e.preventDefault();
+                let name = $("#name").val(), sell_price = $("#sell_price").val(), category_id = $("#category_id").val(), provider_id = $("#provider_id").val();
+                let picture = $("#picture").prop('files')[0];
+                let formData = new FormData();
+
+                formData.append('image',picture);
+                formData.append('name',name);
+                formData.append('sell_price',sell_price);
+                formData.append('category_id',category_id);
+                formData.append('provider_id',provider_id);
+
+                const swalWithBootstrapButtons = Swal.mixin({customClass: {confirmButton: 'btn btn-success',cancelButton: 'btn btn-danger mr-1'},buttonsStyling: false});
+                swalWithBootstrapButtons.fire({
+                    title : 'Está seguro de crear un nuevo registro',
+                    'icon':'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si, Guardar!',
+                    cancelButtonText: 'No, Cancelar!',
+                    reverseButtons: true
+                }).then((result)=>{
+                    if (result.value) {createProduct(formData);}
+                });
+            });
+        });
     </script>
 @endsection
+@include('components._modal_categoria')
