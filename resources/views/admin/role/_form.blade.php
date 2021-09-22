@@ -29,7 +29,7 @@
                             @foreach ($permissions as $id => $permission)
                                 <tr>
                                     <td>{{ $permission }}</td>
-                                    <td>
+                                    <td id="roles">
                                         <label>
                                             {!! Form::checkbox('permisions[]', $id, null, ['class' => 'mr-1']) !!}
                                         </label>

@@ -43,7 +43,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('categories/search', [CategoryController::class, 'search'])->name('categories.search');
 
 
-    Route::resource('Business', BusinessController::class)->only(['index', 'update'])->names('business');
+    Route::resource('business', BusinessController::class)->only(['index', 'update'])->names('business');
     Route::resource('printer', PrinterController::class)->only(['index', 'update'])->names('printer');
 
     Route::get('logout',[LoginController::class,'logout'])->name('logout');

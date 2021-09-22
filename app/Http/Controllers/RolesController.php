@@ -29,9 +29,13 @@ class RolesController extends Controller
     }
     public function store(Request $request)
     {
-        $role = Role::create($request->all());
-        $role->permissions()->sync($request->input('permisions',[]));
-        return redirect()->route('roles.index');
+        try {
+            $role = Role::create($request->all());
+            $role->permissions()->sync($request->input('permisions',[]));
+            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'El Rol se Guardo exitosamente','data' => $role],200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
+        }
     }
     public function show(Role $rols)
     {
