@@ -120,7 +120,7 @@
             }
             $("#formulario").submit((e)=>{
                 e.preventDefault();
-                let name = $("#name").val(), sell_price = $("#sell_price").val(), category_id = $("#category_id").val(), provider_id = $("#provider_id").val();
+                let name = $("#name").val(), sell_price = $("#sell_price").val(), category_id = $("#category_id").val(), provider_id = $("#provider_id").val(),code = $("#code").val();
                 let picture = $("#picture").prop('files')[0];
                 let formData = new FormData();
 
@@ -129,6 +129,7 @@
                 formData.append('sell_price',sell_price);
                 formData.append('category_id',category_id);
                 formData.append('provider_id',provider_id);
+                formData.append('code',code);
 
                 const swalWithBootstrapButtons = Swal.mixin({customClass: {confirmButton: 'btn btn-success',cancelButton: 'btn btn-danger mr-1'},buttonsStyling: false});
                 swalWithBootstrapButtons.fire({

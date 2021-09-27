@@ -38,13 +38,14 @@
     <script>
         $(document).ready(function() {
             $.ajaxSetup({headers: {'X-CSRF-Token': $('meta[name=_token]').attr('content')}});
-            const updateProduct = (id,name,sell_price,category_id,provider_id) => {
+            const updateProduct = (id,name,sell_price,category_id,provider_id,code) => {
                 $.ajax({
                     url: "{{route('product.update',$product->id)}}",
                     type: 'POST',
                     data:{
                         id,
                         name,
+                        code,
                         sell_price,
                         category_id,
                         provider_id,
@@ -78,6 +79,7 @@
                 let sell_price = $("#sell_price").val();
                 let category_id = $("#category_id").val();
                 let provider_id = $("#provider_id").val();
+                let code = $("#code").val();
                 const swalWithBootstrapButtons = Swal.mixin({customClass: {confirmButton: 'btn btn-success',cancelButton: 'btn btn-danger mr-1'},buttonsStyling: false});
                 swalWithBootstrapButtons.fire({
                     title : 'Está seguro de actualizar registro',
@@ -87,7 +89,7 @@
                     cancelButtonText: 'No, Cancelar!',
                     reverseButtons: true
                 }).then((result)=>{
-                    if (result.value) { updateProduct(id,name,sell_price,category_id,provider_id);}
+                    if (result.value) { updateProduct(id,name,sell_price,category_id,provider_id,code);}
                 });
             });
         });

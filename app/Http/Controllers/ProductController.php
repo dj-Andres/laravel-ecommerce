@@ -15,37 +15,37 @@ class ProductController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('can:product.index')->only(['index']);
-        $this->middleware('can:product.create')->only(['create','store']);
-        $this->middleware('can:product.edit')->only(['edit','update']);
+        $this->middleware('can:product.create')->only(['create', 'store']);
+        $this->middleware('can:product.edit')->only(['edit', 'update']);
         $this->middleware('can:product.destroy')->only(['destroy']);
         $this->middleware('can:product.change_status')->only(['change_status']);
     }
 
     public function index()
     {
-        $products = Product::join('categories','categories.id','=','products.category_id')
-                            ->select('products.id','products.name','products.stock','products.status','categories.name as categoria')
-                            ->get();
+        $products = Product::join('categories', 'categories.id', '=', 'products.category_id')
+            ->select('products.id', 'products.name', 'products.stock', 'products.status', 'categories.name as categoria')
+            ->get();
         return view('admin.product.index', compact('products'));
     }
 
     public function search(Request $request)
     {
         $a = $request->all();
-        if(isset($a['action'])){
-            switch($a['action']){
+        if (isset($a['action'])) {
+            switch ($a['action']) {
                 case 'getProducts':
-                    $products = Product::where('code',$request->code)->firstOrFail();
+                    $products = Product::where('code', $request->code)->firstOrFail();
                     return response()->json($products->toArray());
-                break;
+                    break;
                 case 'getProductById':
                     $product = Product::firstOrFail($request->product_id);
                     return response()->json($product->toArray());
-                break;
+                    break;
                 default:
-                break;
+                    break;
             }
-            return ['success' => false,'message' => 'No se encontro la accion'];
+            return ['success' => false, 'message' => 'No se encontro la accion'];
         }
         /*if($request->ajax()){
             switch ($request->input('getProducts')) {
@@ -79,22 +79,26 @@ class ProductController extends Controller
         $validated = $request->validated();
         try {
             $file = $request->file('image');
-            $file->move(public_path("/images/productos"),$file->getClientOriginalName());
-            $product = Product::create($request->all()+['image'=>$file]);
-            $product->update(['code' => $product->id]);
-            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'El Producto se  creo exitosamente.','data' => $product],200);
+            $file->move(public_path("/images"), $file->getClientOriginalName());
+            $product = Product::create($request->all() + ['image' => $file]);
+            if ($request->code == "") {
+                $numero = $product->id;
+                $numeroConCeros = str_pad($numero, 8, "0", STR_PAD_LEFT);
+                $product->update(['code' => $numeroConCeros]);
+            }
+            return response()->json(['status' => 'ok', 'code' => 200, 'message' => 'El Producto se  creo exitosamente.', 'data' => $product], 200);
         } catch (\Exception $e) {
-            return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
+            return response()->json(['status' => 'error', 'code' => 400, 'message' => $e->getMessage()]);
         }
     }
 
     public function show($id)
     {
-        $product = Product::join('categories','categories.id','=','products.category_id')
-                    ->join('providers','providers.id','=','products.provider_id')
-                    ->select('products.id','products.code','providers.id as provider_id','categories.id as category_id','products.name','products.sell_price','products.status','products.image','categories.name as categoria','providers.name as proveedor')
-                    ->where('products.id','=',$id)
-                    ->first();
+        $product = Product::join('categories', 'categories.id', '=', 'products.category_id')
+            ->join('providers', 'providers.id', '=', 'products.provider_id')
+            ->select('products.id', 'products.code', 'providers.id as provider_id', 'categories.id as category_id', 'products.name', 'products.sell_price', 'products.status', 'products.image', 'categories.name as categoria', 'providers.name as proveedor')
+            ->where('products.id', '=', $id)
+            ->first();
         return view('admin.product.show', compact('product'));
     }
 
@@ -105,15 +109,15 @@ class ProductController extends Controller
         return view('admin.product.edit', compact('product', 'categories', 'providers'));
     }
 
-    public function update(UpdateRequest $request,$id)
+    public function update(UpdateRequest $request, $id)
     {
         $validated = $request->validated();
         try {
             $product = Product::findOrFail($id);
             $product->update($request->all());
-            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'El Producto se '.$request->name. ' actualizo exitosamente.','data' => $product],200);
+            return response()->json(['status' => 'ok', 'code' => 200, 'message' => 'El Producto se ' . $request->name . ' actualizo exitosamente.', 'data' => $product], 200);
         } catch (\Exception $e) {
-            return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
+            return response()->json(['status' => 'error', 'code' => 400, 'message' => $e->getMessage()]);
         }
     }
     public function destroy($id)
@@ -122,18 +126,18 @@ class ProductController extends Controller
             $product = Product::findOrFail($id);
             $product->status = 'DESACTIVED';
             $product->update();
-            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'El Producto se '.$product->name. ' se anulo exitosamente.','data' => $product],200);
+            return response()->json(['status' => 'ok', 'code' => 200, 'message' => 'El Producto se ' . $product->name . ' se anulo exitosamente.', 'data' => $product], 200);
         } catch (\Exception $e) {
-            return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
+            return response()->json(['status' => 'error', 'code' => 400, 'message' => $e->getMessage()]);
         }
     }
     public function change_status(Product $product)
     {
         if ($product->status == 'ACTIVE') {
-            $product->update(['status'=>'DEACTIVATED']);
+            $product->update(['status' => 'DEACTIVATED']);
             return redirect()->back();
         } else {
-            $product->update(['status'=>'ACTIVE']);
+            $product->update(['status' => 'ACTIVE']);
             return redirect()->back();
         }
     }

@@ -3,13 +3,20 @@
     <div id="errors_prod"></div>
     <div class="row">
         <input type="hidden" id="id" name="id" @isset($product->id) value = "{{ $product->id }}" @endisset>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="form-group row">
                 {!! Form::label('name', 'Nombre',['class' => 'required']) !!}
                 {!! Form::text('name', null, ['class' => 'form-control letters', 'placeholder' => 'Ingrese el Poroducto', 'id' => 'name']) !!}
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
+            <div class="form-group">
+                {!! Form::label('codigo', 'Codigo Barras',['class' => 'required']) !!}
+                {!! Form::text('code', null, ['class' => 'form-control numbers', 'id' => 'code']) !!}
+                <small id="helpId" class="text-muted">Campo opcional</small>
+            </div>
+        </div>
+        <div class="col-md-4">
             <div class="form-group">
                 {!! Form::label('sell_price', 'Precio de Compra',['class' => 'required']) !!}
                 {!! Form::text('sell_price', null, ['class' => 'form-control numbers', 'placeholder' => 'Ingrese el Precio Compra', 'id' => 'sell_price']) !!}
