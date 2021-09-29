@@ -40,7 +40,7 @@
     </div>
 @endsection
 @section('scripts')
-    {!! Html::script('js/sweetalert2.js') !!}
+    {!! Html::script('admin/js/sweetalert2.js') !!}
     <script>
         $(document).ready(() => {
             $.ajaxSetup({headers: {'X-CSRF-Token': $('meta[name=_token]').attr('content')}});

@@ -90,7 +90,7 @@
 @endsection
 
 @section('scripts')
-{!! Html::script('js/data-table.js') !!}
+{!! Html::script('admin/js/data-table.js') !!}
 <script>
     window.onload = function(){
         const fecha = new Date();
@@ -99,10 +99,10 @@
         const year = fecha.getFullYear();
 
         if(day<10)
-          day='0'+day; 
+          day='0'+day;
         if(mount<10)
           mount='0'+mount;
-          
+
         document.getElementById('fecha_fin').value=year+"-"+mount"-"+day;
     }
 </script>

@@ -70,5 +70,5 @@
     </div>
 @endsection
 @section('scripts')
-{!! Html::script('js/data-table.js') !!}
+{!! Html::script('admin/js/data-table.js') !!}
 @endsection

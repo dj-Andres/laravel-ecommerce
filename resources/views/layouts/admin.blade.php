@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Punto de Venta</title>
-    <link rel="stylesheet" href="{{ asset('vendors/iconfonts/font-awesome/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendors/css/vendor.bundle.base.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendors/css/vendor.bundle.addons.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/sweetalert2.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/toastr.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/select2-bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/vendors/iconfonts/font-awesome/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/vendors/css/vendor.bundle.base.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/vendors/css/vendor.bundle.addons.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/sweetalert2.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/toastr.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/select2-bootstrap.min.css') }}">
     @yield('styles')
     <link rel="shortcut icon" href="http://www.urbanui.com/" />
 </head>
@@ -20,10 +20,10 @@
     <div class="container-scroller">
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row default-layout-navbar">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                <a class="navbar-brand brand-logo" href="index-2.html"><img src="{{ asset('images/logo.svg') }}"
+                <a class="navbar-brand brand-logo" href="index-2.html"><img src="{{ asset('admin/images/logo.svg') }}"
                         alt="logo" /></a>
                 <a class="navbar-brand brand-logo-mini" href="index-2.html"><img
-                        src="{{ asset('images/logo-mini.svg') }}" alt="logo" /></a>
+                        src="{{ asset('admin/images/logo-mini.svg') }}" alt="logo" /></a>
             </div>
             <div class="navbar-menu-wrapper d-flex align-items-stretch">
                 <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -89,7 +89,7 @@
                     </li>
                     <li class="nav-item nav-profile dropdown align-self-center">
                         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-                            <img src="{{ asset('images/faces/face5.jpg') }}" alt="profile" />
+                            <img src="{{ asset('admin/images/faces/face5.jpg') }}" alt="profile" />
                         </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown"
                             aria-labelledby="profileDropdown">
@@ -110,16 +110,16 @@
             </div>
         </div>
     </div>
-    <script src="{{asset('vendors/js/vendor.bundle.base.js')}}"></script>
-    <script src="{{asset('vendors/js/vendor.bundle.addons.js')}}"></script>
-    <script src="{{asset('js/off-canvas.js')}}"></script>
-    <script src="{{asset('js/hoverable-collapse.js')}}"></script>
-    <script src="{{asset('js/misc.js')}}"></script>
-    <script src="{{asset('js/settings.js')}}"></script>
-    <script src="{{asset('js/todolist.js')}}"></script>
-    <script src="{{ asset('js/toastr.min.js') }}"></script>
-    <script src="{{asset('js/custom.js')}}"></script>
-    <script src="{{asset('js/dashboard.js')}}"></script>
+    <script src="{{asset('admin/vendors/js/vendor.bundle.base.js')}}"></script>
+    <script src="{{asset('admin/vendors/js/vendor.bundle.addons.js')}}"></script>
+    <script src="{{asset('admin/js/off-canvas.js')}}"></script>
+    <script src="{{asset('admin/js/hoverable-collapse.js')}}"></script>
+    <script src="{{asset('admin/js/misc.js')}}"></script>
+    <script src="{{asset('admin/js/settings.js')}}"></script>
+    <script src="{{asset('admin/js/todolist.js')}}"></script>
+    <script src="{{ asset('admin/js/toastr.min.js') }}"></script>
+    <script src="{{asset('admin/js/custom.js')}}"></script>
+    <script src="{{asset('admin/js/dashboard.js')}}"></script>
     @yield('scripts')
 </body>
 </html>

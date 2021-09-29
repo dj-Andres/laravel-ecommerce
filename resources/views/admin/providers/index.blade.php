@@ -81,8 +81,8 @@
     </div>
 @endsection
 @section('scripts')
-{!! Html::script('js/data-table.js') !!}
-{!! Html::script('js/sweetalert2.js') !!}
+{!! Html::script('admin/js/data-table.js') !!}
+{!! Html::script('admin/js/sweetalert2.js') !!}
 <script>
 $(document).ready(function(){
     $.ajaxSetup({

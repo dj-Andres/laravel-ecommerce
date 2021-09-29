@@ -69,7 +69,7 @@
 @endsection
 
 @section('scripts')
-{!! Html::script('js/dropify.js') !!}
+{!! Html::script('admin/js/dropify.js') !!}
 @endsection
 
 @include('admin.business._modal')

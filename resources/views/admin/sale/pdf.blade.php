@@ -157,7 +157,7 @@
 @section('header')
     <header class="clearfix">
         <div id="logo">
-            <img src="../public/images/logo.png">
+            <img src="../public/admin/images/logo.png">
         </div>
         <div class="center">
             <h4>Datos de la Empresa</h4>
