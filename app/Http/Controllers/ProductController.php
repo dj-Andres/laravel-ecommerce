@@ -115,7 +115,7 @@ class ProductController extends Controller
         try {
             $product = Product::findOrFail($id);
             $product->update($request->all());
-            return response()->json(['status' => 'ok', 'code' => 200, 'message' => 'El Producto se ' . $request->name . ' actualizo exitosamente.', 'data' => $product], 200);
+            return response()->json(['status' => 'ok', 'code' => 200, 'message' => 'El Producto ' . $request->name . ' actualizo exitosamente.', 'data' => $product], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'code' => 400, 'message' => $e->getMessage()]);
         }
@@ -126,7 +126,7 @@ class ProductController extends Controller
             $product = Product::findOrFail($id);
             $product->status = 'DESACTIVED';
             $product->update();
-            return response()->json(['status' => 'ok', 'code' => 200, 'message' => 'El Producto se ' . $product->name . ' se anulo exitosamente.', 'data' => $product], 200);
+            return response()->json(['status' => 'ok', 'code' => 200, 'message' => 'El Producto ' . $product->name . ' se anulo exitosamente.', 'data' => $product], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'code' => 400, 'message' => $e->getMessage()]);
         }
