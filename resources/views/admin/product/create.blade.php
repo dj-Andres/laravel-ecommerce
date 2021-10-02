@@ -15,20 +15,9 @@
                 </ol>
             </nav>
         </div>
-        <div class="row">
-            <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <h4 class="card-title">Registro Producto</h4>
-                        </div>
-                        {!! Form::open(['route' => 'product.store', 'method' => 'POST', 'files' => true, 'id' => 'formulario', 'class' => 'form-sample']) !!}
-                            @include('admin.product._form')
-                        {!! Form::close() !!}
-                    </div>
-                </div>
-            </div>
-        </div>
+        {!! Form::open(['route' => 'product.store', 'method' => 'POST', 'files' => true, 'id' => 'formulario', 'class' => 'form-sample']) !!}
+            @include('admin.product._form')
+        {!! Form::close() !!}
     </div>
 @endsection
 @section('scripts')
@@ -120,15 +109,18 @@
             }
             $("#formulario").submit((e)=>{
                 e.preventDefault();
-                let name = $("#name").val(), sell_price = $("#sell_price").val(), category_id = $("#category_id").val(), provider_id = $("#provider_id").val(),code = $("#code").val();
+                let name = $("#name").val(), sell_price = $("#sell_price").val(), subcategory_id = $("#subcategory_id").val(), provider_id = $("#provider_id").val(),code = $("#code").val(),short_description = $("#short_description").val(),long_description = $("#long_description").val(), tags = $("#tags").val();
                 let picture = $("#picture").prop('files')[0];
                 let formData = new FormData();
 
-                formData.append('image',picture);
+                formData.append('images',picture);
                 formData.append('name',name);
                 formData.append('sell_price',sell_price);
-                formData.append('category_id',category_id);
+                formData.append('short_description',short_description);
+                formData.append('subcategory_id',subcategory_id);
+                formData.append('long_description',long_description);
                 formData.append('provider_id',provider_id);
+                formData.append('tags',tags);
                 formData.append('code',code);
 
                 const swalWithBootstrapButtons = Swal.mixin({customClass: {confirmButton: 'btn btn-success',cancelButton: 'btn btn-danger mr-1'},buttonsStyling: false});

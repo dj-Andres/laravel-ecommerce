@@ -41,11 +41,12 @@ class CategoryController extends Controller
         return view('admin.categories.create');
     }
 
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request,Category $category)
     {
         $validated = $request->validated();
         try {
-            $category = Category::create($request->all());
+            //$category = Category::create($request->all());
+            $category->storeCategory($request);
             return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'La categoria ha sido guardada exitosamente','data' => $category],200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
@@ -67,7 +68,7 @@ class CategoryController extends Controller
         $validated = $request->validated();
         try {
             $category = Category::findOrFail($id);
-            $category->update($request->all());
+            $category->updateCategory($request);
             return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'La categoria '.$request->name.'  ha sido actualizada exitosamente','data' => $category],200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);

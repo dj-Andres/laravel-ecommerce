@@ -98,7 +98,7 @@
             }).then((result)=>{
                 if(result.value){
                     $.ajax({
-                        url: "{{route('categories.destroy',$category->id)}}",
+                        url: "{{route('categories.destroy',isset($category))}}",
                         type: 'POST',
                         data: {
                             id: id,

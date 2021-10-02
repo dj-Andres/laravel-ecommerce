@@ -4,28 +4,101 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
-    //use HasFactory;
+    use HasFactory;
 
     protected $fillable = [
         'code',
         'name',
+        'slug',
         'stock',
-        'image',
         'sell_price',
+        'short_description',
+        'long_description',
         'status',
-        'category_id',
+        'subcategory_id',
         'provider_id',
     ];
 
-    public function category(){
-        return $this->belongsTo(Category::class);
+    public function subcategory()
+    {
+        return $this->belongsTo(SubCategory::class);
     }
 
-    public function provider(){
+    public function provider()
+    {
         return $this->belongsTo(Provider::class);
     }
 
+    public function images()
+    {
+        return $this->morphOne(Image::class,'imageable');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+
+    public function storeProduct($request)
+    {
+        $product = self::create([
+            'code' => $request->code,
+            'name' => $request->name,
+            'slug' => Str::of($request->name)->slug('-'),
+            'sell_price' => $request->sell_price,
+            'short_description' => $request->short_description,
+            'long_description' => $request->long_description,
+            'subcategory_id' => $request->subcategory_id,
+            'provider_id' => $request->provider_id,
+        ]);
+
+        $product->tags()->attach($request->tags);
+        $this->generateCode($product);
+        $this->uploadImage($request,$product);
+    }
+
+    public function updateProduct($request)
+    {
+        $this->update([
+            'code' => $request->code,
+            'name' => $request->name,
+            'slug' => Str::of($request->name)->slug('-'),
+            'sell_price' => $request->sell_price,
+            'short_description' => $request->short_description,
+            'long_description' => $request->long_description,
+            'subcategory_id' => $request->subcategory_id,
+            'provider_id' => $request->provider_id,
+        ]);
+
+        $this->tags()->sync($request->get('tags'));
+        $this->generateCode($this);
+        $this->uploadImage($request,$this);
+    }
+
+    public function generateCode($product)
+    {
+        $numero = $product->id;
+        $numeroConCeros = str_pad($numero, 8, "0", STR_PAD_LEFT);
+        $product->update(['code' => $numeroConCeros]);
+    }
+
+    public function uploadImage($request,Product $product)
+    {
+        $urlImages = [];
+
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+            foreach ($images as $image) {
+                $name = time().$image->getClientOrigenName();
+                $url = public_path().'/images';
+                $image->move($url,$name);
+                $urlImages[]['url'] = '/images/'.$name;
+            }
+        }
+        $product->images()->createMany($urlImages);
+    }
 }

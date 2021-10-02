@@ -7,6 +7,8 @@ use App\Http\Requests\Product\UpdateRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Provider;
+use App\Models\SubCategory;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -23,8 +25,8 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::join('categories', 'categories.id', '=', 'products.category_id')
-            ->select('products.id', 'products.name', 'products.stock', 'products.status', 'categories.name as categoria')
+        $products = Product::join('sub_categories', 'sub_categories.id', '=', 'products.subcategory_id')
+            ->select('products.id', 'products.name', 'products.stock', 'products.status', 'sub_categories.name as categoria')
             ->get();
         return view('admin.product.index', compact('products'));
     }
@@ -71,21 +73,16 @@ class ProductController extends Controller
     {
         $categories = Category::get();
         $providers = Provider::get();
-        return view('admin.product.create', compact('categories', 'providers'));
+        $tags = Tag::get();
+        $subcategories = SubCategory::all();
+        return view('admin.product.create', compact('categories', 'providers','tags','subcategories'));
     }
 
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request,Product $product)
     {
         $validated = $request->validated();
         try {
-            $file = $request->file('image');
-            $file->move(public_path("/images"), $file->getClientOriginalName());
-            $product = Product::create($request->all() + ['image' => $file]);
-            if ($request->code == "") {
-                $numero = $product->id;
-                $numeroConCeros = str_pad($numero, 8, "0", STR_PAD_LEFT);
-                $product->update(['code' => $numeroConCeros]);
-            }
+            $product->storeProduct($request);
             return response()->json(['status' => 'ok', 'code' => 200, 'message' => 'El Producto se  creo exitosamente.', 'data' => $product], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'code' => 400, 'message' => $e->getMessage()]);
@@ -94,9 +91,9 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $product = Product::join('categories', 'categories.id', '=', 'products.category_id')
+        $product = Product::join('sub_categories', 'sub_categories.id', '=', 'products.subcategory_id')
             ->join('providers', 'providers.id', '=', 'products.provider_id')
-            ->select('products.id', 'products.code', 'providers.id as provider_id', 'categories.id as category_id', 'products.name', 'products.sell_price', 'products.status', 'products.image', 'categories.name as categoria', 'providers.name as proveedor')
+            ->select('products.id', 'products.code', 'providers.id as provider_id', 'sub_categories.id as category_id', 'products.name', 'products.sell_price', 'products.status', 'products.image', 'categories.name as categoria', 'providers.name as proveedor')
             ->where('products.id', '=', $id)
             ->first();
         return view('admin.product.show', compact('product'));
@@ -114,7 +111,7 @@ class ProductController extends Controller
         $validated = $request->validated();
         try {
             $product = Product::findOrFail($id);
-            $product->update($request->all());
+            $product->updateProduct($request);
             return response()->json(['status' => 'ok', 'code' => 200, 'message' => 'El Producto se ' . $request->name . ' actualizo exitosamente.', 'data' => $product], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'code' => 400, 'message' => $e->getMessage()]);

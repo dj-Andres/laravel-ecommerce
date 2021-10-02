@@ -18,12 +18,14 @@ class CreateProductsTable extends Migration
 
             $table->string('code')->unique()->nullable();
             $table->string('name')->unique();
+            $table->string('slug')->unique();
             $table->integer('stock')->default(0);
-            $table->string('image');
             $table->decimal('sell_price',12,2);
+            $table->mediumText('short_description')->nullable();
+            $table->longText('long_description')->nullable();
             $table->enum('status',['ACTIVE','DESACTIVED'])->default('ACTIVE');
-            $table->unsignedBigInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->unsignedBigInteger('subcategory_id');
+            $table->foreign('subcategory_id')->references('id')->on('sub_categories')->onDelete('cascade');
             $table->unsignedBigInteger('provider_id');
             $table->foreign('provider_id')->references('id')->on('providers')->onDelete('cascade');
 

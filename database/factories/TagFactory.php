@@ -2,17 +2,18 @@
 
 namespace Database\Factories;
 
-use App\Models\Provider;
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
-class ProviderFactory extends Factory
+class TagFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Provider::class;
+    protected $model = Tag::class;
 
     /**
      * Define the model's default state.
@@ -21,12 +22,11 @@ class ProviderFactory extends Factory
      */
     public function definition()
     {
+        $name = $this->faker->unique()->word(20);
         return [
-            'name' => $this->faker->name(),
-            'email' => $this->faker->email(),
-            'ruc_number' => $this->faker->isbn10(),
-            'address' => $this->faker->address(),
-            'phone' => $this->faker->phoneNumber(),
+            'name' => $name,
+            'slug' => Str::slug($name),
+            'description' => $this->faker->sentence($nbWords = 6, $variableNbWords = true),
         ];
     }
 }

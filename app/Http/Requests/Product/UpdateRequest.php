@@ -22,7 +22,7 @@ class UpdateRequest extends FormRequest
             //'name' => 'required|string|unique:products,name'.$this->route('product')->id.'|max:250',
             //'image' => 'required|dimensions:min_width=100,min_height=200',
             'sell_price' => 'required',
-            'category_id'=>'integer|required|exists:App\Models\Category,id',
+            'subcategory_id'=>'integer|required|exists:App\Models\SubCategory,id',
             'provider_id'=>'integer|required|exists:App\Models\Provider,id',
         ];
         return $rules;

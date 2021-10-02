@@ -20,9 +20,11 @@ class StoreRequest extends FormRequest
         return [
             'name' => 'required|string|unique:products|max:150',
             //'image' => 'required|dimensions:min_width=100,min_height=200',
-            'image' => 'required',
+            //'slug' => 'required|string',
             'sell_price' => 'required',
-            'category_id'=>'integer|required|exists:App\Models\Category,id',
+            'short_description'=> 'nullable|string|max:100',
+            'long_description'=> 'nullable|string|max:250',
+            'subcategory_id'=>'integer|required|exists:App\Models\SubCategory,id',
             'provider_id'=>'integer|required|exists:App\Models\Provider,id',
         ];
     }
