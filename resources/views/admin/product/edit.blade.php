@@ -1,7 +1,6 @@
 @extends('layouts.admin')
 @section('styles')
-    <style type="text/css">
-    </style>
+    <link rel="stylesheet" href="{{ asset('admin/vendors/lightgallery/css/lightgallery.css') }}">
 @endsection
 @section('content')
     <div class="content-wrapper">
@@ -16,39 +15,78 @@
                 </ol>
             </nav>
         </div>
-        <div class="row">
-            <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <h4 class="card-title">Producto</h4>
-                        </div>
-                        {!! Form::model($product, ['route'=>['product.update',$product->id],'method'=>'PUT','id' => "formulario"]) !!}
-                            @include('admin.product._form')
-                        {!! Form::close() !!}
-                    </div>
-                </div>
-            </div>
-        </div>
+        {!! Form::model($product, ['route'=>['product.update',$product->id],'method'=>'PUT','id' => "formulario", 'files' => 'true']) !!}
+            @include('admin.product._form')
+        {!! Form::close() !!}
     </div>
 @endsection
 @section('scripts')
+    {!! Html::script('admin/ckeditor/ckeditor.js') !!}
+    {!! Html::script('admin/ckeditor/translations/es.js') !!}
     {!! Html::script('admin/js/dropify.js') !!}
+    {!! Html::script('admin/vendors/lightgallery/js/lightgallery-all.min.js') !!}
+    {!! Html::script('admin/js/light-gallery.js') !!}
     {!! Html::script('admin/js/sweetalert2.js') !!}
     <script>
         $(document).ready(function() {
             $.ajaxSetup({headers: {'X-CSRF-Token': $('meta[name=_token]').attr('content')}});
-            const updateProduct = (id,name,sell_price,category_id,provider_id,code) => {
+            if ($("#fileuploader").length) {
+                $("#fileuploader").uploadFile({
+                    url: "/product/upload/{{$product->id}}",
+                    fileName: "picture"
+                });
+            }
+            ClassicEditor
+                .create( document.querySelector( '#short_description' ),{
+                    language: 'es'
+                })
+                .catch( error =>{
+                    console.error(error);
+                });
+            ClassicEditor
+                .create( document.querySelector( '#long_description' ),{
+                    language: 'es'
+                })
+                .catch( error =>{
+                    console.error(error);
+                });
+            $("#category_id").change(function(){
+                $.ajax({
+                    url: "{{route('product.search')}}",
+                    type: 'POST',
+                    data:{
+                        category_id:$("#category_id").val(),
+                        getSubCategory:'getSubCategory',
+                    }
+                }).done(function(response){
+                    if(response.code == 200){
+                        $("#subcategory_id").empty();
+                        $("#subcategory_id").append("<option disabled selected>...Seleccionar una SubCategoria</option>")
+                        let item = response.data;
+                        $.each(item,function(key,element){
+                            console.log(element);
+                            $("#subcategory_id").append('<option value="'+element.id+'">'+element.name+'</option>');
+                        });
+                    }else{
+                        toastr.error(response.message);
+                        console.error(response.message);
+                    }
+                });
+            });
+            const updateProduct = (id,name,sell_price,subcategory_id,provider_id,code,short_description,long_description,tags) => {
                 $.ajax({
                     url: "{{route('product.update',$product->id)}}",
                     type: 'POST',
                     data:{
                         id,
                         name,
-                        code,
                         sell_price,
-                        category_id,
+                        subcategory_id,
                         provider_id,
+                        code,
+                        short_description,
+                        long_description,
+                        tags,
                         _method:'PUT'
                     }
                 }).done(function(response){
@@ -73,13 +111,16 @@
             }
             $("#formulario").submit((e) => {
                 e.preventDefault();
-                let id = $("#id").val();
-                console.log(id);
+                let id = $(this).data("id")
                 let name = $("#name").val();
                 let sell_price = $("#sell_price").val();
-                let category_id = $("#category_id").val();
+                let subcategory_id = $("#subcategory_id").val();
                 let provider_id = $("#provider_id").val();
                 let code = $("#code").val();
+                let short_description = $("#short_description").val();
+                let long_description = $("#long_description").val();
+                let tags = $("#tags").val();
+
                 const swalWithBootstrapButtons = Swal.mixin({customClass: {confirmButton: 'btn btn-success',cancelButton: 'btn btn-danger mr-1'},buttonsStyling: false});
                 swalWithBootstrapButtons.fire({
                     title : 'Está seguro de actualizar registro',
@@ -89,7 +130,7 @@
                     cancelButtonText: 'No, Cancelar!',
                     reverseButtons: true
                 }).then((result)=>{
-                    if (result.value) { updateProduct(id,name,sell_price,category_id,provider_id,code);}
+                    if (result.value) { updateProduct(id,name,sell_price,subcategory_id,provider_id,code,short_description,long_description,tags);}
                 });
             });
         });

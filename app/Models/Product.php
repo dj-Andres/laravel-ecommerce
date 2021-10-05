@@ -35,7 +35,7 @@ class Product extends Model
 
     public function images()
     {
-        return $this->morphOne(Image::class,'imageable');
+        return $this->morphMany(Image::class,'imageable');
     }
 
     public function tags()
@@ -86,9 +86,9 @@ class Product extends Model
         $product->update(['code' => $numeroConCeros]);
     }
 
-    public function uploadImage($request,Product $product)
+    public function uploadImage($request,$product)
     {
-        $urlImages = [];
+        $urlimages = [];
 
         if ($request->hasFile('images')) {
             $images = $request->file('images');
@@ -96,9 +96,9 @@ class Product extends Model
                 $name = time().$image->getClientOrigenName();
                 $url = public_path().'/images';
                 $image->move($url,$name);
-                $urlImages[]['url'] = '/images/'.$name;
+                $urlimages[]['url'] = '/images/'.$name;
             }
         }
-        $product->images()->createMany($urlImages);
+        $product->images()->createMany($urlimages);
     }
 }

@@ -27,6 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('sales', SaleController::class)->names('sales');
 
     Route::get('purchases/upload/{purchase}', [PurchaseController::class, 'upload'])->name('purchase.upload');
+    Route::post('product/upload/{id}', [ProductController::class, 'upload'])->name('product.upload');
     Route::get('change_status/purchases/{purchase}', [PurchaseController::class, 'change_status'])->name('purchase.change_status');
     Route::get('change_status/product/{pruduct}', [ProductController::class, 'change_status'])->name('change.status.product');
     Route::get('change_status/sales/{sale}', [SaleController::class, 'change_status'])->name('sale.change_status');

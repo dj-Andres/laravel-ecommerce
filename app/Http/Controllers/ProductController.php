@@ -33,9 +33,8 @@ class ProductController extends Controller
 
     public function search(Request $request)
     {
-        $a = $request->all();
-        if (isset($a['action'])) {
-            switch ($a['action']) {
+        if (isset($request)) {
+            switch ($request->input('getSubCategory')) {
                 case 'getProducts':
                     $products = Product::where('code', $request->code)->firstOrFail();
                     return response()->json($products->toArray());
@@ -44,10 +43,14 @@ class ProductController extends Controller
                     $product = Product::firstOrFail($request->product_id);
                     return response()->json($product->toArray());
                     break;
+                case 'getSubCategory':
+                    $subcategory = SubCategory::select('id','category_id','name')->where('category_id',$request->category_id)->get();
+                    return response()->json(['status' => 'ok','code' => 200, 'data' => $subcategory->toArray()]);
+                    break;
                 default:
                     break;
             }
-            return ['success' => false, 'message' => 'No se encontro la accion'];
+            return response()->json(['status' => 'error','code' => 400,'message' =>'Solicitud no encontrada']);
         }
         /*if($request->ajax()){
             switch ($request->input('getProducts')) {
@@ -75,10 +78,10 @@ class ProductController extends Controller
         $providers = Provider::get();
         $tags = Tag::get();
         $subcategories = SubCategory::all();
-        return view('admin.product.create', compact('categories', 'providers','tags','subcategories'));
+        return view('admin.product.create', compact('categories', 'providers', 'tags', 'subcategories'));
     }
 
-    public function store(StoreRequest $request,Product $product)
+    public function store(StoreRequest $request, Product $product)
     {
         $validated = $request->validated();
         try {
@@ -103,7 +106,9 @@ class ProductController extends Controller
     {
         $categories = Category::get();
         $providers = Provider::get();
-        return view('admin.product.edit', compact('product', 'categories', 'providers'));
+        $tags = Tag::all();
+        $subcategories = SubCategory::all();
+        return view('admin.product.edit', compact('product', 'categories', 'providers', 'tags', 'subcategories'));
     }
 
     public function update(UpdateRequest $request, $id)
@@ -137,5 +142,16 @@ class ProductController extends Controller
             $product->update(['status' => 'ACTIVE']);
             return redirect()->back();
         }
+    }
+    public function upload(Request $request,$id)
+    {
+        $product = Product::findOrFail($id);
+        if ($request->hasFile('picture')) {
+            $file = $request->file('picture');
+            $image_name = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('/image'), $image_name);
+            $urlimage = '/image/' . $image_name;
+        }
+        $product->images()->create(['url' => $urlimage]);
     }
 }

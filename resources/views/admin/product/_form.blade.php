@@ -5,8 +5,6 @@
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    <input type="hidden" id="id" name="id" @isset($product->id) value = "{{ $product->id }}"
-                    @endisset>
                     <div class="col-md-6">
                         <div class="form-group row">
                             {!! Form::label('name', 'Nombre', ['class' => 'required']) !!}
@@ -86,9 +84,13 @@
                             <label for="subcategory_id" class="required">SubCategorias</label>
                             <select class="form-control select2" name="subcategory_id" id="subcategory_id"
                                 style="width:100%">
-                                @foreach ($subcategories as $subcategory)
-                                    <option value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
-                                @endforeach
+                                @if (isset($product))
+                                    <option disabled selected>...Seleccionar una Categoria</option>
+                                @else
+                                    @foreach ($subcategories as $subcategory)
+                                        <option value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
+                                    @endforeach
+                                @endif
                             </select>
                         </div>
                     </div>
@@ -100,12 +102,17 @@
                             <select class="form-control select2" name="tags[]" multiple id="tags"
                                 style="width:100%">
                                 @foreach ($tags as $tag)
-                                    <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                                    <option value="{{ $tag->id }}"
+                                        @if ($product->tags->pluck('id')->contains($tag->id)) selected @endif
+                                        >{{ $tag->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                 </div>
+                @if (isset($product))
+                    @include('admin.product.partial._file_input')
+                @endif
             </div>
         </div>
     </div>
@@ -114,8 +121,11 @@
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <label for="image" class="required">Imagenes del Producto</label>
-                <input type="file" name="images[]" id="picture" class="dropify" multiple />
+                @if (isset($product))
+                    @include('admin.product.partial._galery')
+                @else
+                    @include('admin.product.partial._dropify')
+                @endif
             </div>
         </div>
     </div>

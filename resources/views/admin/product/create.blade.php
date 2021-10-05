@@ -21,11 +21,29 @@
     </div>
 @endsection
 @section('scripts')
+    {!! Html::script('admin/ckeditor/ckeditor.js') !!}
+    {!! Html::script('admin/ckeditor/translations/es.js') !!}
     {!! Html::script('admin/js/dropify.js') !!}
     {!! Html::script('admin/js/sweetalert2.js') !!}
     <script>
         $(document).ready(function() {
             $.ajaxSetup({headers: {'X-CSRF-Token': $('meta[name=_token]').attr('content')}});
+            var imagenes = null;
+            ClassicEditor
+                .create( document.querySelector( '#short_description' ),{
+                    language: 'es'
+                })
+                .catch( error =>{
+                    console.error(error);
+                });
+            ClassicEditor
+                .create( document.querySelector( '#long_description' ),{
+                    language: 'es'
+                })
+                .catch( error =>{
+                    console.error(error);
+                });
+
             $("#categoria").on('click',function(e){
                 e.preventDefault();
                 $("#categoria-registro").modal('show');
@@ -107,21 +125,46 @@
                     });
                 });
             }
+            $("#picture").change(function(event){
+                let archivos = event.target.files;
+                imagenes = archivos[0];
+                let fileLength = this.files.length;
+                let match= ["image/jpeg","image/png","image/jpg","image/gif"];
+                let i;
+
+                for(i = 0; i < fileLength;i++){
+                    let file = this.files[i];
+                    let imageFile = file.type;
+
+                    if(!((imageFile == match[0]) || (imageFile == match[1]) || (imageFile == match[2]) || (imageFile == match[3]))){
+                        toastr.error('El formato de la Imagen seleccionada no esta permitido');
+                        $('#picture').val('');
+                        return false;
+                    }
+                }
+            });
             $("#formulario").submit((e)=>{
                 e.preventDefault();
-                let name = $("#name").val(), sell_price = $("#sell_price").val(), subcategory_id = $("#subcategory_id").val(), provider_id = $("#provider_id").val(),code = $("#code").val(),short_description = $("#short_description").val(),long_description = $("#long_description").val(), tags = $("#tags").val();
-                let picture = $("#picture").prop('files')[0];
+                let name = $("#name").val();
+                let sell_price = $("#sell_price").val();
+                let subcategory_id = $("#subcategory_id").val();
+                let provider_id = $("#provider_id").val();
+                let code = $("#code").val();
+                let short_description = $("#short_description").val();
+                let long_description = $("#long_description").val();
+                let tags = $("#tags").val();
+
                 let formData = new FormData();
 
-                formData.append('images',picture);
+                formData.append('images',imagenes);
                 formData.append('name',name);
+                formData.append('code',code);
                 formData.append('sell_price',sell_price);
                 formData.append('short_description',short_description);
-                formData.append('subcategory_id',subcategory_id);
                 formData.append('long_description',long_description);
+                formData.append('subcategory_id',subcategory_id);
                 formData.append('provider_id',provider_id);
                 formData.append('tags',tags);
-                formData.append('code',code);
 
                 const swalWithBootstrapButtons = Swal.mixin({customClass: {confirmButton: 'btn btn-success',cancelButton: 'btn btn-danger mr-1'},buttonsStyling: false});
                 swalWithBootstrapButtons.fire({
