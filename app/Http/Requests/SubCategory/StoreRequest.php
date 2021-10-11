@@ -25,7 +25,6 @@ class StoreRequest extends FormRequest
     {
         $rules = [
             'name' => 'required|unique:sub_categories|string',
-            'slug' => 'required|string',
             'category_id' => 'required',
             'description' => 'nullable|string|max:200|min:20'
         ];

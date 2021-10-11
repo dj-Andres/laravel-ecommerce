@@ -55,6 +55,9 @@
                                                 @can('categories.edit','categories.destroy')
                                                 {!! Form::open(['route' => ['categories.destroy', $category], 'method' => 'DELETE']) !!}
                                                     <meta name="_token" content="{!! csrf_token() !!}"/>
+                                                    <button class="jsgrid-button jsgrid-delete-button unstyled-button" id="subcategory" type="button" title="SubCategoria" data-toggle="modal" data-target="#subcategoryModal">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
                                                     <a class="jsgrid-button jsgrid-edit-button" href="{{ route('categories.edit', $category) }}" title="Editar">
                                                         <i class="far fa-edit"></i>
                                                     </a>
@@ -65,6 +68,7 @@
                                                 @endcan
                                             </td>
                                         </tr>
+                                        @include('admin.categories.partial._modal_subcategory',['category_id' => $category->id])
                                     @endforeach
                                 </tbody>
                             </table>
@@ -81,43 +85,92 @@
     <script>
         $(document).ready(function(){
             $.ajaxSetup({headers: {'X-CSRF-Token': $('meta[name=_token]').attr('content')}});
-        });
-        $("body").on('click','#delete',function(e){
-            e.preventDefault();
-            let id = $(this).data("id");
-            let name = $(this).data("name");
-            const swalWithBootstrapButtons = Swal.mixin({customClass: {confirmButton: 'btn btn-success',cancelButton: 'btn btn-danger mr-1'},buttonsStyling: false});
+            $("body").on('click','#delete',function(e){
+                e.preventDefault();
+                let id = $(this).data("id");
+                let name = $(this).data("name");
+                const swalWithBootstrapButtons = Swal.mixin({customClass: {confirmButton: 'btn btn-success',cancelButton: 'btn btn-danger mr-1'},buttonsStyling: false});
 
-            swalWithBootstrapButtons.fire({
-                title : 'Está seguro de eliminar la categoria:' +name,
-                'icon':'question',
-                showCancelButton: true,
-                confirmButtonText: 'Si, Eliminar!',
-                cancelButtonText: 'No, Cancelar!',
-                reverseButtons: true
-            }).then((result)=>{
-                if(result.value){
-                    $.ajax({
-                        url: "{{route('categories.destroy',isset($category))}}",
-                        type: 'POST',
-                        data: {
-                            id: id,
-                            _method:'DELETE'
-                        },
-                        success: function (response){
-                            toastr.success(response.message);
-                            $('#'+id).remove();
-                        },
-                        error:function(response){
-                            toastr.error(response.message);
-                            console.log(response);
-                        }
-                    });
-                }else if(result.dismiss === Swal.DismissReason.cancel){
-                    swalWithBootstrapButtons.fire('Cancelar','La Categoria :'+name+' no se elimino','error');
-                }
+                swalWithBootstrapButtons.fire({
+                    title : 'Está seguro de eliminar la categoria:' +name,
+                    'icon':'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si, Eliminar!',
+                    cancelButtonText: 'No, Cancelar!',
+                    reverseButtons: true
+                }).then((result)=>{
+                    if(result.value){
+                        $.ajax({
+                            url: "{{route('categories.destroy',$category)}}",
+                            type: 'POST',
+                            data: {
+                                id: id,
+                                _method:'DELETE'
+                            },
+                            success: function (response){
+                                toastr.success(response.message);
+                                $('#'+id).remove();
+                            },
+                            error:function(response){
+                                toastr.error(response.message);
+                                console.log(response);
+                            }
+                        });
+                    }else if(result.dismiss === Swal.DismissReason.cancel){
+                        swalWithBootstrapButtons.fire('Cancelar','La Categoria :'+name+' no se elimino','error');
+                    }
+                });
+                return false;
             });
-            return false;
+            const createSubCategory = (category_id,name,description) => {
+                const request = $.ajax({
+                    url: "{{ route('subcategories.store') }}",
+                    type: 'POST',
+                    data:{
+                        category_id,
+                        name,
+                        description
+                    }
+                });
+                request.done(function(response) {
+                    if (response.code == 200) {
+                        toastr.success(response.message);
+                        $("#subcategoryModal").modal('hide');
+                    } else {
+                        toastr.error(response.message);
+                        console.error(response.message);
+                    }
+                });
+                request.fail(function(xhr, status, error) {
+                    $.each(xhr.responseJSON.errors, function(key, item) {
+                        $("#errors").append("<li class='alert alert-danger'>" + item + "</li>")
+                        setInterval(function() {
+                            $("#errors").hide()
+                        }, 7000)
+                    });
+                });
+            }
+            $('#formularioSubcategory').submit((e) => {
+                e.preventDefault();
+                let category_id = $("#category_id").val();
+                let name = $("#name").val();
+                let description = $("#description").val();
+
+
+                const swalWithBootstrapButtons = Swal.mixin({customClass: {confirmButton: 'btn btn-success',cancelButton: 'btn btn-danger mr-1'},buttonsStyling: false});
+                swalWithBootstrapButtons.fire({
+                    title : 'Está seguro de asociar la Categoria seleccionada a la SubCategoria ingresada !!',
+                    'icon':'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si, Guardar!',
+                    cancelButtonText: 'No, Cancelar!',
+                    reverseButtons: true
+                }).then((result)=>{
+                    if (result.value) {
+                        createSubCategory(category_id,name,description);
+                    }
+                });
+            });
         });
     </script>
 @endsection

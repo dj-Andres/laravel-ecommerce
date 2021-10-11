@@ -32,7 +32,7 @@ class SubCategoryController extends Controller
             $subcategory = SubCategory::create([
                 'name' => $request->name,
                 'slug' => Str::of($request->name)->slug('-'),
-                'category_id' => $request->icategory_id,
+                'category_id' => $request->category_id,
                 'description ' => $request->description
             ]);
             return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'La Sub Categoria ha sido guardada exitosamente','data' => $subcategory],200);

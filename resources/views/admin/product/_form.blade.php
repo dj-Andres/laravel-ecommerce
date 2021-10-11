@@ -85,7 +85,7 @@
                             <select class="form-control select2" name="subcategory_id" id="subcategory_id"
                                 style="width:100%">
                                 @if (isset($product))
-                                    <option disabled selected>...Seleccionar una Categoria</option>
+                                    <option disabled selected> - - -Seleccionar una Categoria - - -</option>
                                 @else
                                     @foreach ($subcategories as $subcategory)
                                         <option value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
@@ -101,11 +101,16 @@
                             <label for="tags" class="required">Tags</label>
                             <select class="form-control select2" name="tags[]" multiple id="tags"
                                 style="width:100%">
-                                @foreach ($tags as $tag)
-                                    <option value="{{ $tag->id }}"
-                                        @if ($product->tags->pluck('id')->contains($tag->id)) selected @endif
-                                        >{{ $tag->name }}</option>
-                                @endforeach
+                                @if (isset($product))
+                                    @foreach ($tags as $tag)
+                                        <option value="{{ $tag->id }}"@if ($product->tags->pluck('id')->contains($tag->id)) selected @endif>{{ $tag->name }}</option>
+                                    @endforeach
+                                @else
+                                    @foreach ($tags as $tag)
+                                        <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                                    @endforeach
+                                @endif
+
                             </select>
                         </div>
                     </div>

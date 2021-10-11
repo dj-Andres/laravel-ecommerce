@@ -61,7 +61,7 @@
                 }).done(function(response){
                     if(response.code == 200){
                         $("#subcategory_id").empty();
-                        $("#subcategory_id").append("<option disabled selected>...Seleccionar una SubCategoria</option>")
+                        $("#subcategory_id").append("<option disabled selected> - - -Seleccionar una SubCategoria - - -</option>")
                         let item = response.data;
                         $.each(item,function(key,element){
                             console.log(element);

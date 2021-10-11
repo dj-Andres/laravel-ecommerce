@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\PrinterController;
 use App\Http\Controllers\ProductController;
@@ -20,6 +21,7 @@ Route::get('/', function () {
 })->name('index');
 Route::middleware(['auth'])->group(function () {
     Route::resource('categories', CategoryController::class)->names('categories');
+    Route::resource('subcategories', SubCategoryController::class)->names('subcategories');
     Route::resource('client', ClientController::class)->names('client');
     Route::resource('product', ProductController::class)->names('product');
     Route::resource('providers', ProviderController::class)->names('providers');

@@ -119,7 +119,7 @@
                 }).then((result)=>{
                     if(result.value){
                         $.ajax({
-                            url: "{{route('purchases.destroy',$purchase)}}",
+                            url: "{{route('purchases.destroy',isset($purchase))}}",
                             type: 'POST',
                             data: {
                                 id: id,
@@ -155,7 +155,7 @@
                 }).then((result)=>{
                     if(result.value){
                         $.ajax({
-                            url: "{{route('purchase.change_status',$purchase->compra_id)}}",
+                            url: "{{route('purchase.change_status',isset($purchase))}}",
                             type: 'GET',
                             data: {
                                 id: id,

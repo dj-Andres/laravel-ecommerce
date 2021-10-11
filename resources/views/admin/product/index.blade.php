@@ -44,6 +44,7 @@
                                             <th>Estado</th>
                                         @endcan
                                         <th>Categoria</th>
+                                        <th>Proveedor</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
@@ -69,6 +70,7 @@
                                                 @endcan
                                             @endif
                                             <td>{{ $product->categoria }}</td>
+                                            <td>{{ $product->proveedor }}</td>
                                             <td style="width: 50px;">
                                                 @can('product.destroy','product.edit')
                                                     {!! Form::open(['route' => ['product.destroy', $product], 'method' => 'DELETE']) !!}

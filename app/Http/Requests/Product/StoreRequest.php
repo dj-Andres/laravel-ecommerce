@@ -21,6 +21,7 @@ class StoreRequest extends FormRequest
             'name' => 'required|string|unique:products|max:150',
             //'image' => 'required|dimensions:min_width=100,min_height=200',
             //'slug' => 'required|string',
+            'code' => 'nullable|string',
             'sell_price' => 'required',
             'short_description'=> 'nullable|string|max:100',
             'long_description'=> 'nullable|string|max:250',
