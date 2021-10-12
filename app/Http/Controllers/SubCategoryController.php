@@ -33,7 +33,7 @@ class SubCategoryController extends Controller
                 'name' => $request->name,
                 'slug' => Str::of($request->name)->slug('-'),
                 'category_id' => $request->category_id,
-                'description ' => $request->description
+                'description' => $request->description
             ]);
             return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'La Sub Categoria ha sido guardada exitosamente','data' => $subcategory],200);
         } catch (\Exception $e) {

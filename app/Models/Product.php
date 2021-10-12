@@ -35,12 +35,18 @@ class Product extends Model
 
     public function images()
     {
-        return $this->morphMany(Image::class,'imageable');
+        return $this->morphMany(Image::class, 'imageable');
     }
 
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function scopeInfoSubCategoriesProviders($query)
+    {
+        return $query->join('sub_categories', 'sub_categories.id', 'products.subcategory_id')
+            ->join('providers', 'providers.id', 'products.provider_id');
     }
 
     public function storeProduct($request)
@@ -58,7 +64,7 @@ class Product extends Model
 
         $product->tags()->attach($request->tags);
         $this->generateCode($product);
-        $this->uploadImage($request,$product);
+        $this->uploadImage($request, $product);
     }
 
     public function updateProduct($request)
@@ -76,7 +82,7 @@ class Product extends Model
 
         $this->tags()->sync($request->get('tags'));
         $this->generateCode($this);
-        $this->uploadImage($request,$this);
+        $this->uploadImage($request, $this);
     }
 
     public function generateCode($product)
@@ -86,17 +92,17 @@ class Product extends Model
         $product->update(['code' => $numeroConCeros]);
     }
 
-    public function uploadImage($request,$product)
+    public function uploadImage($request, $product)
     {
         $urlimages = [];
 
         if ($request->hasFile('images')) {
             $images = $request->file('images');
             foreach ($images as $image) {
-                $name = time().$image->getClientOrigenName();
-                $url = public_path().'/images';
-                $image->move($url,$name);
-                $urlimages[]['url'] = '/images/'.$name;
+                $name = time() . $image->getClientOrigenName();
+                $url = public_path() . '/images';
+                $image->move($url, $name);
+                $urlimages[]['url'] = '/images/' . $name;
             }
         }
         $product->images()->createMany($urlimages);

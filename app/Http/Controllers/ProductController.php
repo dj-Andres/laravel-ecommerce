@@ -25,9 +25,11 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::join('sub_categories', 'sub_categories.id', '=', 'products.subcategory_id')
-            ->join('providers','providers.id','=','products.provider_id')
-            ->select('products.id', 'products.name', 'products.stock', 'products.status', 'sub_categories.name as categoria','providers.name as proveedor')
+        $products = Product::query()
+            ->InfoSubCategoriesProviders()
+            ->with('tags')
+            ->select('products.id', 'products.name', 'products.stock', 'products.status', 'sub_categories.name as categoria', 'providers.name as proveedor')
+            ->orderBy('products.id', 'DESC')
             ->get();
         return view('admin.product.index', compact('products'));
     }
@@ -45,13 +47,13 @@ class ProductController extends Controller
                     return response()->json($product->toArray());
                     break;
                 case 'getSubCategory':
-                    $subcategory = SubCategory::select('id','category_id','name')->where('category_id',$request->category_id)->get();
-                    return response()->json(['status' => 'ok','code' => 200, 'data' => $subcategory->toArray()]);
+                    $subcategory = SubCategory::select('id', 'category_id', 'name')->where('category_id', $request->category_id)->get();
+                    return response()->json(['status' => 'ok', 'code' => 200, 'data' => $subcategory->toArray()]);
                     break;
                 default:
                     break;
             }
-            return response()->json(['status' => 'error','code' => 400,'message' =>'Solicitud no encontrada']);
+            return response()->json(['status' => 'error', 'code' => 400, 'message' => 'Solicitud no encontrada']);
         }
         /*if($request->ajax()){
             switch ($request->input('getProducts')) {
@@ -144,7 +146,7 @@ class ProductController extends Controller
             return redirect()->back();
         }
     }
-    public function upload(Request $request,$id)
+    public function upload(Request $request, $id)
     {
         $product = Product::findOrFail($id);
         if ($request->hasFile('picture')) {

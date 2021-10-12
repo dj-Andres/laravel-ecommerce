@@ -68,7 +68,7 @@
                                                 @endcan
                                             </td>
                                         </tr>
-                                        @include('admin.categories.partial._modal_subcategory',['category_id' => $category->id])
+                                        @include('admin.categories.partial._modal_subcategory',['id' => "subcategoryModal", 'title' => "Agregar SubCategoria"])
                                     @endforeach
                                 </tbody>
                             </table>
@@ -136,6 +136,7 @@
                     if (response.code == 200) {
                         toastr.success(response.message);
                         $("#subcategoryModal").modal('hide');
+                        $('#formularioSubcategory').trigger('reset');
                     } else {
                         toastr.error(response.message);
                         console.error(response.message);
@@ -150,6 +151,11 @@
                     });
                 });
             }
+            $(document).on('click','#subcategory',(e)=>{
+                const elemento=$(this)[0].activeElement.parentElement.parentElement.parentElement;
+                const id=$(elemento).attr('id');
+                $("#category_id").val(id);
+            });
             $('#formularioSubcategory').submit((e) => {
                 e.preventDefault();
                 let category_id = $("#category_id").val();
