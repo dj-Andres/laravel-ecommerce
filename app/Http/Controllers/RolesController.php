@@ -37,9 +37,11 @@ class RolesController extends Controller
             return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
         }
     }
-    public function show(Role $rols)
+    public function show(Role $role)
     {
-        return view('admin.role.show', compact('rols'));
+        $permissions = Permission::all()->pluck('name','id');
+        $role->load('permissions');
+        return view('admin.role.show', compact('role','permissions'));
     }
     public function edit(Role $role)
     {

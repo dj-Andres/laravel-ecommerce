@@ -22,50 +22,11 @@
             </nav>
         </div>
         <div class="row">
-            <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <h4 class="card-title">Editar Rol</h4>
-                        </div>
-                        {!! Form::model($role, ['route'=>['roles.update',$role->id],'method'=>'PUT']) !!}
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        {!! Form::label('name', 'nombre') !!}
-                                        {!! Form::text('name', null, ['class' => 'form-control','placeholder' => 'Ingrese el Nombre del Rol']) !!}
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        {!! Form::label('descripcion', 'Descripción') !!}
-                                        {!! Form::text('guard_name', null, ['class' => 'form-control','placeholder' => 'Ingrese la Descripcion']) !!}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <ul class="list-unstyled">
-                                            <h4>Listado de Permisos</h4>
-                                            @foreach ($permissions as $id => $permission)
-                                                <label class="mr-2 form-check">
-                                                    <input class="form-check-input position-static" type="checkbox" name="permisions[]"
-                                                    value="{{ $id }}"  @if ($role->permissions->contains($id)) checked @endif>
-                                                    {{ $permission }}
-                                                </label>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary mr-2">Actualizar</button>
-                            <a href="{{ route('roles.index')}}" class="btn btn-light">Cancelar</a>
-                        {!! Form::close() !!}
-
-                    </div>
-                </div>
-            </div>
+            <x-card title="Editar Rol">
+                {!! Form::model($role, ['route'=>['roles.update',$role->id],'method'=>'PUT']) !!}
+                    @include('admin.role._form')
+                {!! Form::close() !!}
+            </x-card>
         </div>
     </div>
 @endsection

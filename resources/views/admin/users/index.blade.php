@@ -26,9 +26,9 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            <h4 class="card-title">Usuario
+                            <h4 class="card-title">
                                 @can('users.create')
-                                    <a href="{{route('users.create')}}" class="btn btn-primary">Crear Nuevo</a>
+                                    <a href="{{route('users.create')}}" class="btn btn-primary"><i class="fas fa-plus"></i> Crear Nuevo</a>
                                 @endcan
                             </h4>
                         </div>

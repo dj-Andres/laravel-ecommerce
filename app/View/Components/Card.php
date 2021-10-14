@@ -4,20 +4,16 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class Modal extends Component
+class Card extends Component
 {
-
-    public $name;
     public $title;
-
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($name,$title)
+    public function __construct($title)
     {
-        $this->name = $name;
         $this->title = $title;
     }
 
@@ -28,6 +24,6 @@ class Modal extends Component
      */
     public function render()
     {
-        return view('components.modal');
+        return view('components.card');
     }
 }

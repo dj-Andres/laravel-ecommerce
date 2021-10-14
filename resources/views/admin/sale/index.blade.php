@@ -128,7 +128,7 @@
                 e.preventDefault();
                 let id = $(this).data("id");
                 $.ajax({
-                    url: "{{route('sales.print',$sale->id)}}",
+                    url: "{{route('sales.print',isset($sale->id))}}",
                     type: 'GET',
                     data: { id: id}
                 }).done(function(response){

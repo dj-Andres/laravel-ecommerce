@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\StoreRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -28,13 +29,17 @@ class UserController extends Controller
         $rols = Role::get();
         return view('admin.users.create', compact('rols'));
     }
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        $user = User::create($request->all());
-        $user->update(['password'=> Hash::make($request->password)]);
-        $user->roles()->sync($request->roles);
-
-        return redirect()->route('users.index');
+        $validated = $request->validated();
+        try {
+            $user = User::create($request->all());
+            $user->update(['password'=> Hash::make($request->password)]);
+            $user->roles()->sync($request->roles);
+            return response()->json(['status' => 'ok', 'code'=>200, 'message'=>'Usuario fue creado correctamente.','data' => $user],200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'code'=>400, 'message'=>$e->getMessage()]);
+        }
     }
     public function show(User $user)
     {

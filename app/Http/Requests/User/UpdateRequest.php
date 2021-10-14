@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\SubCategory;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class StoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -23,11 +23,8 @@ class StoreRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
-            'name' => 'required|unique:sub_categories|string',
-            'category_id' => 'required',
-            'description' => 'nullable|string|max:200|min:20'
+        return [
+            //
         ];
-        return $rules;
     }
 }

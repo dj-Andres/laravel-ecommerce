@@ -17,18 +17,11 @@
             </nav>
         </div>
         <div class="row">
-            <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <h4 class="card-title">Registro Cliente</h4>
-                        </div>
-                        {!! Form::open(['route' => 'client.store', 'method' => 'POST', 'id' => 'formulario', 'class' => 'cmxform']) !!}
-                            @include('admin.client._form')
-                        {!! Form::close() !!}
-                    </div>
-                </div>
-            </div>
+            <x-card title="Registro Cliente">
+                {!! Form::open(['route' => 'client.store', 'method' => 'POST', 'id' => 'formulario', 'class' => 'cmxform']) !!}
+                    @include('admin.client._form')
+                {!! Form::close() !!}
+            </x-card>
         </div>
     </div>
 @endsection
@@ -41,65 +34,72 @@
                     'X-CSRF-Token': $('meta[name=_token]').attr('content')
                 }
             });
-            function guardar(datos){
+            function guardar(datos) {
                 const request = $.ajax({
                     url: "{{ route('client.store') }}",
                     type: 'POST',
-                    data:datos
+                    data: datos
                 });
                 request.done(function(response) {
-                    if(response.code == 200){
+                    if (response.code == 200) {
                         toastr.success(response.message);
-                        setTimeout(function(){
-                            window.location.href="{{route('client.index')}}"
-                        },3000);
-                    }else{
+                        setTimeout(function() {
+                            window.location.href = "{{ route('client.index') }}"
+                        }, 3000);
+                    } else {
                         toastr.error(response.message);
                         console.error(response.message);
                     }
                 });
-                request.fail(function(xhr, status, error){
-                    $.each(xhr.responseJSON.errors, function (key, item)
-                    {
-                        $("#errors").append("<li class='alert alert-danger'>"+item+"</li>")
-                        setInterval(function(){
+                request.fail(function(xhr, status, error) {
+                    $.each(xhr.responseJSON.errors, function(key, item) {
+                        $("#errors").append("<li class='alert alert-danger'>" + item + "</li>")
+                        setInterval(function() {
                             $("#errors").hide()
-                        },7000)
+                        }, 7000)
                     });
                 });
             }
-            $("#guardar").on("click",function(e){
+            $("#guardar").on("click", function(e) {
                 e.preventDefault();
                 let cedula = $("#cedula").val().trim();
                 let formulario = $('#formulario').serialize();
-                let total = 0; let longitud = cedula.length;  let longcheck = longitud - 1;
+                let total = 0;
+                let longitud = cedula.length;
+                let longcheck = longitud - 1;
 
                 if (cedula !== "" && longitud === 10) {
                     for (i = 0; i < longcheck; i++) {
                         if (i % 2 === 0) {
-                        let aux = cedula.charAt(i) * 2;
-                        if (aux > 9) aux -= 9;
+                            let aux = cedula.charAt(i) * 2;
+                            if (aux > 9) aux -= 9;
                             total += aux;
                         } else {
                             total += parseInt(cedula.charAt(i));
                         }
                     }
                     total = total % 10 ? 10 - (total % 10) : 0;
-                    if (cedula.charAt(longitud - 1) == total){
-                        const swalWithBootstrapButtons = Swal.mixin({customClass: {confirmButton: 'btn btn-success',cancelButton: 'btn btn-danger mr-1'},buttonsStyling: false});
+                    if (cedula.charAt(longitud - 1) == total) {
+                        const swalWithBootstrapButtons = Swal.mixin({
+                            customClass: {
+                                confirmButton: 'btn btn-success',
+                                cancelButton: 'btn btn-danger mr-1'
+                            },
+                            buttonsStyling: false
+                        });
                         swalWithBootstrapButtons.fire({
-                            title : 'Está seguro de crear un nuevo registro',
-                            'icon':'question',
+                            title: 'Está seguro de crear un nuevo registro',
+                            'icon': 'question',
                             showCancelButton: true,
                             confirmButtonText: 'Si, Guardar!',
                             cancelButtonText: 'No, Cancelar!',
                             reverseButtons: true
-                        }).then((result)=>{
+                        }).then((result) => {
                             if (result.value) {
                                 guardar(formulario);
                             }
                         });
-                    }else{
+                    } else {
                         $("#aviso").show();
                         $("#aviso").text("Cedula invalida");
                     }

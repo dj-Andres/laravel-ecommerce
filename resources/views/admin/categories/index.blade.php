@@ -48,7 +48,7 @@
                                         <tr id="{{ $category->id }}">
                                             <th scope="row">{{ $category->id }}</th>
                                             <td>
-                                                {{ $category->name }}
+                                                <a href="{{route('categories.show',$category)}}">{{ $category->name }}</a>
                                             </td>
                                             <td>{{ $category->description }}</td>
                                             <td style="width: 50px;">
@@ -68,7 +68,6 @@
                                                 @endcan
                                             </td>
                                         </tr>
-                                        @include('admin.categories.partial._modal_subcategory',['id' => "subcategoryModal", 'title' => "Agregar SubCategoria"])
                                     @endforeach
                                 </tbody>
                             </table>
@@ -78,6 +77,7 @@
             </div>
         </div>
     </div>
+    @include('admin.categories.partial._modal_subcategory',['id' => "subcategoryModal", 'title' => "Agregar SubCategoria"])
 @endsection
 @section('scripts')
     {!! Html::script('admin/js/data-table.js') !!}

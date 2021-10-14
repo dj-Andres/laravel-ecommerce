@@ -48,53 +48,11 @@
     <div class="form-group">
         <button type="button" id="agregar" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Agregar producto</button>
     </div>
-    <div class="form-group">
-        <h4 class="card-title">Detalles de compra</h4>
-        <div class="table-responsive col-md-12">
-            <table id="detalles" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Eliminar</th>
-                        <th>Producto</th>
-                        <th>Precio $</th>
-                        <th>Cantidad</th>
-                        <th>SubTotal</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <th colspan="4">
-                            <p align="right">TOTAL:</p>
-                        </th>
-                        <th>
-                            <p align="right"><span id="total">$ 0.00</span> </p>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th colspan="4">
-                            <p align="right">TOTAL IMPUESTO (12%):</p>
-                        </th>
-                        <th>
-                            <p align="right"><span id="total_impuesto">$ 0.00</span></p>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th colspan="4">
-                            <p align="right">TOTAL PAGAR:</p>
-                        </th>
-                        <th>
-                            <p align="right">
-                                <span align="right" id="total_pagar_html">$ 0.00</span>
-                                <input type="hidden" name="total" id="total_pagar">
-                            </p>
-                        </th>
-                    </tr>
-                </tfoot>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    @if (isset($purchase))
+        @include('admin.purchase.partial._table_edit')
+    @else
+        @include('admin.purchase.partial._table_create')
+    @endif
     <div class="row">
         <div class="col-md-6 col-lg-12">
             <div class="form-group pt-2">

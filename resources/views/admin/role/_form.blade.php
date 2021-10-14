@@ -18,7 +18,7 @@
             <div class="card-body">
                 <h4 class="card-title">Listado de Permisos</h4>
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-striped" id="order-listing">
                         <thead>
                             <tr>
                                 <th>Permiso</th>
@@ -26,16 +26,29 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($permissions as $id => $permission)
-                                <tr>
-                                    <td>{{ $permission }}</td>
-                                    <td id="roles">
-                                        <label>
-                                            {!! Form::checkbox('permisions[]', $id, null, ['class' => 'mr-1']) !!}
-                                        </label>
-                                    </td>
-                                </tr>
-                            @endforeach
+                            @if (isset($role))
+                                @foreach ($permissions as $id => $permission)
+                                    <tr>
+                                        <td>{{ $permission }}</td>
+                                        <td id="roles">
+                                            <label>
+                                                <input class="mr-1" type="checkbox" name="permisions[]" value="{{ $id }}"  @if ($role->permissions->contains($id)) checked @endif>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                @foreach ($permissions as $id => $permission)
+                                    <tr>
+                                        <td>{{ $permission }}</td>
+                                        <td id="roles">
+                                            <label>
+                                                {!! Form::checkbox('permisions[]', $id, null, ['class' => 'mr-1']) !!}
+                                            </label>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>

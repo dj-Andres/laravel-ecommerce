@@ -23,19 +23,11 @@
             </nav>
         </div>
         <div class="row">
-            <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <h4 class="card-title">Registro Categorías</h4>
-                        </div>
-
-                        {!! Form::open(['route' => 'categories.store', 'method' => 'POST', 'id' => 'formulario']) !!}
-                            @include('admin.categories._form')
-                        {!! Form::close() !!}
-                    </div>
-                </div>
-            </div>
+            <x-card title="Registro Categorías">
+                {!! Form::open(['route' => 'categories.store', 'method' => 'POST', 'id' => 'formulario']) !!}
+                    @include('admin.categories._form')
+                {!! Form::close() !!}
+            </x-card>
         </div>
     </div>
 @endsection

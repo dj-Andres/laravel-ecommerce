@@ -22,18 +22,11 @@
             </nav>
         </div>
         <div class="row">
-            <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <h4 class="card-title">Editar Categorías</h4>
-                        </div>
-                        {!! Form::model($category, ['route'=>['categories.update',$category->id],'method'=>'PUT','id' => 'formulario']) !!}
-                            @include('admin.categories._form')
-                        {!! Form::close() !!}
-                    </div>
-                </div>
-            </div>
+            <x-card title="Editar Categoría">
+                {!! Form::model($category, ['route'=>['categories.update',$category->id],'method'=>'PUT','id' => 'formulario']) !!}
+                    @include('admin.categories._form')
+                {!! Form::close() !!}
+            </x-card>
         </div>
     </div>
 @endsection
@@ -42,13 +35,14 @@
 <script>
     $(document).ready(function(){
         $.ajaxSetup({headers: {'X-CSRF-Token': $('meta[name=_token]').attr('content')}});
-        function editar(id,name,description) {
+        function editar(id,name,description,icon) {
             const request = $.ajax({
                 url: "{{ route('categories.update',$category->id) }}",
                 type: 'POST',
                 data:{
-                    id:id,
+                    id,
                     name,
+                    icon,
                     description,
                     _method:'PUT'
                 }
@@ -75,7 +69,7 @@
         }
         $("#formulario").submit((e) => {
             e.preventDefault();
-            let id = $(this).data("id"),name=$("#name").val(),description=$("#description").val();
+            let id = $(this).data("id"),name=$("#name").val(),description=$("#description").val(),icon = $("#icon").val();
             const swalWithBootstrapButtons = Swal.mixin({customClass: {confirmButton: 'btn btn-success',cancelButton: 'btn btn-danger mr-1'},buttonsStyling: false});
             swalWithBootstrapButtons.fire({
                 title : 'Está seguro de actualizar registro',
@@ -86,7 +80,7 @@
                 reverseButtons: true
             }).then((result)=>{
                 if (result.value) {
-                    editar(id,name,description)
+                    editar(id,name,description,icon)
                 }
             });
         });

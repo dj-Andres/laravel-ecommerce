@@ -113,6 +113,14 @@
             </table>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-6 col-lg-12">
+            <div class="form-group pt-2">
+                <button type="submit" id="guardar" class="btn btn-primary mr-2">Guardar</button>
+                <a href="{{ route('sales.index') }}" class="btn btn-light">Cancelar</a>
+            </div>
+        </div>
+    </div>
 </fieldset>
 
 

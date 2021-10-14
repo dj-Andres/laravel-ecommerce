@@ -1,12 +1,5 @@
 @extends('layouts.admin')
 @section('styles')
-    <style type="text/css">
-        .unstyled-button {
-            border: none;
-            padding: 0;
-            background: none;
-        }
-    </style>
 @endsection
 @section('content')
     <div class="content-wrapper">
@@ -22,18 +15,11 @@
             </nav>
         </div>
         <div class="row">
-            <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <h4 class="card-title">Registro Roles</h4>
-                        </div>
-                        {!! Form::open(['route' => 'roles.store','method' => 'POST','id' => 'formulario']) !!}
-                            @include('admin.role._form')
-                        {!! Form::close() !!}
-                    </div>
-                </div>
-            </div>
+            <x-card title="Registro Roles">
+                {!! Form::open(['route' => 'roles.store','method' => 'POST','id' => 'formulario']) !!}
+                    @include('admin.role._form')
+                {!! Form::close() !!}
+            </x-card>
         </div>
     </div>
 @endsection

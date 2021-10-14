@@ -18,28 +18,14 @@
             </nav>
         </div>
         <div class="row">
-            <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <h4 class="card-title">Registro Ventas</h4>
-                        </div>
-                        {!! Form::open(['route' => 'sales.store', 'method' => 'POST', 'files' => true, 'id' => 'formulario', 'class' => 'form-sample']) !!}
-                        @include('admin.sale._form')
-                        <div class="row">
-                            <div class="col-md-6 col-lg-12">
-                                <div class="form-group pt-2">
-                                    <button type="submit" id="guardar" class="btn btn-primary mr-2">Guardar</button>
-                                    <a href="{{ route('sales.index') }}" class="btn btn-light">Cancelar</a>
-                                </div>
-                            </div>
-                        </div>
-                        {!! Form::close() !!}
-                    </div>
-                </div>
-            </div>
+            <x-card title="Registro de Ventas">
+                {!! Form::open(['route' => 'sales.store', 'method' => 'POST', 'files' => true, 'id' => 'formulario', 'class' => 'form-sample']) !!}
+                    @include('admin.sale._form')
+                {!! Form::close() !!}
+            </x-card>
         </div>
     </div>
+    @include('shared._modal_cliente',['id' => "cliente-registro", 'title' => "Clientes"])
 @endsection
 @section('scripts')
     {!! Html::script('admin/js/sweetalert2.js') !!}
@@ -227,4 +213,3 @@
         });
     </script>
 @endsection
-@include('components._modal_cliente')

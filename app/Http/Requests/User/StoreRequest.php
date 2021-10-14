@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\SubCategory;
+namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,10 +24,11 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name' => 'required|unique:sub_categories|string',
-            'category_id' => 'required',
-            'description' => 'nullable|string|max:200|min:20'
+            'name' => 'required|string|max:250',
+            'email' => 'required|string|email|unique:users|max:200',
+            'password' => 'required|string'
         ];
+
         return $rules;
     }
 }
