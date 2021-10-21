@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Category\StoreRequest;
 use App\Http\Requests\Category\UpdateRequest;
 use App\Models\Category;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -19,7 +20,15 @@ class CategoryController extends Controller
     }
     public function index()
     {
-        $categories = Category::get();
+        $categories = Category::query()
+            ->addSelect([
+                'subcategories' => SubCategory::select('name')
+                    ->whereColumn('category_id', 'categories.id')
+                    ->orderBy('name')
+                    ->take(1)
+            ])
+            ->get();
+
 
         return view('admin.categories.index', compact('categories'));
     }

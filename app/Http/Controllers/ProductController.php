@@ -27,7 +27,6 @@ class ProductController extends Controller
     {
         $products = Product::query()
             ->InfoSubCategoriesProviders()
-            ->with('tags')
             ->select('products.id', 'products.name', 'products.stock', 'products.status', 'sub_categories.name as categoria', 'providers.name as proveedor')
             ->orderBy('products.id', 'DESC')
             ->get();

@@ -40,6 +40,7 @@
                                         <th>Id</th>
                                         <th>Nombre</th>
                                         <th>Descripción</th>
+                                        <th>SubCategoria</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
@@ -51,6 +52,9 @@
                                                 <a href="{{route('categories.show',$category)}}">{{ $category->name }}</a>
                                             </td>
                                             <td>{{ $category->description }}</td>
+                                            <td>
+                                                <span class="badge badge-success">{{ $category->subcategories }}</span>
+                                            </td>
                                             <td style="width: 50px;">
                                                 @can('categories.edit','categories.destroy')
                                                 {!! Form::open(['route' => ['categories.destroy', $category], 'method' => 'DELETE']) !!}
