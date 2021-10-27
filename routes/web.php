@@ -12,6 +12,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 })->name('index');
+
 Route::middleware(['auth'])->group(function () {
     Route::resource('categories', CategoryController::class)->names('categories');
     Route::resource('subcategories', SubCategoryController::class)->names('subcategories');
@@ -27,6 +29,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('providers', ProviderController::class)->names('providers');
     Route::resource('purchases', PurchaseController::class)->names('purchases');
     Route::resource('sales', SaleController::class)->names('sales');
+    Route::resource('tags', TagController::class)->names('tags');
 
     Route::get('purchases/upload/{purchase}', [PurchaseController::class, 'upload'])->name('purchase.upload');
     Route::post('product/upload/{id}', [ProductController::class, 'upload'])->name('product.upload');
@@ -45,17 +48,15 @@ Route::middleware(['auth'])->group(function () {
     Route::post('product/search', [ProductController::class, 'search'])->name('product.search');
     Route::post('categories/search', [CategoryController::class, 'search'])->name('categories.search');
 
-
     Route::resource('business', BusinessController::class)->only(['index', 'update'])->names('business');
     Route::resource('printer', PrinterController::class)->only(['index', 'update'])->names('printer');
 
-    Route::get('logout',[LoginController::class,'logout'])->name('logout');
+    Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
     Route::group(['middleware' => ['role:admin']], function () {
         Route::resource('users', UserController::class)->names('users');
         Route::resource('roles', RolesController::class)->names('roles');
     });
-
 });
 Auth::routes();
 
