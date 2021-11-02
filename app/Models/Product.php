@@ -48,7 +48,6 @@ class Product extends Model
         return $query->join('sub_categories', 'sub_categories.id', 'products.subcategory_id')
             ->join('providers', 'providers.id', 'products.provider_id');
     }
-
     public function storeProduct($request)
     {
         $product = self::create([
