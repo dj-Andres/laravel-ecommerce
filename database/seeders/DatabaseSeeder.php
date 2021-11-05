@@ -7,6 +7,7 @@ use App\Models\Printer;
 use App\Models\Tag;
 use App\Models\Category;
 use App\Models\Client;
+use App\Models\Image;
 use App\Models\Product;
 use App\Models\Provider;
 use App\Models\SubCategory;
@@ -30,7 +31,7 @@ class DatabaseSeeder extends Seeder
         Category::factory(10)->create();
         SubCategory::factory(10)->create();
         Provider::factory(10)->create();
-        Product::factory(10)->create();
+        $this->call(ProductSeeder::class);
         Client::factory(10)->create();
     }
 }

@@ -179,6 +179,8 @@ return [
         Laraveles\Spanish\SpanishServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
+
+        App\Providers\Ecommerce\ShoopingCardProvider::class,
     ],
 
     /*

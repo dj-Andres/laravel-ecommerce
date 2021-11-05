@@ -96,12 +96,12 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $product = Product::join('product_tag','product_tag.id','products.id')
-            ->join('tags','tags.id','product_tag.tag_id')
-            ->join('providers','providers.id','products.provider_id')
-            ->join('sub_categories','sub_categories.id','products.subcategory_id')
-            ->select('products.code','products.name','products.sell_price','products.long_description','providers.name as proveedor','sub_categories.name as sub_category','tags.name as tags','products.status')
-            ->where('products.id',$id)
+        $product = Product::join('product_tag', 'product_tag.id', 'products.id')
+            ->join('tags', 'tags.id', 'product_tag.tag_id')
+            ->join('providers', 'providers.id', 'products.provider_id')
+            ->join('sub_categories', 'sub_categories.id', 'products.subcategory_id')
+            ->select('products.code', 'products.name', 'products.sell_price', 'products.long_description', 'providers.name as proveedor', 'sub_categories.name as sub_category', 'tags.name as tags', 'products.status')
+            ->where('products.id', $id)
             ->first();
         return view('admin.product.show', compact('product'));
     }
