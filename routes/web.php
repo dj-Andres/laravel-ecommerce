@@ -16,6 +16,7 @@ use App\Http\Controllers\RolesController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
+use App\Models\ShoppingCart;
 use Illuminate\Support\Facades\Route;
 
 
@@ -27,10 +28,11 @@ Route::get('cart', [WebController::class, 'cart'])->name('web.cart');
 Route::get('about', [WebController::class, 'about'])->name('web.about');
 Route::get('products', [WebController::class, 'shop_grid'])->name('web.shop_grid');
 Route::get('products/{product}', [WebController::class, 'detailsProduct'])->name('web.products');
-Route::resource('ShoppingCartDetail', ShoppingCartDetailController::class)->only(['update', 'destroy'])->names('shopping');
+Route::resource('ShoppingCartDetail', ShoppingCartDetailController::class)->only(['update'])->names('shopping');
+Route::get('ShoppingCartDetail/{ShoppingCartDetail}/destroy',[ShoppingCartDetailController::class,'destroy'])->name('shopping.destroy');
 Route::post('AddShoppingCart/{product}/store',[ShoppingCartDetailController::class,'store'])->name('shoppingCart.store');
 Route::get('AddProductCart/{product}/store',[ShoppingCartDetailController::class,'storeProduct'])->name('shoppingProductCart.store');
-
+Route::put('shoppingCard',[ShoppingCart::class,'update'])->name('shoppingCard.update');
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('categories', CategoryController::class)->names('categories');

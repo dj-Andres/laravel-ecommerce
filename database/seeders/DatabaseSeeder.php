@@ -32,6 +32,6 @@ class DatabaseSeeder extends Seeder
         SubCategory::factory(10)->create();
         Provider::factory(10)->create();
         $this->call(ProductSeeder::class);
-        Client::factory(10)->create();
+        //Client::factory(10)->create();
     }
 }
