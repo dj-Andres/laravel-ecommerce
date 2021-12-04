@@ -9,6 +9,7 @@ use App\Http\Controllers\Ecommerce\ShoppingCartDetailController;
 use App\Http\Controllers\Ecommerce\WebController;
 use App\Http\Controllers\PrinterController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ReportController;
@@ -38,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('categories', CategoryController::class)->names('categories');
     Route::resource('subcategories', SubCategoryController::class)->names('subcategories');
     Route::resource('client', ClientController::class)->names('client');
+    Route::resource('profile', ProfileController::class)->names('profile');
     Route::resource('product', ProductController::class)->names('product');
     Route::resource('providers', ProviderController::class)->names('providers');
     Route::resource('purchases', PurchaseController::class)->names('purchases');

@@ -73,14 +73,20 @@
                 </a>
             </li>
         @endcan
-        @can('client.index')
+        {{--@can('client.index')
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('client.index') }}">
                     <i class="fas fa-users menu-icon"></i>
                     <span class="menu-title">Clientes</span>
                 </a>
             </li>
-        @endcan
+        @endcan--}}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('profile.index') }}">
+                    <i class="fas fa-users menu-icon"></i>
+                    <span class="menu-title">Perfil</span>
+                </a>
+            </li>
         @can('providers.index')
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('providers.index') }}">

@@ -18,6 +18,7 @@ class RolSeeder extends Seeder
     {
         $role = Role::create(['name'=>'admin']);
         $rol_vendedor = Role::create(['name'=>'vendedor']);
+        $rol_cliente = Role::create(['name'=>'cliente']);
 
         Permission::create(['name'=>'categories.index'])->assignRole($role);
         Permission::create(['name'=>'categories.create'])->assignRole($role);
