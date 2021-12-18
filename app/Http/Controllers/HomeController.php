@@ -28,7 +28,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $compramensual = Purchase::select(DB::raw('month(purchase_date) as mes'), DB::raw('SUM(total) as totales'))
+        $compramensual = Purchase::select(DB::raw('EXTRACT(MONTH FROM purchases) as mes'), DB::raw('SUM(total) as totales'))
             ->where('status', "VALID")
             ->groupBy('purchase_date')
             ->orderBy('purchase_date', 'desc')
