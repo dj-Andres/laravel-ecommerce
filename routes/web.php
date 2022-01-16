@@ -27,7 +27,9 @@ Route::get('/', function () {
 
 Route::get('cart', [WebController::class, 'cart'])->name('web.cart');
 Route::get('about', [WebController::class, 'about'])->name('web.about');
-Route::get('products', [WebController::class, 'shop_grid'])->name('web.shop_grid');
+Route::get('products', function(){
+    return view('web.shop-grid');
+})->name('web.shop_grid');
 Route::get('products/{product}', [WebController::class, 'detailsProduct'])->name('web.products');
 Route::resource('ShoppingCartDetail', ShoppingCartDetailController::class)->only(['update'])->names('shopping');
 Route::get('ShoppingCartDetail/{ShoppingCartDetail}/destroy',[ShoppingCartDetailController::class,'destroy'])->name('shopping.destroy');
