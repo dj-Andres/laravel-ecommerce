@@ -16,5 +16,6 @@ class Client extends Model
         'address',
         'phone',
         'email',
+        'pdf'
     ];
 }

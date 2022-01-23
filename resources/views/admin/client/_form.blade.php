@@ -57,6 +57,16 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-md-12">
+            <div class="form-group row">
+                {!! Form::label('pdf', 'Hoja de Vida',['class' => 'col-sm-3 col-form-label required']) !!}
+                <div class="col-sm-9">
+                    <input type="file" name="pdf" id="pdf" class="form-control" accept="application/pdf">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-6 col-sm-12">
             <div class="form-group pt-2">
                 <button type="submit" class="btn btn-primary mr-2" id="guardar" @if (isset($client)) data-id="{{ $client->id }}" @endif><i class="fas fa-save"></i> Guardar</button>

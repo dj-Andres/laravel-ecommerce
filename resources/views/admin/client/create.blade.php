@@ -23,7 +23,7 @@
                         <div class="d-flex justify-content-between">
                             <h4 class="card-title">Registro Cliente</h4>
                         </div>
-                        {!! Form::open(['route' => 'client.store', 'method' => 'POST', 'id' => 'formulario', 'class' => 'cmxform']) !!}
+                        {!! Form::open(['route' => 'client.store', 'method' => 'POST', 'files' => true,'id' => 'formulario', 'class' => 'form-sample']) !!}
                             @include('admin.client._form')
                         {!! Form::close() !!}
                     </div>
@@ -42,12 +42,14 @@
                 }
             });
             function guardar(datos){
-                const request = $.ajax({
+                $.ajax({
                     url: "{{ route('client.store') }}",
                     type: 'POST',
-                    data:datos
-                });
-                request.done(function(response) {
+                    data:datos,
+                    processData:false,
+                    cache:false,
+                    contentType: false
+                }).done(function(response){
                     if(response.code == 200){
                         toastr.success(response.message);
                         setTimeout(function(){
@@ -57,8 +59,7 @@
                         toastr.error(response.message);
                         console.error(response.message);
                     }
-                });
-                request.fail(function(xhr, status, error){
+                }).fail(function(xhr, status, error){
                     $.each(xhr.responseJSON.errors, function (key, item)
                     {
                         $("#errors").append("<li class='alert alert-danger'>"+item+"</li>")
@@ -67,11 +68,26 @@
                         },7000)
                     });
                 });
-            }
-            $("#guardar").on("click",function(e){
+            };
+            $("#formulario").submit((e)=>{
                 e.preventDefault();
                 let cedula = $("#cedula").val().trim();
-                let formulario = $('#formulario').serialize();
+                let name = $("#name").val();
+                let ruc = $("#ruc").val();
+                let email = $("#email").val();
+                let address = $("#address").val();
+                let phone = $("#phone").val();
+                let pdf = $("#pdf").prop('files')[0];
+
+                let formData = new FormData();
+
+                formData.append('pdf',pdf);
+                formData.append('cedula',cedula);
+                formData.append('name',name);
+                formData.append('ruc',ruc);
+                formData.append('email',email);
+                formData.append('address',address);
+                formData.append('phone',phone);
                 let total = 0; let longitud = cedula.length;  let longcheck = longitud - 1;
 
                 if (cedula !== "" && longitud === 10) {
@@ -96,7 +112,7 @@
                             reverseButtons: true
                         }).then((result)=>{
                             if (result.value) {
-                                guardar(formulario);
+                                guardar(formData);
                             }
                         });
                     }else{
