@@ -17,18 +17,18 @@ class Category extends Model
         return $this->hasMany(SubCategory::class);
     }
 
-    public static function getIcons ()
+    public static function getIcons()
     {
         [
-        'icon-fruits',
-         'icon-broccoli-1',
-         'icon-beef',
-         'icon-fish',
-         'icon-fast-food',
-         'icon-honey',
-         'icon-grape',
-         'icon-onions',
-         'icon-avocado'
+            'icon-fruits',
+            'icon-broccoli-1',
+            'icon-beef',
+            'icon-fish',
+            'icon-fast-food',
+            'icon-honey',
+            'icon-grape',
+            'icon-onions',
+            'icon-avocado'
         ];
     }
 

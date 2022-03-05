@@ -21,36 +21,17 @@ use App\Models\ShoppingCart;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('index');
-
-Route::get('products', function(){
-    return view('web.shop-grid');
-})->name('web.shop_grid');
-
-Route::get('details', function(){
-    return view('web.product_detail');
-})->name('web.product_detail');
-
-Route::get('account', function(){
-    return view('web.account');
-})->name('web.account');
-
-Route::get('registro', function(){
-    return view('web.login_register');
-})->name('web.login_register');
-
-Route::get('contact', function(){
-    return view('web.contact');
-})->name('web.contact');
-
-Route::get('blog', function(){
-    return view('web.blog');
-})->name('web.blog');
-
+Route::get('/', [WebController::class,'index'])->name('index');
+Route::get('products',[WebController::class,'products'])->name('web.shop_grid');
+Route::get('details', [WebController::class,'details'])->name('web.product_detail');
+Route::get('account', [WebController::class,'account'])->name('web.account');
+Route::get('registro', [WebController::class,'login_register'])->name('web.login_register');
+Route::get('contact',[WebController::class,'contact'])->name('web.contact');
 Route::get('cart', [WebController::class, 'cart'])->name('web.cart');
 Route::get('about', [WebController::class, 'about'])->name('web.about');
+Route::get('checkout', [WebController::class, 'checkout'])->name('web.checkout');
+Route::get('blog',[WebController::class,'blog'])->name('web.blog');
+
 Route::get('products/{product}', [WebController::class, 'detailsProduct'])->name('web.products');
 Route::resource('ShoppingCartDetail', ShoppingCartDetailController::class)->only(['update'])->names('shopping');
 Route::get('ShoppingCartDetail/{ShoppingCartDetail}/destroy',[ShoppingCartDetailController::class,'destroy'])->name('shopping.destroy');

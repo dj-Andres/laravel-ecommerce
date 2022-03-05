@@ -13,14 +13,13 @@ class WebController extends Controller
         return view('web.about');
     }
 
-    public function shop_grid()
+    public function products()
     {
         $products = Product::where('status', 'ACTIVE')
             ->orderBy('id', 'desc')
-            ->paginate(12)
-            ->get();
+            ->paginate(12);
 
-        return view('web.shop_grid', compact('products'));
+        return view('web.shop-grid', compact('products'));
     }
     public function detailsProduct(Product $product)
     {
@@ -29,5 +28,33 @@ class WebController extends Controller
     public function cart()
     {
         return view('web.cart');
+    }
+    public function checkout()
+    {
+        return view('web.checkout');
+    }
+    public function blog()
+    {
+        return view('web.blog');
+    }
+    public function contact()
+    {
+        return view('web.contact');
+    }
+    public function login_register()
+    {
+        return view('web.login_register');
+    }
+    public function account()
+    {
+        return view('web.account');
+    }
+    public function details()
+    {
+        return view('web.product_detail');
+    }
+    public function index()
+    {
+        return view('welcome');
     }
 }
